@@ -27,13 +27,15 @@ const styles = StyleSheet.create({
     header: {
         transformOrigin: 'center',
         color: 'white',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: 20,
     },
     text: {
         transformOrigin: 'center',
         color: 'white',
         marginTop: '1%',
         marginBottom: '20%',
+        fontSize: 18,
     },
     fact_view: {
         justifyContent: 'center',
@@ -44,11 +46,13 @@ const styles = StyleSheet.create({
     fact_header: {
         transformOrigin: 'center',
         color: 'white',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: 24,
     },
     fact_text: {
         transformOrigin: 'center',
         color: 'white',
         marginTop: '1%',
+        fontSize: 18,
     },
 });
