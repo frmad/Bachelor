@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import {Image,StyleSheet, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from "./HomeScreen"
@@ -7,15 +7,24 @@ import Plan from "./PlanScreen"
 import Meal from "./MealScreen"
 import Tracking from "./TrackingScreen"
 import Profile from "./ProfileScreen"
+import { ColorfulTabBar } from 'react-navigation-tabbar-collection';
 
 export default function TabNav(){
     const Tab = createBottomTabNavigator();
 
     return(
         <NavigationContainer>
-            <Tab.Navigator initialRouteName='Home' screenOptions={({route, navigation }) => {
-        return { headerShown: false, tabBarLabel: navigation.isFocused() ? route.name : '' };
-    }}>
+            <Tab.Navigator initialRouteName='Home' 
+                tabBar={(props) => <ColorfulTabBar {...props} />}
+                screenOptions={({ route, navigation}) => ({
+                    tabBarIcon: ({ focused }) => (
+                    CustomTabBarIcon(route.name, focused)),
+                    headerShown: false, 
+                    tabBarLabel: navigation.isFocused() ? route.name : '',
+                    tabBarActiveTintColor : '#65CB2E',
+          })}
+          
+          >
                 <Tab.Screen name="Home" component={Home}/>
                 <Tab.Screen name="Plan" component={Plan}/>
                 <Tab.Screen name="Meal" component={Meal}/>
@@ -25,3 +34,34 @@ export default function TabNav(){
         </NavigationContainer>
     );
 }
+
+function CustomTabBarIcon ( routeName, focused ){  return (<Image source={getTabBarIconSource(routeName, focused)} style={{ width: 24, height: 24 }}/>)
+};
+
+const getTabBarIconSource = (routeName, focused) => {
+    const iconMap = {
+      Home: {
+        focused: require('../../assets/icons/home-filled.png'),
+        notFocused: require('../../assets/icons/home.png'),
+      },
+      Plan: {
+        focused: require('../../assets/icons/calendar-filled.png'),
+        notFocused: require('../../assets/icons/calendar.png'),
+      },
+      Meal: {
+        focused: require('../../assets/icons/dining-room-filled.png'),
+        notFocused: require('../../assets/icons/dining-room.png'),
+      },
+      Tracking: {
+        focused: require('../../assets/icons/report-card-filled.png'),
+        notFocused: require('../../assets/icons/report-card.png'),
+      },
+      Profile: {
+        focused: require('../../assets/icons/user-filled.png'),
+        notFocused: require('../../assets/icons/user.png'),
+      },
+    };
+    const { focused: focusedIcon, notFocused: notFocusedIcon } = iconMap[routeName];
+    return focused ? focusedIcon : notFocusedIcon;
+  };
+  
