@@ -1,12 +1,24 @@
-import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import LoadingIcon from "./LoadingIcon";
 
-export default function Loading(){
-    return(
+export default function Loading() {
+    const navigation = useNavigation();
+
+    //Go back after some time
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            navigation.goBack();
+        }, 5000);
+
+        return () => clearTimeout(timeout); // Clean up the timeout
+    }, [navigation]);
+
+    return (
         <View style={styles.container}>
             <LoadingIcon />
-            <Text style={styles.header}>Currenly Loading Your Results...</Text>
+            <Text style={styles.header}>Currently Loading Your Results...</Text>
             <Text style={styles.text}>This may take a minute</Text>
             <View style={styles.fact_view}>
                 <Text style={styles.fact_header}>Did you know?</Text>
@@ -22,7 +34,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#65CB2E',
-        padding: '5%',
+        padding: '13%',
     },
     header: {
         transformOrigin: 'center',
@@ -34,14 +46,16 @@ const styles = StyleSheet.create({
         transformOrigin: 'center',
         color: 'white',
         marginTop: '1%',
-        marginBottom: '20%',
+        marginBottom: '10%',
         fontSize: 18,
+        marginEnd: '5%',
+        marginStart: '5%',
     },
     fact_view: {
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: 20,
+        bottom: 50,
     },
     fact_header: {
         transformOrigin: 'center',
@@ -54,5 +68,8 @@ const styles = StyleSheet.create({
         color: 'white',
         marginTop: '1%',
         fontSize: 18,
+        marginEnd: '5%',
+        marginStart: '5%',
+        textAlign: 'center',
     },
 });

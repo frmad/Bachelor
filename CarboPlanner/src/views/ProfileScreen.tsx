@@ -1,24 +1,21 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
-import {useEffect, useState} from "react";
-import Loading from "./Loading";
+import { useEffect } from "react";
+import { useNavigation } from '@react-navigation/native';
+import { View, Text } from 'react-native';
 
+export default function ProfileScreen() {
+    const navigation = useNavigation();
 
-export default function ProfileScreen(){
-    const [isLoading, setIsLoading] = useState(true);
-
+    // Navigate to Loading screen after a delay (simulate loading)
     useEffect(() => {
-        // Simulate an API call - should be changed for when using the loading screen
-        setTimeout(() => {
-            setIsLoading(false);
+        const timeout = setTimeout(() => {
+            navigation.navigate('Loading');
         }, 2000);
-    }, []);
 
-    if (isLoading) {
-        return <Loading />;
-    }
+        return () => clearTimeout(timeout);
+    }, [navigation]);
 
-    return(
+    return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text>Profile!</Text>
         </View>

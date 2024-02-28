@@ -30,6 +30,8 @@ const LoadingIcon = () => {
                     styles.icon,
                     {
                         transform: [{ rotate: spin }],
+                        width: 150,
+                        height: 150
                     },
                 ]}
             />
@@ -41,7 +43,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        margin: '10%',
+        margin: '2%',
     },
     icon: {
         transformOrigin: 'center',
