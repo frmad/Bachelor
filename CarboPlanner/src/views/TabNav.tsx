@@ -7,22 +7,27 @@ import Plan from "./PlanScreen"
 import Meal from "./MealScreen"
 import Tracking from "./TrackingScreen"
 import Profile from "./ProfileScreen"
-import { ColorfulTabBar } from 'react-navigation-tabbar-collection';
+import {
+    AnimatedTabBarNavigator,
+    DotSize, // optional
+    TabElementDisplayOptions, // optional
+    TabButtonLayout, // optional
+    IAppearanceOptions // optional
+  } from 'react-native-animated-nav-tab-bar'
 
 export default function TabNav(){
-    const Tab = createBottomTabNavigator();
+    const Tab = AnimatedTabBarNavigator();
 
     return(
         <NavigationContainer>
             <Tab.Navigator initialRouteName='Home' 
-                tabBar={(props) => <ColorfulTabBar {...props} />}
                 screenOptions={({ route, navigation}) => ({
                     tabBarIcon: ({ focused }) => (
                     CustomTabBarIcon(route.name, focused)),
                     headerShown: false, 
                     tabBarLabel: navigation.isFocused() ? route.name : '',
-                    tabBarActiveTintColor : '#65CB2E',
           })}
+          tabBarOptions={{ activeBackgroundColor: '#BCFFBB'}}
           
           >
                 <Tab.Screen name="Home" component={Home}/>
