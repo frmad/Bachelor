@@ -22,7 +22,6 @@ export default function HomeScreen(){
   return (
     <View>
       <Camera />
-      <Text> hello world</Text>
     </View>
   );
 }

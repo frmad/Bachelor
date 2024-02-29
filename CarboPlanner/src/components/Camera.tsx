@@ -1,43 +1,17 @@
 import * as React from 'react';
 import { Camera as CameraMode } from 'expo-camera';
 import { CameraType } from 'expo-camera';
-import RNFetchBlob from 'rn-fetch-blob';
 import { useState } from 'react';
-
-
 import { Button, Platform, SafeAreaView, Text, TouchableOpacity, View, StyleSheet, Image, Pressable } from 'react-native';
-import {
-  useFonts,
-  Inter_100Thin,
-  Inter_200ExtraLight,
-  Inter_300Light,
-  Inter_400Regular,
-  Inter_500Medium,
-  Inter_600SemiBold,
-  Inter_700Bold,
-  Inter_800ExtraBold,
-  Inter_900Black,
-} from '@expo-google-fonts/inter';
 
 
-export default function Camera(){
+export default function Camera(props: any){
   const [type, setType] = useState(CameraType.back);
+  // @ts-ignore
+  const [flashMode, setFlashMode] = useState(CameraMode.Constants.FlashMode.off);
   const [permission, requestPermission] = CameraMode.useCameraPermissions();
   const [imageUri, setImageUri] = useState(null);
   const [camera, setCamera] = useState(null);
-
-  //Use Google Font (Inter)
-  let [fontsLoaded] = useFonts({
-    Inter_100Thin,
-    Inter_200ExtraLight,
-    Inter_300Light,
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-    Inter_700Bold,
-    Inter_800ExtraBold,
-    Inter_900Black,
-  });
 
   if (!permission) {
     // Camera permissions are still loading
@@ -57,19 +31,24 @@ export default function Camera(){
   function toggleCameraType() {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   }
-  
 
+  function toggleFlashMode() {
+     // @ts-ignore
+    setFlashMode(c => (c === CameraMode.Constants.FlashMode.off ? CameraMode.Constants.FlashMode.torch : CameraMode.Constants.FlashMode.off));
+  }
+  
   const takePicture = async () => {
     if (camera) {
       const data = await camera.takePictureAsync(null);
       //console.log(data.uri);
       setImageUri(data.uri);
-      getInfo(data.uri);
+      fetchData(data.uri);
     }
   }
 
+  
 
-  const getInfo = async (base64Image) => {
+  const fetchData = async (base64Image) => {
 
     fetch('http://localhost:5000/v1/object-detection/yolov5s', {
       method: 'POST',
@@ -77,7 +56,7 @@ export default function Camera(){
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        base64Image,
+        image: base64Image,
       }),
       mode: "no-cors"
     })
@@ -103,9 +82,9 @@ export default function Camera(){
       
       <View style={styles.header}>
         <Pressable onPress={() => console.log("Back")} style={styles.button} >
-          <Text style={styles.text}>{'<'}</Text>
+          <Text style={styles.text}>{"<"}</Text>
         </Pressable>
-        <Pressable onPress={() => console.log("Flash")} style={styles.button} >
+        <Pressable onPress={toggleFlashMode} style={styles.button} >
           <Image source={require('../../assets/icons/lightning-bolt-filled.png')} style={{width: 32, height: 32}} />
         </Pressable>
       </View>
@@ -113,6 +92,7 @@ export default function Camera(){
  
       {!imageUri && <View style={styles.cameraContainer}>
         <CameraMode
+        flashMode={flashMode}
           ref={(ref) => setCamera(ref)}
           style={styles.fixedRatio}
           type={type}
@@ -120,6 +100,8 @@ export default function Camera(){
         />
       </View>}
       
+      {imageUri && <Image source={{ uri: imageUri }} style={{ flex: 1 }} />}
+
       <View style={styles.footer}>
         <Pressable onPress={takePicture} style={styles.button} >
           <Text style={styles.circle}></Text>
@@ -127,15 +109,15 @@ export default function Camera(){
       </View>
       
 
-      {imageUri && <Image source={{ uri: imageUri }} style={{ flex: 1 }} />}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "black",
+    flexDirection: "column",
+    height: "100%"
   },
   header: {
     flexDirection: "row",
@@ -157,13 +139,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cameraContainer: {
-    flex: 1,
     flexDirection: 'row',
   },
   fixedRatio: {
-    flex: 1,
     aspectRatio: 1,
-    zIndex: 10,
+    height: "100%",
   },
   footer: {
     justifyContent: "center",
