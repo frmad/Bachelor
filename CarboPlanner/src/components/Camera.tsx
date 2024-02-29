@@ -2,8 +2,9 @@ import * as React from 'react';
 import { Camera as CameraMode } from 'expo-camera';
 import { CameraType } from 'expo-camera';
 import { useState } from 'react';
-import { Button, Platform, SafeAreaView, Text, TouchableOpacity, View, StyleSheet, Image, Pressable } from 'react-native';
+import { Button, Text, View, StyleSheet, Image, Pressable } from 'react-native';
 
+const flashLogo = require('../../assets/icons/lightning-bolt-filled.png');
 
 export default function Camera(props: any){
   const [type, setType] = useState(CameraType.back);
@@ -11,6 +12,7 @@ export default function Camera(props: any){
   const [flashMode, setFlashMode] = useState(CameraMode.Constants.FlashMode.off);
   const [permission, requestPermission] = CameraMode.useCameraPermissions();
   const [imageUri, setImageUri] = useState(null);
+  const [resons, setRespons] = useState(null);
   const [camera, setCamera] = useState(null);
 
   if (!permission) {
@@ -29,20 +31,28 @@ export default function Camera(props: any){
   }
 
   function toggleCameraType() {
+    // Changes front or back camera
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   }
 
   function toggleFlashMode() {
+    // Toggles Camera Flash
      // @ts-ignore
     setFlashMode(c => (c === CameraMode.Constants.FlashMode.off ? CameraMode.Constants.FlashMode.torch : CameraMode.Constants.FlashMode.off));
   }
   
   const takePicture = async () => {
+    // Check if the camera is available and not null, if true, 
+    // it will use the takePictureAsync to take a picture and save it to the app's cache
     if (camera) {
       const data = await camera.takePictureAsync(null);
-      //console.log(data.uri);
+      // Sets the Image URI to the data.uri (Base64)
       setImageUri(data.uri);
-      fetchData(data.uri);
+
+      // Splits the Base64 from the Type identifier made by Expo Camera, and sends the bare Base64 code
+      const splitBase64String: string[] = data.uri.split(',');
+
+      fetchData(splitBase64String[1]);
     }
   }
 
@@ -50,15 +60,17 @@ export default function Camera(props: any){
 
   const fetchData = async (base64Image) => {
 
+    const requestBody = {
+      image: base64Image
+    };
+
+    //Sends POST request to this URL, sends using the Base64 Image from the Expo Camera
     fetch('http://localhost:5000/v1/object-detection/yolov5s', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        image: base64Image,
-      }),
-      mode: "no-cors"
+      body: JSON.stringify(requestBody),
     })
     .then(function(response) {
       if (response.ok) {
@@ -68,6 +80,7 @@ export default function Camera(props: any){
       }
     })
     .then(function(data) {
+      // The JSON data from the WebServer is returned here
       return data;
     })
     .catch(function(error) {
@@ -76,29 +89,27 @@ export default function Camera(props: any){
   };
 
   return (
-
-    
     <View style={styles.container}>
-      
+
       <View style={styles.header}>
         <Pressable onPress={() => console.log("Back")} style={styles.button} >
           <Text style={styles.text}>{"<"}</Text>
         </Pressable>
+        
         <Pressable onPress={toggleFlashMode} style={styles.button} >
-          <Image source={require('../../assets/icons/lightning-bolt-filled.png')} style={{width: 32, height: 32}} />
+          <Image source={flashLogo} style={{width: 32, height: 32}} />
         </Pressable>
       </View>
 
- 
-      {!imageUri && <View style={styles.cameraContainer}>
+      <View style={styles.cameraContainer}>
         <CameraMode
-        flashMode={flashMode}
+          flashMode={flashMode}
           ref={(ref) => setCamera(ref)}
           style={styles.fixedRatio}
           type={type}
           ratio={'1:1'}
         />
-      </View>}
+      </View>
       
       {imageUri && <Image source={{ uri: imageUri }} style={{ flex: 1 }} />}
 
@@ -108,7 +119,6 @@ export default function Camera(props: any){
         </Pressable>
       </View>
       
-
     </View>
   );
 }
