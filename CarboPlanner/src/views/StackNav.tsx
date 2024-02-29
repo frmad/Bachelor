@@ -26,7 +26,7 @@ export function StackNav() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name="Home" component={Tabs} options={{ headerShown: false }}/>
+                <Stack.Screen name="Tab" component={Tabs} options={{ headerShown: false }}/>
                 <Stack.Screen name="Loading" component={Loading} options={{ headerShown: false }}/>
             </Stack.Navigator>
         </NavigationContainer>
