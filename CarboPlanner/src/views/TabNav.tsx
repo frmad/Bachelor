@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from "./HomeScreen"
@@ -25,3 +24,4 @@ export default function TabNav(){
         </NavigationContainer>
     );
 }
+
