@@ -23,7 +23,9 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.73.4",
+    "react-native-animated-nav-tab-bar": "^3.1.10",
     "react-native-web": "~0.19.6",
+    "react-navigation-tabbar-collection": "^1.0.0",
     "rn-fetch-blob": "^0.12.0",
     "tailwind-rn": "^4.2.0",
     "typescript": "^5.3.0"
@@ -31,7 +33,8 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react-native": "^0.73.0",
-    "tailwindcss": "^3.3.2"
+    "tailwindcss": "^3.3.2",
+    "@expo/ngrok": "^4.1.0"
   },
   "private": true
 }
