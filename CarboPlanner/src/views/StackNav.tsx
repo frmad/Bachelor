@@ -6,6 +6,7 @@ import HomeScreen from "./HomeScreen";
 import MealScreen from "./MealScreen";
 import PlanScreen from "./PlanScreen";
 import ProfileScreen from "./ProfileScreen";
+import Camera from '../components/Camera';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,6 +29,7 @@ export function StackNav() {
             <Stack.Navigator>
                 <Stack.Screen name="Tab" component={Tabs} options={{ headerShown: false }}/>
                 <Stack.Screen name="Loading" component={Loading} options={{ headerShown: false }}/>
+                <Stack.Screen name="Camera" component={Camera} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

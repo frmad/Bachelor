@@ -22,9 +22,19 @@ import List from '../components/List';
 import ListItem from '../components/ListItem';
 import MacroProgressBar from '../components/MacroProgressBar';
 import HorizontalLine from '../components/HorizontalLine';
+import { useNavigation } from '@react-navigation/native';
+
+
 
 
 export default function HomeScreen(){
+  const navigation = useNavigation();
+
+
+function handlePress(){
+  navigation.navigate('Camera');
+}
+
   let [fontsLoaded] = useFonts({
     Inter_100Thin,
     Inter_200ExtraLight,
@@ -100,12 +110,21 @@ export default function HomeScreen(){
           )
         })}
       </Card>
-
+      
+        <TouchableOpacity style={styles.camera_button} onPress={handlePress}/>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  camera_button: {
+      backgroundColor: "#FFFFFF",
+      padding: 25,
+      width: 25,
+      justifyContent: "center",
+
+      borderRadius: 50,
+  },
   container: {
       flex: 1,
       flexDirection: "column",

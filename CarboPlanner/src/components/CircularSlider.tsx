@@ -41,7 +41,7 @@ const CircularSlider = (props: any) => {
         linearGradient={[{ offset: '0%', color:'#65CB2E' }, { offset: '100%', color: '#65CB2E' }]}
         thumbRadius={0}
         unit={" / " + props.max}
-        sliderWidth={20}
+        sliderWidth={15}
         unitStyle={[{fontSize: 22, fontFamily: "Inter_700Bold", color: "#45505B"}]}
         valueStyle={[{fontSize: 22, marginRight: -20,  fontFamily: "Inter_700Bold", color: "#45505B"}]}
         style={[{justifyContent: "center"}]}
@@ -53,7 +53,9 @@ const CircularSlider = (props: any) => {
 };
 
 const styles = StyleSheet.create({
-
+  container: {
+    
+    },
 });
 
 export default CircularSlider;

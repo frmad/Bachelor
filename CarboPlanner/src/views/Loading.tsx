@@ -3,13 +3,49 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LoadingIcon from "./LoadingIcon";
 
-export default function Loading() {
+export default function Loading({route}) {
     const navigation = useNavigation();
+
+    const { base64 } = route.params;
+
+    const fetchData = async (base64Image) => {
+
+        const requestBody = {
+          image: base64Image
+        };
+    
+        //Sends POST request to this URL, sends using the Base64 Image from the Expo Camera
+        fetch('http://localhost:5000/v1/object-detection/yolov5s', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        })
+        .then(function(response) {
+          if (response.ok) {
+            //TODO: make return with params to the result screen
+            //navigation.navigate("Home");
+            return response.json();
+          } else {
+            throw new Error('Request failed.');
+          }
+        })
+        .then(function(data) {
+          // The JSON data from the WebServer is returned here
+          return data;
+        })
+        .catch(function(error) {
+          return null;
+        });
+      };
+    
 
     //Go back after some time
     useEffect(() => {
         const timeout = setTimeout(() => {
-            navigation.goBack();
+            //TODO: Change the navigation to the correct path...
+            navigation.navigate("Home");
         }, 5000);
 
         return () => clearTimeout(timeout); // Clean up the timeout
