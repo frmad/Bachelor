@@ -22,7 +22,9 @@ export default function List(props: any) {
                     <Text>{ expanded ? "V" : "^"}</Text>
                 </View>
             </TouchableOpacity>
-            { expanded && body }
+            <View style={styles.body}>
+                { expanded && body }
+            </View>
         </View>
     );
 }
@@ -38,6 +40,9 @@ const styles = StyleSheet.create({
     tinyImage: {
         width: 60,
         height: 60,
+    },
+    body: {
+        paddingTop: "1%",
     },
     row: {
         flex: 1,

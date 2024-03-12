@@ -17,47 +17,90 @@ import {
 } from '@expo-google-fonts/inter';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
-import MacroSlider from '../components/MacroSlider';
+import MacroSlider from '../components/MacroProgressBar';
 import List from '../components/List';
 import ListItem from '../components/ListItem';
+import MacroProgressBar from '../components/MacroProgressBar';
+import HorizontalLine from '../components/HorizontalLine';
 
 
 export default function HomeScreen(){
+  let [fontsLoaded] = useFonts({
+    Inter_100Thin,
+    Inter_200ExtraLight,
+    Inter_300Light,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    Inter_800ExtraBold,
+    Inter_900Black,
+  });
+
+  const data = [
+      {
+        
+        name: "Pancakes",
+        meals: [
+          {
+            name: "Item 1",
+            weight: "432",
+            calories: "320",
+            carbs: "32",
+            protein: "22",
+            fat: "12",
+          },
+          {
+            name: "Item 2",
+            weight: "123",
+            calories: "320",
+            carbs: "32",
+            protein: "22",
+            fat: "12",
+          },
+        ],
+      },
+    ];
 
   return (
     <View style={styles.container}>
-      <Text>Today</Text>
+      <Text style={styles.header_text}>Today</Text>
 
       <Card>
         <View style={styles.row}>
           <CircularSlider value={1200} max={2000}/>
         </View>
         <View style={styles.row}>
-          <View style={styles.column}>
-            <MacroSlider name={"Carbs"} value={180} max={210} />
-          </View>
+            <MacroProgressBar name={"Carbs"} value={0.5} max={210} />
           
-          <View style={styles.column}>
-            <MacroSlider name={"Protein"} value={25} max={180} />
-          </View>
+            <MacroProgressBar name={"Protein"} value={1} max={180} />
           
-          <View style={styles.column}>
-            <MacroSlider name={"Fat"} value={120} max={200} />
-          </View>
+            <MacroProgressBar name={"Fat"} value={0.2} max={200} />
         </View>
       </Card>
 
       <Card>
-        <List name={"Breakfast"}>
-          <Text>------------------------------------------------</Text>
-          <ListItem weight={322} name="Pancakes" />
+        {data.map((meals, index) => {
+          return (
+          <List name={meals.name}>
+            <HorizontalLine />
+          
+            {data[index].meals.map((items) => {
+              return (
+                <ListItem weight={items.weight} 
+                          name={items.name} 
+                          calories={items.calories} 
+                          protein={items.protein} 
+                          carbs={items.carbs} 
+                          fat={items.fat} />
+              );
+            })}
 
-          <Text>Title</Text>
-
-
-        </List>
+          </List>
+          )
+        })}
       </Card>
-      
+
     </View>
   );
 }
@@ -78,6 +121,13 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-around",
+  },
+  header_text: {
+    fontFamily: "Inter_700Bold",
+    fontSize: 40,
+    marginLeft: "2%",
+    paddingVertical: "1%",
+    color: "#45505B",
   },
   column: {
     flexDirection: "column",
