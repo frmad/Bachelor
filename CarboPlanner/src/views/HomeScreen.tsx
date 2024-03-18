@@ -25,15 +25,13 @@ import HorizontalLine from '../components/HorizontalLine';
 import { useNavigation } from '@react-navigation/native';
 
 
-
-
 export default function HomeScreen(){
   const navigation = useNavigation();
 
 
-function handlePress(){
-  navigation.navigate('Camera');
-}
+  function handlePress(){
+    navigation.navigate('Camera');
+  }
 
   let [fontsLoaded] = useFonts({
     Inter_100Thin,
@@ -49,7 +47,6 @@ function handlePress(){
 
   const data = [
       {
-        
         name: "Pancakes",
         meals: [
           {
@@ -62,6 +59,29 @@ function handlePress(){
           },
           {
             name: "Item 2",
+            weight: "123",
+            calories: "320",
+            carbs: "32",
+            protein: "22",
+            fat: "12",
+          },
+        ],
+        icon: "../../assets/flat-icons/lunch_bag.png",
+      },
+      {
+        name: "Not Pancakes",
+        icon: "../../assets/flat-icons/midday_lunch.png",
+        meals: [
+          {
+            name: "Item 5",
+            weight: "12 ",
+            calories: "320",
+            carbs: "32",
+            protein: "22",
+            fat: "12",
+          },
+          {
+            name: "Item 3",
             weight: "123",
             calories: "320",
             carbs: "32",
@@ -92,7 +112,7 @@ function handlePress(){
       <Card>
         {data.map((meals, index) => {
           return (
-          <List name={meals.name}>
+          <List name={meals.name} imageURI={meals.icon}>
             <HorizontalLine />
           
             {data[index].meals.map((items) => {
@@ -105,14 +125,16 @@ function handlePress(){
                           fat={items.fat} />
               );
             })}
-
-          </List>
+            
+          </List> 
           )
         })}
+
       </Card>
       
-        <TouchableOpacity style={styles.camera_button} onPress={handlePress}/>
-    </View>
+      <TouchableOpacity onPress={handlePress} style={styles.camera_button} />
+      
+      </View>
   );
 }
 
@@ -155,6 +177,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-
-//<Camera />

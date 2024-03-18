@@ -8,10 +8,10 @@ export default function Loading({route}) {
 
     const { base64 } = route.params;
 
-    const fetchData = async (base64Image) => {
+    const fetchData = async (base64) => {
 
         const requestBody = {
-          image: base64Image
+          image: base64
         };
     
         //Sends POST request to this URL, sends using the Base64 Image from the Expo Camera
@@ -25,7 +25,6 @@ export default function Loading({route}) {
         .then(function(response) {
           if (response.ok) {
             //TODO: make return with params to the result screen
-            //navigation.navigate("Home");
             return response.json();
           } else {
             throw new Error('Request failed.');
@@ -33,6 +32,8 @@ export default function Loading({route}) {
         })
         .then(function(data) {
           // The JSON data from the WebServer is returned here
+          navigation.navigate('Result', {base64: base64, data: data});
+
           return data;
         })
         .catch(function(error) {
@@ -43,13 +44,8 @@ export default function Loading({route}) {
 
     //Go back after some time
     useEffect(() => {
-        const timeout = setTimeout(() => {
-            //TODO: Change the navigation to the correct path...
-            navigation.navigate("Home");
-        }, 5000);
-
-        return () => clearTimeout(timeout); // Clean up the timeout
-    }, [navigation]);
+        fetchData(base64);  
+    });
 
     return (
         <View style={styles.container}>

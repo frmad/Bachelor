@@ -56,7 +56,7 @@ export default function Camera(props: any){
       // Splits the Base64 from the Type identifier made by Expo Camera, and sends the bare Base64 code
       const splitBase64String: string[] = data.uri.split(',');
 
-      fetchData(splitBase64String[1]);
+      //fetchData(splitBase64String[1]);
 
       navigation.navigate('Loading', {base64: splitBase64String[1]});
     }

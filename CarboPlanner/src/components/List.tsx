@@ -15,11 +15,11 @@ export default function List(props: any) {
         <View>
             <TouchableOpacity onPress={handlePress}>
                 <View style={styles.row}>
-                    <Image style={styles.tinyImage} source={require("../../assets/flat-icons/morning_breakfast.png")} />
+                    <Image style={styles.tinyImage} source={props.imageURI} />
                     <View style={styles.column}>
                         <Text style={styles.bold}>{props.name}</Text>
                     </View>
-                    <Text>{ expanded ? "V" : "^"}</Text>
+                    {expanded ? <Image source={require("../../assets/func-icon/Accordion-Up-Switch.png")} style={styles.accordionLogo} /> : <Image source={require("../../assets/func-icon/Accordion-Down-Switch.png")} style={styles.accordionLogo} />}
                 </View>
             </TouchableOpacity>
             <View style={styles.body}>
@@ -41,6 +41,12 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
     },
+    accordionLogo: {
+        width: 40,
+        height: 40,
+        alignSelf: "center",
+        paddingRight: "2%",
+    },
     body: {
         paddingTop: "1%",
     },
@@ -48,6 +54,10 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         justifyContent: "space-between",
+    },
+    center: {
+        flex: 1,
+        justifyContent: "center",
     },
     column: {
         flex: 1,
