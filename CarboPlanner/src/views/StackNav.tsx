@@ -5,7 +5,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from "./HomeScreen";
 import MealScreen from "./MealScreen";
 import PlanScreen from "./PlanScreen";
+import ResultScreen from "./ResultScreen";
 import ProfileScreen from "./ProfileScreen";
+import Camera from '../components/Camera';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,9 +28,16 @@ export function StackNav() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name="Tab" component={Tabs} options={{ headerShown: false }}/>
-                <Stack.Screen name="Loading" component={Loading} options={{ headerShown: false }}/>
+                <Stack.Group>
+                    <Stack.Screen name="Tab" component={Tabs} options={{ headerShown: false }}/>
+                    <Stack.Screen name="Loading" component={Loading} options={{ headerShown: false }}/>
+                    <Stack.Screen name="Camera" component={Camera} options={{ headerShown: false }} />
+                </Stack.Group>
+                <Stack.Group screenOptions={{ presentation: "modal" }}>
+                    <Stack.Screen name='Result' component={ResultScreen} options={{headerShown: false}} />
+                </Stack.Group>
             </Stack.Navigator>
+           
         </NavigationContainer>
     );
 }

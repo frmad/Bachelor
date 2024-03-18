@@ -3,6 +3,7 @@ import { Camera as CameraMode } from 'expo-camera';
 import { CameraType } from 'expo-camera';
 import { useState } from 'react';
 import { Button, Text, View, StyleSheet, Image, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const flashLogo = require('../../assets/icons/lightning-bolt-filled.png');
 
@@ -14,6 +15,9 @@ export default function Camera(props: any){
   const [imageUri, setImageUri] = useState(null);
   const [resons, setRespons] = useState(null);
   const [camera, setCamera] = useState(null);
+
+  const navigation = useNavigation();
+
 
   if (!permission) {
     // Camera permissions are still loading
@@ -52,7 +56,9 @@ export default function Camera(props: any){
       // Splits the Base64 from the Type identifier made by Expo Camera, and sends the bare Base64 code
       const splitBase64String: string[] = data.uri.split(',');
 
-      fetchData(splitBase64String[1]);
+      //fetchData(splitBase64String[1]);
+
+      navigation.navigate('Loading', {base64: splitBase64String[1]});
     }
   }
 
@@ -92,7 +98,7 @@ export default function Camera(props: any){
     <View style={styles.container}>
 
       <View style={styles.header}>
-        <Pressable onPress={() => console.log("Back")} style={styles.button} >
+        <Pressable onPress={navigation.goBack} style={styles.button} >
           <Text style={styles.text}>{"<"}</Text>
         </Pressable>
         
@@ -111,7 +117,6 @@ export default function Camera(props: any){
         />
       </View>
       
-      {imageUri && <Image source={{ uri: imageUri }} style={{ flex: 1 }} />}
 
       <View style={styles.footer}>
         <Pressable onPress={takePicture} style={styles.button} >
@@ -150,6 +155,7 @@ const styles = StyleSheet.create({
   },
   cameraContainer: {
     flexDirection: 'row',
+    height: "80%",
   },
   fixedRatio: {
     aspectRatio: 1,
@@ -158,6 +164,6 @@ const styles = StyleSheet.create({
   footer: {
     justifyContent: "center",
     margin: "auto",
-    borderRadius: 0,
+    borderRadius: 2,
   }
 });
