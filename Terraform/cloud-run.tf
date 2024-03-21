@@ -1,17 +1,30 @@
-resource "google_storage_bucket" "default" {
-  name          = "cccg6-frontend-bucket"
-  location      = "europe-west1"
-  uniform_bucket_level_access = true
-  storage_class = "STANDARD"   
+resource "google_cloud_run_v2_service" "cloud_bite_backend" {
+  name     = "yolov5-flaskAPI"
+  ingress = "INGRESS_TRAFFIC_ALL"
+  location = "europe-north1"
 
-  force_destroy = true          
+  depends_on = []
 
-  versioning {
-    enabled = true  # Enable versioning for the bucket
+template {
+    scaling {
+      max_instance_count = 2
+    }
+    vpc_access{
+      connector = google_vpc_access_connector.api_connector.id
+      egress = "ALL_TRAFFIC"
+    }
+
+    containers {
+      image = "gcr.io/cloud-bite-sdu-401607/cloud-bite-backend"
+
+      ports {
+        container_port = 5000
+      }
+    }
   }
 
-  website {
-    main_page_suffix = "index.html"  
-    not_found_page   = "404.html"    
+  traffic {
+    type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
+    percent = 100
   }
 }
