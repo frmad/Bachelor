@@ -1,11 +1,23 @@
-FROM python:3.11-slim
+# Use an official Python runtime as a parent image
+FROM python:3.8-slim-buster
 
+RUN apt-get update
+RUN apt-get install ffmpeg libsm6 libxext6  -y
+
+# Set the working directory to /app
 WORKDIR /app
 
+# Copy the current directory contents into the container at /app
 COPY . /app
 
+# Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
 
+# Make port 5000 available to the world outside this container
 EXPOSE 5000
 
-CMD ["python", "restapi.py", "--port", "5000"]
+# Run app.py when the container launches
+CMD ["python", "restapi.py", "--port=5000"]
+
+
+# Docker image has neem taken from here : https://dev.to/aneeqmalik/create-restapi-of-yolov5-on-flask-deployed-on-azure-app-service-and-use-in-flutter-app-3c0p
