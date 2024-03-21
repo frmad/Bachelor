@@ -1,26 +1,26 @@
 resource "google_compute_network" "network" {
-  provider = google-beta
-  name     = "static_endpoint"
+  provider = google
+  name     = "static-endpoint"
 }
 
 resource "google_compute_subnetwork" "subnet" {
-  provider      = google-beta
+  provider      = google
   name          = "static-subnet"
   ip_cidr_range = "10.124.0.0/28"
   network       = google_compute_network.network.id
-  region        = "eu-north1"
+  region        = "europe-north1"
 }
 
 resource "google_project_service" "vpc" {
-  provider           = google-beta
+  provider           = google
   service            = "vpcaccess.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_vpc_access_connector" "api_connector" {
-  provider = google-beta
+  provider = google
   name     = "api-connector"
-  region   = "eu-north1"
+  region   = "europe-north1"
 
   subnet {
     name = google_compute_subnetwork.subnet.name
@@ -34,20 +34,20 @@ resource "google_vpc_access_connector" "api_connector" {
 }
 
 resource "google_compute_router" "vpc_NAT" {
-  provider = google-beta
+  provider = google
   name     = "public-ip-router"
   network  = google_compute_network.network.name
   region   = google_compute_subnetwork.subnet.region
 }
 
 resource "google_compute_address" "static_ip" {
-  provider = google-beta
+  provider = google
   name     = "api-static-ip"
   region   = google_compute_subnetwork.subnet.region
 }
 
 resource "google_compute_router_nat" "compute_NAT" {
-  provider = google-beta
+  provider = google
   name     = "api-static-nat"
   router   = google_compute_router.vpc_NAT.name
   region   = google_compute_subnetwork.subnet.region

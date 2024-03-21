@@ -1,9 +1,9 @@
-resource "google_cloud_run_v2_service" "cloud_bite_backend" {
-  name     = "yolov5-flaskAPI"
+resource "google_cloud_run_v2_service" "flask-api" {
+  name     = "yolov5-flaskapi"
   ingress = "INGRESS_TRAFFIC_ALL"
   location = "europe-north1"
 
-  depends_on = []
+  depends_on = [google_vpc_access_connector.api_connector]
 
 template {
     scaling {
@@ -15,7 +15,13 @@ template {
     }
 
     containers {
-      image = "gcr.io/cloud-bite-sdu-401607/cloud-bite-backend"
+      image = "europe-north1-docker.pkg.dev/carboplanner/flask-api/flask_api:latest"
+
+      resources {
+        limits = {
+          memory = "2Gi"
+        }
+      }
 
       ports {
         container_port = 5000
@@ -23,8 +29,23 @@ template {
     }
   }
 
+ 
+
   traffic {
     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
     percent = 100
   }
 }
+
+
+resource "google_cloud_run_service_iam_binding" "invoker" {
+  location = google_cloud_run_v2_service.flask-api.location
+  service  = google_cloud_run_v2_service.flask-api.name
+  role     = "roles/run.invoker"
+  members = [
+    "allUsers"
+  ]
+}
+
+
+
