@@ -1,9 +1,10 @@
 import { Text, SafeAreaView, TouchableOpacity, View, Image, StyleSheet } from "react-native";
 import Card from "../components/Card";
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, {useState} from "react";
 import {getCategory} from "../components/MealType";
 import {getMacros} from "../components/Macros";
+import {TextInput} from "react-native-paper";
 
 export default function Loading({route}) {
 
@@ -15,7 +16,11 @@ export default function Loading({route}) {
 
     const  mealMacros = getMacros();
 
-    const mealtype = getCategory();
+    const [mealtype, setMealtype] = useState(getCategory());
+
+    const [changeText, setChangeText] = useState(false);
+
+    const [newText, setNewText] =  useState('')
 
     const image: any = "data:image/png;base64," + base64;
 
@@ -40,9 +45,33 @@ export default function Loading({route}) {
 
 
                 <Image source={image} style={styles.image} />
-                
+
                 <Card>
-                    <Text>{mealtype}</Text>
+                    <View>
+                        {changeText ? ( // If changeText is true
+                            <View>
+                                <TextInput
+                                    onChangeText={setNewText}
+                                    placeholder="useless placeholder"
+                                />
+                                <TouchableOpacity onPress={() => {
+                                    setChangeText(false);
+                                    setMealtype(newText);
+                                }} style={styles.go_back_button}>
+                                    <Text>Save</Text>
+                                </TouchableOpacity>
+                            </View>
+                        ) : ( // If changeText is false
+                            <View>
+                                <Text>{mealtype}</Text>
+                                <TouchableOpacity onPress={() => {
+                                    setChangeText(true);
+                                }} style={styles.go_back_button}>
+                                    <Text>Change Text</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </View>
 
                     {data.map((items, index) => {
                         return (
