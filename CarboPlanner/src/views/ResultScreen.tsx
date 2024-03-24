@@ -1,10 +1,11 @@
-import { Text, SafeAreaView, TouchableOpacity, View, Image, StyleSheet } from "react-native";
+import {Text, SafeAreaView, TouchableOpacity, View, Image, StyleSheet, Button} from "react-native";
 import Card from "../components/Card";
 import { useNavigation } from "@react-navigation/native";
 import React, {useState} from "react";
 import {getCategory} from "../components/MealType";
 import {getMacros} from "../components/Macros";
 import {TextInput} from "react-native-paper";
+import AddFoodModal from "../components/AddFoodModal";
 
 export default function Loading({route}) {
 
@@ -37,7 +38,7 @@ export default function Loading({route}) {
     return(
             <SafeAreaView>
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => {navigation.navigate('Home');}} style={styles.go_back_button} />
+                    <TouchableOpacity onPress={() => {navigation.navigate('Home');}} style={styles.goBackButton} />
                     <View style={styles.resultHeaderContainer}>
                         <Text style={styles.resultHeaderText}>Result</Text>
                     </View>
@@ -48,16 +49,17 @@ export default function Loading({route}) {
 
                 <Card>
                     <View>
+                        {/*Title*/}
                         {changeText ? ( // If changeText is true
                             <View>
                                 <TextInput
                                     onChangeText={setNewText}
-                                    placeholder="useless placeholder"
+                                    placeholder="Name for the meal"
                                 />
                                 <TouchableOpacity onPress={() => {
                                     setChangeText(false);
                                     setMealtype(newText);
-                                }} style={styles.go_back_button}>
+                                }} style={styles.goBackButton}>
                                     <Text>Save</Text>
                                 </TouchableOpacity>
                             </View>
@@ -66,38 +68,46 @@ export default function Loading({route}) {
                                 <Text>{mealtype}</Text>
                                 <TouchableOpacity onPress={() => {
                                     setChangeText(true);
-                                }} style={styles.go_back_button}>
+                                }} style={styles.goBackButton}>
                                     <Text>Change Text</Text>
                                 </TouchableOpacity>
                             </View>
                         )}
+
+                        {/*Macros are hard coded*/}
+                        <View style={styles.macros}>
+                            <Text>Calories:{mealMacros.totalCalories}</Text>
+                            <Text>Carbs:{mealMacros.totalCarb}</Text>
+                            <Text>Fat:{mealMacros.totalProtein}</Text>
+                            <Text>Protein:{mealMacros.totalFat}</Text>
+                        </View>
                     </View>
 
                     {data.map((items, index) => {
                         return (
-                            <View key={index}>
-                                <View style={styles.macros}>
-                                    {/*Macros are hard coded*/}
-                                    <Text>Calories:{mealMacros.totalCalories}</Text>
-                                    <Text>Carbs:{mealMacros.totalCarb}</Text>
-                                    <Text>Fat:{mealMacros.totalProtein}</Text>
-                                    <Text>Protein:{mealMacros.totalFat}</Text>
-                                </View>
                                 <View style={styles.card}>
                                     <Text>{items.name}</Text>
                                     <Text>100g</Text>
                                     <Text>{Math.round(100 * items.confidence)}%</Text>
                                 </View>
-                            </View>
                             );
                             })}
 
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity onPress={() => {navigation.navigate('Home');}} style={styles.add_food_button}>
-                            <Text>Add Food</Text>
-                        </TouchableOpacity>
+                        <AddFoodModal></AddFoodModal>
                     </View>
                 </Card>
+
+                {/*save or cancel*/}
+                <View style={styles.saveOrCancel}>
+                    <TouchableOpacity onPress={() => {navigation.navigate('Home');}} style={styles.saveButton}>
+                        <Text>Save</Text>
+                    </TouchableOpacity>
+                    <p>or</p>
+                    <TouchableOpacity onPress={() => {navigation.navigate('Home');}} style={styles.cancelButton}>
+                        <Text>Cancel</Text>
+                    </TouchableOpacity>
+                </View>
 
             </SafeAreaView>
     );
@@ -147,16 +157,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 20,
     },
-    go_back_button: {
+    goBackButton: {
         backgroundColor: "#FFFFFF",
         padding: 25,
-        justifyContent: "center",
-        borderRadius: 50,
-    },
-    add_food_button: {
-        backgroundColor: '#65CB2E',
-        padding: 25,
-        width: "auto",
         justifyContent: "center",
         borderRadius: 50,
     },
@@ -168,5 +171,27 @@ const styles = StyleSheet.create({
         paddingHorizontal: '2%',
         marginVertical: '2%',
         marginHorizontal: '2%',
+    },
+    saveOrCancel: {
+        alignItems: 'center',
+    },
+    saveButton: {
+        backgroundColor: '#65CB2E',
+        padding: 25,
+        width: "auto",
+        justifyContent: "center",
+        borderRadius: 50,
+    },
+    cancelButton: {
+        backgroundColor: '#D9D9D9',
+        padding: 25,
+        width: "auto",
+        justifyContent: "center",
+        borderRadius: 50,
+    },
+    optionText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
     },
 });
