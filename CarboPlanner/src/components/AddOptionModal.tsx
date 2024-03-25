@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import ManuallyAdd from "./ManuallyAdd";
+import ManuallyAdd from "./ManualAddFoodModal";
 
 const windowWidth = Dimensions.get('window').width;
 
-const AddFoodModal = () => {
+const AddOptionModal = () => {
     const [isVisible, setIsVisible] = useState(false);
 
     const toggleModal = () => {
@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AddFoodModal;
+export default AddOptionModal;

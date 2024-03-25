@@ -5,7 +5,7 @@ import React, {useState} from "react";
 import {getCategory} from "../components/MealType";
 import {getMacros} from "../components/Macros";
 import {TextInput} from "react-native-paper";
-import AddFoodModal from "../components/AddFoodModal";
+import AddOptionModal from "../components/AddOptionModal";
 
 export default function Loading({route}) {
 
@@ -94,7 +94,7 @@ export default function Loading({route}) {
                             })}
 
                     <View style={styles.buttonContainer}>
-                        <AddFoodModal></AddFoodModal>
+                        <AddOptionModal></AddOptionModal>
                     </View>
                 </Card>
 
