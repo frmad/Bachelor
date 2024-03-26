@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import { TextInput } from "react-native-paper";
 
 const windowWidth = Dimensions.get('window').width;
@@ -58,8 +58,8 @@ const ManuallyAddModal = () => {
                 >
                     <View style={styles.modalContent}>
                         <View style={styles.fieldContainer}>
-                            <Text style={styles.fieldText}>Manually add food</Text>
-                            <View style={styles.field}> {/*use value={name} or value{calories.toString()} for the change food item modal*/}
+                            <Text style={{textAlignVertical:"center"}}>Manually add food</Text>
+                            <View style={styles.field}> 
                                 <Text style={styles.fieldText}>Name</Text>
                                 <TextInput
                                     style={styles.input}
@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         marginBottom: 20,
     },
+    
 });
 
 export default ManuallyAddModal;
