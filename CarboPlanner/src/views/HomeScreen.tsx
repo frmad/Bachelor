@@ -24,13 +24,16 @@ import MacroProgressBar from '../components/MacroProgressBar';
 import HorizontalLine from '../components/HorizontalLine';
 import { useNavigation } from '@react-navigation/native';
 
-
 export default function HomeScreen(){
   const navigation = useNavigation();
 
 
   function handlePress(){
     navigation.navigate('Camera');
+  }
+
+  function goToCalendar() {
+    navigation.navigate('Calendar');
   }
 
   let [fontsLoaded] = useFonts({
@@ -133,6 +136,7 @@ export default function HomeScreen(){
       </Card>
       
       <TouchableOpacity onPress={handlePress} style={styles.camera_button} />
+      <TouchableOpacity onPress={goToCalendar} style={styles.camera_button} />
       
       </View>
   );

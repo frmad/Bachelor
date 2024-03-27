@@ -8,6 +8,7 @@ import PlanScreen from "./PlanScreen";
 import ResultScreen from "./ResultScreen";
 import ProfileScreen from "./ProfileScreen";
 import Camera from '../components/Camera';
+import Calendar from '../views/Calendar';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,6 +33,7 @@ export function StackNav() {
                     <Stack.Screen name="Tab" component={Tabs} options={{ headerShown: false }}/>
                     <Stack.Screen name="Loading" component={Loading} options={{ headerShown: false }}/>
                     <Stack.Screen name="Camera" component={Camera} options={{ headerShown: false }} />
+                    <Stack.Screen name="Calendar" component={Calendar} options={{ headerShown: false }} />
                 </Stack.Group>
                 <Stack.Group screenOptions={{ presentation: "modal" }}>
                     <Stack.Screen name='Result' component={ResultScreen} options={{headerShown: false}} />
