@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
+//https://www.npmjs.com/package/react-native-calendars#calendar
 export default function CalendarComponent() {
     const [value, onChange] = useState(new Date());
 
