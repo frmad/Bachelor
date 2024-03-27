@@ -7,7 +7,7 @@ import {getMacros} from "../components/Macros";
 import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
 
 export default function Loading({route}) {
 
@@ -106,13 +106,11 @@ export default function Loading({route}) {
                         <Text>Protein:{mealMacros.totalFat}</Text>
                     </View>
                 </View>
-                <View>
-                <FlatList
-                    data={item}
-                    renderItem={food}
-                    />
-                </View>
-
+                    <FlatList
+                        style={{height: "20%"}}
+                        data={item}
+                        renderItem={food}
+                        />
                 <View style={styles.buttonContainer}>
                     <AddOptionModal></AddOptionModal>
                 </View>
@@ -213,5 +211,11 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    listingsList: {
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        justifyContent: "space-evenly",
+        gap: 15
     },
 });

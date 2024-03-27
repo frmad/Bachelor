@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import { TextInput } from "react-native-paper";
+import {LongTextInput, ShortTextInput} from '../components/TextInput';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -20,9 +21,14 @@ const ManuallyAddModal = () => {
         setName(text);
     };
 
+    const onChangeWeight = (text) => {
+        setCalories(parseInt(text) || 0);
+    };
+
     const onChangeCalories = (text) => {
         setCalories(parseInt(text) || 0);
     };
+
 
     const onChangeFat = (text) => {
         setFat(parseInt(text) || 0);
@@ -40,6 +46,8 @@ const ManuallyAddModal = () => {
         event.stopPropagation();
     };
 
+    const element = <TextInput.Icon name="lock-outline" />
+
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.option} onPress={toggleModal}></TouchableOpacity>
@@ -49,6 +57,7 @@ const ManuallyAddModal = () => {
                 visible={isVisible}
                 onRequestClose={toggleModal}
                 onTouchStart={stopPropagation}
+                statusBarTranslucent={true}
 
             >
                 <TouchableOpacity
@@ -57,64 +66,61 @@ const ManuallyAddModal = () => {
                     onPressOut={toggleModal}
                 >
                     <View style={styles.modalContent}>
-                        <View style={styles.fieldContainer}>
-                            <Text style={{textAlignVertical:"center"}}>Manually add food</Text>
-                            <View style={styles.field}> 
-                                <Text style={styles.fieldText}>Name</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={onChangeName}
-                                    placeholder="Name"
-                                    onTouchStart={stopPropagation}
-                                />
-                            </View>
-                            <View style={styles.field}>
-                                <Text style={styles.fieldText}>Calories</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={onChangeCalories}
-                                    placeholder="Calories"
-                                    keyboardType="numeric"
-                                    onTouchStart={stopPropagation}
-                                />
-                            </View>
                             <View style={styles.macros}>
-                                <View style={styles.field}>
-                                    <Text style={styles.fieldText}>Fat</Text>
-                                    <TextInput
-                                        style={styles.input}
-                                        onChangeText={onChangeFat}
-                                        placeholder="Fat"
-                                        keyboardType="numeric"
-                                        onTouchStart={stopPropagation}
-                                    />
-                                </View>
-                                <View style={styles.field}>
-                                    <Text style={styles.fieldText}>Protein</Text>
-                                    <TextInput
-                                        style={styles.input}
-                                        onChangeText={onChangeProtein}
-                                        placeholder="Protein"
-                                        keyboardType="numeric"
-                                        onTouchStart={stopPropagation}
-                                    />
-                                </View>
-                                <View style={styles.field}>
-                                    <Text style={styles.fieldText}>Carbs</Text>
-                                    <TextInput
-                                        style={styles.input}
-                                        onChangeText={onChangeCarb}
-                                        placeholder="Carbs"
-                                        keyboardType="numeric"
-                                        onTouchStart={stopPropagation}
-                                    />
-                                </View>
+                                <TouchableOpacity style={{borderRadius: 500, width: 40, alignContent: "center"}} onPress={toggleModal}>
+                                    <Text style={{ fontSize: 25, fontWeight: "bold", textAlign: "center"}}>{"<"}</Text>
+                                </TouchableOpacity>
+                                <Text style={{textAlign:"center", marginBottom:5, fontSize: 20, fontWeight: "bold"}}>Manually add food</Text>
+                                <TouchableOpacity style={{borderRadius : 500, backgroundColor: "grey", width: 40, alignContent: "center"}}>
+                                    <Text style={{ fontSize: 25, fontWeight: "bold", textAlign: "center"}}>{"i"}</Text>
+                                </TouchableOpacity>
                             </View>
+                            <View style={styles.bigWrapper}>
+                                <LongTextInput
+                                    label="Name"
+                                    onChangeText={onChangeName}
+                                    affix=""
+                                />
+                            </View>
+                            <View style={styles.bigWrapper}>
+                                <LongTextInput
+                                label="Weight"
+                                onChangeText={onChangeWeight}
+                                affix="| g"
+                                />
+                            </View>
+
+                            <View style={styles.bigWrapper}>
+                                <LongTextInput
+                                label="Calories"
+                                onChangeText={onChangeCalories}
+                                affix="| kcal"
+                                />
+                            </View>
+
+                            <View style={styles.macros}>
+                                <ShortTextInput
+                                label="Carb"
+                                onChangeText={onChangeCarb}
+                                affix="| g"
+                                />
+                                <ShortTextInput
+                                label="Protein"
+                                onChangeText={onChangeProtein}
+                                affix="| g"
+                                />
+                                <ShortTextInput
+                                label="Fat"
+                                onChangeText={onChangeFat}
+                                affix="| g"
+                                />
+                            </View>
+                            
                             <TouchableOpacity style={styles.addFoodButton} onPress={toggleModal}>
                                 <Text>Save</Text>
                             </TouchableOpacity>
+                        
                         </View>
-                    </View>
                 </TouchableOpacity>
             </Modal>
         </View>
@@ -122,6 +128,9 @@ const ManuallyAddModal = () => {
 };
 
 const styles = StyleSheet.create({
+    bigWrapper: {
+        width: "100%"
+    },
     container: {
         flex: 1,
         justifyContent: 'center',
@@ -138,9 +147,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: 370,
+        width: "90%",
+        height: "60%",
         padding: 20,
-        borderRadius: 10,
+        borderRadius: 20,
         elevation: 5,
     },
     option: {
@@ -174,7 +184,6 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        width: '100%',
         maxWidth: 100,
         marginVertical: 5,
         borderWidth: 1,
