@@ -51,38 +51,38 @@ export default function CalendarComponent() {
                 <style>{`
                     .react-calendar {
                         font-family: 'Inter';
-                        color: #333;
+                        color: #45505B;
                     }
                  
                     .react-calendar__tile--active {
-                        background-color: #4caf50 !important; /* Green */
+                        background-color: #65CB2E !important; 
                         color: white !important;
                         border-radius: 45%;
                     }
     
                     .react-calendar__tile--now {
-                        background-color: #8bc34a !important; /* Light Green */
+                        background-color: #A4DF84 !important; 
                         color: white !important;
                         border-radius: 45%;
                     }
                     .react-calendar__month-view__days__day--weekend {
-                        color: #333 !important; /* Match the color of other days */
+                        color: #45505B !important; 
                     }
                     
                     .react-calendar__navigation__label {
                         font-size: 20px;
                         font-weight: bold;
-                        color: #333;
+                        color: #45505B;
                     }
                     
                     .react-calendar__navigation__arrow {
                         font-size: 24px;
-                        color: #4caf50;
+                        color: #65CB2E;
                         cursor: pointer;
                     }
                 `}</style>
             </div>
-            <div style={{ marginTop: '20px', textAlign: 'center', fontFamily: 'Inter'}}>
+            <div style={{ marginTop: '20px', textAlign: 'center', fontFamily: 'Inter', color: "#45505B",}}>
                 <h3>Agenda for {formattedDate}</h3>
                 <p>{agenda}</p>
             </div>
