@@ -36,8 +36,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     goBackButton: {
-        position: 'absolute',
-        left: 20,
+        marginRight: 0,
     },
     goBackText: {
         color: "#45505B",
@@ -49,7 +48,7 @@ const styles = StyleSheet.create({
     },
     headerTextView: {
         flex: 1,
-        alignItems: 'center', 
+        alignItems: 'center',
     },
     greenLine: {
         height: 3,
