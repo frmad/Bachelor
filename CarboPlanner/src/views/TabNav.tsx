@@ -69,4 +69,3 @@ const getTabBarIconSource = (routeName, focused) => {
     const { focused: focusedIcon, notFocused: notFocusedIcon } = iconMap[routeName];
     return focused ? focusedIcon : notFocusedIcon;
   };
-  
