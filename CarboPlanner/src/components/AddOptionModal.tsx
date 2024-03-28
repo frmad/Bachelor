@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions, Pressable } from 'react-native';
 import ManuallyAdd from "./ManualAddFoodModal";
 
 const windowWidth = Dimensions.get('window').width;
@@ -11,10 +11,15 @@ const AddOptionModal = () => {
         setIsVisible(!isVisible);
     };
 
+    const setFirstModal = () => {
+        setIsVisible(false);
+    }
+        
+
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.addFoodButton} onPress={toggleModal}>
-                <Text>Add food item</Text>
+                <Text>{"HELLO"}</Text>
             </TouchableOpacity>
             <Modal
                 animationType="slide"
@@ -30,11 +35,12 @@ const AddOptionModal = () => {
                     <View style={styles.modalContent}>
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Manually add food</Text>
-                            <ManuallyAdd></ManuallyAdd>
+                            <ManuallyAdd toggleParentModal={setFirstModal}></ManuallyAdd>
                         </View>
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Camera upload</Text>
-                            <TouchableOpacity style={styles.option} onPress={toggleModal}></TouchableOpacity>
+                            <TouchableOpacity style={styles.option} onPress={toggleModal}>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </TouchableOpacity>

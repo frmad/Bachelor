@@ -31,7 +31,9 @@ const ManuallyAddModal = () => {
 
 
     const onChangeFat = (text) => {
-        setFat(parseInt(text) || 0);
+        console.log(text);
+        setFat(prevFat => parseFloat(text) || prevFat);
+        console.log("Updated fat state:", fat);
     };
 
     const onChangeProtein = (text) => {
@@ -51,6 +53,7 @@ const ManuallyAddModal = () => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.option} onPress={toggleModal}></TouchableOpacity>
+            
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -60,11 +63,7 @@ const ManuallyAddModal = () => {
                 statusBarTranslucent={true}
 
             >
-                <TouchableOpacity
-                    style={styles.modalContainer}
-                    activeOpacity={1}
-                    onPressOut={toggleModal}
-                >
+                <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                             <View style={styles.macros}>
                                 <TouchableOpacity style={{borderRadius: 500, width: 40, alignContent: "center"}} onPress={toggleModal}>
@@ -78,14 +77,14 @@ const ManuallyAddModal = () => {
                             <View style={styles.bigWrapper}>
                                 <LongTextInput
                                     label="Name"
-                                    onChangeText={onChangeName}
+                                    onChange={onChangeName}
                                     affix=""
                                 />
                             </View>
                             <View style={styles.bigWrapper}>
                                 <LongTextInput
                                 label="Weight"
-                                onChangeText={onChangeWeight}
+                                onChange={onChangeWeight}
                                 affix="| g"
                                 />
                             </View>
@@ -93,7 +92,7 @@ const ManuallyAddModal = () => {
                             <View style={styles.bigWrapper}>
                                 <LongTextInput
                                 label="Calories"
-                                onChangeText={onChangeCalories}
+                                onChange={onChangeCalories}
                                 affix="| kcal"
                                 />
                             </View>
@@ -117,11 +116,11 @@ const ManuallyAddModal = () => {
                             </View>
                             
                             <TouchableOpacity style={styles.addFoodButton} onPress={toggleModal}>
-                                <Text>Save</Text>
+                                <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Save</Text>
                             </TouchableOpacity>
                         
                         </View>
-                </TouchableOpacity>
+                        </View>
             </Modal>
         </View>
     );
@@ -149,7 +148,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         width: "90%",
         height: "60%",
-        padding: 20,
+        padding: 15,
         borderRadius: 20,
         elevation: 5,
     },
@@ -191,10 +190,11 @@ const styles = StyleSheet.create({
     },
     addFoodButton: {
         backgroundColor: '#65CB2E',
-        paddingVertical: 15,
+        paddingVertical: 5,
         paddingHorizontal: 25,
         borderRadius: 50,
-        marginBottom: 20,
+        marginBottom: 1,
+        width: "50%"
     },
     
 });
