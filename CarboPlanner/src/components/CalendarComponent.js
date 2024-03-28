@@ -10,6 +10,7 @@ const getCurrentDate = () => {
     return new Date(`${year}-${month}-${day}`);
 };
 
+
 const mealData = {
     [getCurrentDate().toISOString().split('T')[0]]: 'Oatmeal, Lunch: Sandwich, Dinner: Pasta',
     // Add more meal data as needed
