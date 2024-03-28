@@ -26,16 +26,18 @@ const AddOptionModal = () => {
                 transparent={true}
                 visible={isVisible}
                 onRequestClose={toggleModal}
+                statusBarTranslucent={true}
             >
                 <TouchableOpacity
                     style={styles.modalContainer}
                     activeOpacity={1}
                     onPressOut={toggleModal}
                 >
+                    <TouchableOpacity activeOpacity={1}>
                     <View style={styles.modalContent}>
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Manually add food</Text>
-                            <ManuallyAdd toggleParentModal={setFirstModal}></ManuallyAdd>
+                            <ManuallyAdd></ManuallyAdd>
                         </View>
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Camera upload</Text>
@@ -43,6 +45,7 @@ const AddOptionModal = () => {
                             </TouchableOpacity>
                         </View>
                     </View>
+                    </TouchableOpacity>
                 </TouchableOpacity>
             </Modal>
         </View>

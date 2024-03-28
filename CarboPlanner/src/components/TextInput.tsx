@@ -10,6 +10,7 @@ return (
     mode='outlined'
     label={props.label}
     activeOutlineColor='black'
+    keyboardType={props.keyboard}
     onChangeText={props.onChange}
     right={<TextInput.Affix text={props.affix}/>}
 />
@@ -25,6 +26,7 @@ export const ShortTextInput = (props : any) => {
         mode='outlined'
         label={props.label}
         activeOutlineColor='black'
+        keyboardType={props.keyboard}
         onChangeText={props.onChangeText}
         right={<TextInput.Affix text={props.affix}/>}
     />
