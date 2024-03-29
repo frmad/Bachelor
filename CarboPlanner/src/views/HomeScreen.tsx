@@ -25,6 +25,7 @@ import HorizontalLine from '../components/HorizontalLine';
 import { useNavigation } from '@react-navigation/native';
 
 
+
 export default function HomeScreen(){
   const navigation = useNavigation();
 
@@ -66,11 +67,11 @@ export default function HomeScreen(){
             fat: "12",
           },
         ],
-        icon: "../../assets/flat-icons/lunch_bag.png",
+        icon: "lunch",
       },
       {
         name: "Not Pancakes",
-        icon: "../../assets/flat-icons/midday_lunch.png",
+        icon: "midday",
         meals: [
           {
             name: "Item 5",
@@ -95,7 +96,6 @@ export default function HomeScreen(){
   return (
     <View style={styles.container}>
       <Text style={styles.header_text}>Today</Text>
-
       <Card>
         <View style={styles.row}>
           <CircularSlider value={1200} max={2000}/>
