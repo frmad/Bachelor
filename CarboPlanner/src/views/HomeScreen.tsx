@@ -1,8 +1,7 @@
 import * as React from 'react';
-import Camera from '../components/Camera';
 
 
-import { Button, Platform, SafeAreaView, Text, TouchableOpacity, View, StyleSheet, Image, Pressable, FlatList } from 'react-native';
+import { Button, Platform, SafeAreaView, Text, TouchableOpacity, View, StyleSheet, Image, Pressable, FlatList, ScrollView } from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
 import MacroSlider from '../components/MacroProgressBar';
@@ -117,7 +116,7 @@ export default function HomeScreen(){
         </View>
       </Card>
 
-      <Card>
+      <Card customStyle={{maxHeight: "44%"}}>
       <FlatList
         data={data}
         renderItem={renderMealItem}
