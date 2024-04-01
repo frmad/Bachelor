@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+
 const flashLogo = require('../../assets/icons/lightning-bolt-filled.png');
 
 export default function Camera(props: any){
@@ -61,6 +62,7 @@ export default function Camera(props: any){
     // Check if the camera is available and not null, if true,
     // it will use the takePictureAsync to take a picture and save it to the app's cache
     if (camera) {
+
       const data = await camera.takePictureAsync(options={base64:true});
       // Sets the Image URI to the data.uri (Base64)
   

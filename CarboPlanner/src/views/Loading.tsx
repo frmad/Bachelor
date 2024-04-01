@@ -8,6 +8,9 @@ export default function Loading({route}) {
 
     const { base64 } = route.params;
 
+    const api_url = process.env.EXPO_PUBLIC_API_URL;
+    console.log(api_url)
+
     const fetchData = async (base64) => {
 
         const requestBody = {
@@ -15,7 +18,7 @@ export default function Loading({route}) {
         };
     
         //Sends POST request to this URL, sends using the Base64 Image from the Expo Camera
-        fetch('https://yolov5-flaskapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection', {
+        fetch(api_url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -33,6 +36,7 @@ export default function Loading({route}) {
         .then(function(data) {
           // The JSON data from the WebServer is returned here
           navigation.navigate('Result', {base64: base64, data: data});
+        
 
           return data;
         })
