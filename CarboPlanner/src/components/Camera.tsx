@@ -57,7 +57,6 @@ export default function Camera(props: any){
     setFlashMode(c => (c === CameraMode.Constants.FlashMode.off ? CameraMode.Constants.FlashMode.torch : CameraMode.Constants.FlashMode.off));
   }
 
-  let splitBase64String: string[] = [];
   const takePicture = async () => {
     // Check if the camera is available and not null, if true,
     // it will use the takePictureAsync to take a picture and save it to the app's cache
@@ -72,14 +71,18 @@ export default function Camera(props: any){
 
       
       // Splits the Base64 from the Type identifier made by Expo Camera, and sends the bare Base64 code
-      splitBase64String = base64.split(',');
       //navigation.navigate('Loading', {base64: splitBase64String[1]});
     }
   }
 
+  function splitBase64String (a) {
+    return (a.split(",")[1])
+  }
+
+
   const proceed = () => {
     //fetchData(splitBase64String[1]);
-    navigation.navigate('Loading', {base64: splitBase64String[1]});
+    navigation.navigate('Loading', {base64: splitBase64String(images[0])});
   }
 
 
