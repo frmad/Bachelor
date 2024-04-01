@@ -23,6 +23,7 @@ export default function Camera(props: any){
   const [flashMode, setFlashMode] = useState(CameraMode.Constants.FlashMode.off);
   const [permission, requestPermission] = CameraMode.useCameraPermissions();
   const [images, setImages] = useState([]);
+  const [base64Images, setBase64] = useState([])
   const [resons, setRespons] = useState(null);
   const [camera, setCamera] = useState(null);
   const navigation = useNavigation();
@@ -60,13 +61,16 @@ export default function Camera(props: any){
     // Check if the camera is available and not null, if true,
     // it will use the takePictureAsync to take a picture and save it to the app's cache
     if (camera) {
-      const data = await camera.takePictureAsync(null);
+      const data = await camera.takePictureAsync(options={base64:true});
       // Sets the Image URI to the data.uri (Base64)
-      setImages(prevImageUris => [...prevImageUris, data.uri]);
+  
+      const base64 = 'data:image/png;base64,' + data.base64;
 
+      setImages(prevImageUris => [...prevImageUris, base64]);
+
+      
       // Splits the Base64 from the Type identifier made by Expo Camera, and sends the bare Base64 code
-      splitBase64String = data.uri.split(',');
-
+      splitBase64String = base64.split(',');
       //navigation.navigate('Loading', {base64: splitBase64String[1]});
     }
   }

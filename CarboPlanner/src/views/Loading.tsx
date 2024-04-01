@@ -15,7 +15,7 @@ export default function Loading({route}) {
         };
     
         //Sends POST request to this URL, sends using the Base64 Image from the Expo Camera
-        fetch('http://localhost:5000/v1/object-detection/yolov5s', {
+        fetch('https://yolov5-flaskapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
