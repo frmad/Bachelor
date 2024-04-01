@@ -2,7 +2,17 @@ import * as React from 'react';
 import { Camera as CameraMode } from 'expo-camera';
 import { CameraType } from 'expo-camera';
 import {useRef, useState} from 'react';
-import {Button, Text, View, StyleSheet, Image, Pressable, ScrollView, SafeAreaView} from 'react-native';
+import {
+  Button,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  Pressable,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const flashLogo = require('../../assets/icons/lightning-bolt-filled.png');
@@ -132,9 +142,9 @@ export default function Camera(props: any){
             <Pressable onPress={takePicture} style={styles.buttonCamera} >
               <Text style={styles.circle}></Text>
             </Pressable>
-            <View style={[styles.proceedButtonContainer, { display: images.length === 0 ? 'none' : 'flex' }]}>
-              <Button onPress={proceed} title="Proceed" color={'#65CB2E'}/>
-            </View>
+            <TouchableOpacity onPress={proceed} style={[styles.proceedButton, { display: images.length === 0 ? 'none' : 'flex' }]}>
+              <Text style={styles.proceedText}>Proceed</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </SafeAreaView>
@@ -168,7 +178,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: 'gray',
-    borderWidth: 2, 
+    borderWidth: 2,
   },
   button: {
     borderRadius: 50,
@@ -196,14 +206,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-  proceedButtonContainer: {
+  proceedButton: {
     position: 'absolute',
     right: 20,
     bottom: 13,
     borderRadius: 25,
     backgroundColor: '#65CB2E',
     paddingHorizontal: 20,
+    width: "auto",
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 40,
   },
+  proceedText: {
+      color: "white",
+      fontSize: 18,
+    },
   bottomLeftContainer: {
     position: 'absolute',
     bottom: 0,
