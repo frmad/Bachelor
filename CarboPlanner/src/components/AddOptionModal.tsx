@@ -37,7 +37,7 @@ const AddOptionModal = () => {
                     <View style={styles.modalContent}>
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Manually add food</Text>
-                            <ManuallyAdd></ManuallyAdd>
+                            <ManuallyAdd/>
                         </View>
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Camera upload</Text>

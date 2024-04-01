@@ -50,7 +50,9 @@ export default function Camera(props: any){
     // Check if the camera is available and not null, if true, 
     // it will use the takePictureAsync to take a picture and save it to the app's cache
     if (camera) {
+      //Option set to base64 true is done so that android produces a base 64 string
       const data = await camera.takePictureAsync(options={base64:true});
+      
       // Sets the Image URI to the data.uri (Base64)
       setImageUri(data.base64);
 

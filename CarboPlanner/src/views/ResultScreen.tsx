@@ -25,7 +25,7 @@ export default function Loading({route}) {
 
     const [changeText, setChangeText] = useState(false);
 
-    const [newText, setNewText] =  useState('')
+    const [newText, setNewText] =  useState('');
 
     const image: any = "data:image/png;base64," + base64;
 
@@ -112,7 +112,7 @@ export default function Loading({route}) {
                         renderItem={food}
                         />
                 <View style={styles.buttonContainer}>
-                    <AddOptionModal></AddOptionModal>
+                    <AddOptionModal/>
                 </View>
             </Card>
 

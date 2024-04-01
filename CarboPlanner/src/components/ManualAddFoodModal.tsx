@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import { TextInput } from "react-native-paper";
-import {LongTextInput, ShortTextInput} from '../components/TextInput';
+import {LongInput, ShortInput} from '../components/TextInput';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -71,14 +71,14 @@ const ManuallyAddModal = () => {
                                     </TouchableOpacity>
                                 </View>
                                 <View style={styles.bigWrapper}>
-                                    <LongTextInput
+                                    <LongInput
                                         label="Name"
                                         onChange={onChangeName}
                                         affix=""
                                     />
                                 </View>
                                 <View style={styles.bigWrapper}>
-                                    <LongTextInput
+                                    <LongInput
                                     label="Weight"
                                     keyboard="numeric"
                                     onChange={onChangeWeight}
@@ -87,7 +87,7 @@ const ManuallyAddModal = () => {
                                 </View>
 
                                 <View style={styles.bigWrapper}>
-                                    <LongTextInput
+                                    <LongInput
                                     label="Calories"
                                     keyboard="numeric"
                                     onChange={onChangeCalories}
@@ -96,19 +96,19 @@ const ManuallyAddModal = () => {
                                 </View>
 
                                 <View style={styles.macros}>
-                                    <ShortTextInput
+                                    <ShortInput
                                     label="Carb"
                                     keyboard="numeric"
                                     onChangeText={onChangeCarb}
                                     affix="| g"
                                     />
-                                    <ShortTextInput
+                                    <ShortInput
                                     label="Protein"
                                     keyboard="numeric"
                                     onChangeText={onChangeProtein}
                                     affix="| g"
                                     />
-                                    <ShortTextInput
+                                    <ShortInput
                                     label="Fat"
                                     keyboard="numeric"
                                     onChangeText={onChangeFat}

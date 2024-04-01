@@ -1,7 +1,7 @@
 import { TextInput } from "react-native-paper"
 
 
-export const LongTextInput = (props : any) => {
+export const LongInput = (props : any) => {
 return (
 <TextInput 
     style={{width:"100%", backgroundColor: "white"}}
@@ -17,7 +17,7 @@ return (
 )
 }
 
-export const ShortTextInput = (props : any) => {
+export const ShortInput = (props : any) => {
     return (
     <TextInput 
         style={{width:"30%", backgroundColor: "white"}}
