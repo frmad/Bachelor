@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
+import { Images } from '../utils/images';
 
 export default function List(props: any) {
     const [expanded, setExpanded] = React.useState(false);
@@ -10,12 +11,14 @@ export default function List(props: any) {
 
     const body = <View>{props.children}</View>;
 
+    const image = {uri: 'file://' + props.imageURI};
+
 
     return (
         <View>
             <TouchableOpacity onPress={handlePress}>
                 <View style={styles.row}>
-                    <Image style={styles.tinyImage} source={props.imageURI} />
+                    <Image style={styles.tinyImage} source={Images[props.imageURI]} />
                     <View style={styles.column}>
                         <Text style={styles.bold}>{props.name}</Text>
                     </View>
