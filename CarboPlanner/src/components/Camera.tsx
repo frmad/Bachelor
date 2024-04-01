@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Button, Text, View, StyleSheet, Image, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+
 const flashLogo = require('../../assets/icons/lightning-bolt-filled.png');
 
 export default function Camera(props: any){
@@ -49,16 +50,14 @@ export default function Camera(props: any){
     // Check if the camera is available and not null, if true, 
     // it will use the takePictureAsync to take a picture and save it to the app's cache
     if (camera) {
-      const data = await camera.takePictureAsync(null);
+      //Option set to base64 true is done so that android produces a base 64 string
+      const data = await camera.takePictureAsync(options={base64:true});
+      
       // Sets the Image URI to the data.uri (Base64)
-      setImageUri(data.uri);
-
-      // Splits the Base64 from the Type identifier made by Expo Camera, and sends the bare Base64 code
-      const splitBase64String: string[] = data.uri.split(',');
+      setImageUri(data.base64);
 
       //fetchData(splitBase64String[1]);
-
-      navigation.navigate('Loading', {base64: splitBase64String[1]});
+      navigation.navigate('Loading', {base64: data.base64});
     }
   }
 

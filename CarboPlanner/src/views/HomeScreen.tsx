@@ -23,6 +23,7 @@ export default function HomeScreen(){
   
   const data = [
       {
+        id: 0,
         name: "Pancakes",
         meals: [
           {
@@ -45,6 +46,7 @@ export default function HomeScreen(){
         icon: "lunch",
       },
       {
+        id: 1,
         name: "Not Pancakes",
         icon: "midday",
         meals: [
