@@ -8,6 +8,8 @@ import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
+import HorizontalLine from '../components/HorizontalLine';
+
 
 export default function Loading({route}) {
 
@@ -28,6 +30,8 @@ export default function Loading({route}) {
     const [newText, setNewText] =  useState('');
 
     const image: any = "data:image/png;base64," + base64;
+
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
 
     interface Recognition{
         xmin: number;
@@ -61,7 +65,6 @@ export default function Loading({route}) {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView>
                 <View style={styles.container}>
                     {/*
                     <View style={styles.header}>
@@ -104,7 +107,7 @@ export default function Loading({route}) {
                                 <View>
                                     <View style={styles.mealTitle}>
                                         <View style={styles.mealIconContainer}>
-                                            <Image source={mealIcon} style={styles.mealIcon} resizeMode="contain" />
+                                            <Image source={{}} style={styles.mealIcon} resizeMode="contain" />
                                         </View>
                                         <Text style={styles.title}>{mealtype}</Text>
                                         <TouchableOpacity onPress={() => {
@@ -154,7 +157,6 @@ export default function Loading({route}) {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </ScrollView>
         </SafeAreaView>
     );
 }
@@ -183,7 +185,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     title: {
-        fontFamily: "Inter_700Bold",
+        
         fontSize: 40,
         color: "#45505B",
         marginRight: 80,
@@ -213,7 +215,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     macroText: {
-        fontFamily: "Inter_300Light",
+        
         fontSize: 12,
         color: "#45505B",
     },
@@ -250,18 +252,18 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     saveButtonText: {
-        fontFamily: "Inter_600SemiBold",
+        
         color: 'white',
-        fontSize: '6vw',
+        fontSize: 6,
     },
     cancelButton: {
         width: "auto",
         justifyContent: "center",
     },
     cancelButtonText: {
-        fontFamily: "Inter_600SemiBold",
+        
         color: '#575757',
-        fontSize: '4vw',
+        fontSize: 4,
     },
     optionText: {
         color: 'white',
@@ -319,14 +321,14 @@ const styles = StyleSheet.create({
         marginTop: 7,
     },
     cardTitleText: {
-        fontFamily: "Inter_300Light",
+        
         fontSize: 12,
         color: "#45505B",
         textAlign: 'center',
         width: '33.33%',
     },
     itemName: {
-        fontFamily: "Inter_600SemiBold",
+        
         fontSize: 16,
         color: "#45505B",
     }
