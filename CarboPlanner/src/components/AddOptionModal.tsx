@@ -19,7 +19,7 @@ const AddOptionModal = () => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.addFoodButton} onPress={toggleModal}>
-                <Text>{"HELLO"}</Text>
+                <Text>{"Add food item"}</Text>
             </TouchableOpacity>
             <Modal
                 animationType="slide"
