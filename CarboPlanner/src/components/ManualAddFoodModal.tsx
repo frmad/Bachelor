@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import { TextInput } from "react-native-paper";
+import {LongInput, ShortInput} from '../components/TextInput';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -18,6 +19,10 @@ const ManuallyAddModal = () => {
 
     const onChangeName = (text) => {
         setName(text);
+    };
+
+    const onChangeWeight = (text) => {
+        setCalories(parseInt(text) || 0);
     };
 
     const onChangeCalories = (text) => {
@@ -49,79 +54,79 @@ const ManuallyAddModal = () => {
                 visible={isVisible}
                 onRequestClose={toggleModal}
                 onTouchStart={stopPropagation}
-
+                statusBarTranslucent={true}
             >
-                <TouchableOpacity
-                    style={styles.modalContainer}
-                    activeOpacity={1}
-                    onPressOut={toggleModal}
-                >
-                    <View style={styles.modalContent}>
-                        <View style={styles.fieldContainer}>
-                            <Text style={styles.fieldText}>Manually add food</Text>
-                            <View style={styles.field}> {/*use value={name} or value{calories.toString()} for the change food item modal*/}
-                                <Text style={styles.fieldText}>Name</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={onChangeName}
-                                    placeholder="Name"
-                                    onTouchStart={stopPropagation}
-                                />
-                            </View>
-                            <View style={styles.field}>
-                                <Text style={styles.fieldText}>Calories</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={onChangeCalories}
-                                    placeholder="Calories"
-                                    keyboardType="numeric"
-                                    onTouchStart={stopPropagation}
-                                />
-                            </View>
-                            <View style={styles.macros}>
-                                <View style={styles.field}>
-                                    <Text style={styles.fieldText}>Fat</Text>
-                                    <TextInput
-                                        style={styles.input}
-                                        onChangeText={onChangeFat}
-                                        placeholder="Fat"
-                                        keyboardType="numeric"
-                                        onTouchStart={stopPropagation}
+                <TouchableOpacity onPress={toggleModal} style={styles.modalContainer}>
+                    <TouchableOpacity activeOpacity={1} style={styles.modalContent}>
+                                <View style={styles.macros}>
+                                    <TouchableOpacity style={styles.topButton} onPress={toggleModal}>
+                                        <Text style={styles.textButton}>{"<"}</Text>
+                                    </TouchableOpacity>
+                                    <Text style={{textAlign:"center", marginBottom:5, fontSize: 20, fontWeight: "bold"}}>Manually add food</Text>
+                                    <TouchableOpacity style={[styles.topButton, {backgroundColor: "grey"}]}>
+                                        <Text style={styles.textButton}>{"i"}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={styles.bigWrapper}>
+                                    <LongInput
+                                        label="Name"
+                                        onChange={onChangeName}
+                                        affix=""
                                     />
                                 </View>
-                                <View style={styles.field}>
-                                    <Text style={styles.fieldText}>Protein</Text>
-                                    <TextInput
-                                        style={styles.input}
-                                        onChangeText={onChangeProtein}
-                                        placeholder="Protein"
-                                        keyboardType="numeric"
-                                        onTouchStart={stopPropagation}
+                                <View style={styles.bigWrapper}>
+                                    <LongInput
+                                    label="Weight"
+                                    keyboard="numeric"
+                                    onChange={onChangeWeight}
+                                    affix="| g"
                                     />
                                 </View>
-                                <View style={styles.field}>
-                                    <Text style={styles.fieldText}>Carbs</Text>
-                                    <TextInput
-                                        style={styles.input}
-                                        onChangeText={onChangeCarb}
-                                        placeholder="Carbs"
-                                        keyboardType="numeric"
-                                        onTouchStart={stopPropagation}
+
+                                <View style={styles.bigWrapper}>
+                                    <LongInput
+                                    label="Calories"
+                                    keyboard="numeric"
+                                    onChange={onChangeCalories}
+                                    affix="| kcal"
                                     />
                                 </View>
-                            </View>
-                            <TouchableOpacity style={styles.addFoodButton} onPress={toggleModal}>
-                                <Text>Save</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </TouchableOpacity>
+
+                                <View style={styles.macros}>
+                                    <ShortInput
+                                    label="Carb"
+                                    keyboard="numeric"
+                                    onChangeText={onChangeCarb}
+                                    affix="| g"
+                                    />
+                                    <ShortInput
+                                    label="Protein"
+                                    keyboard="numeric"
+                                    onChangeText={onChangeProtein}
+                                    affix="| g"
+                                    />
+                                    <ShortInput
+                                    label="Fat"
+                                    keyboard="numeric"
+                                    onChangeText={onChangeFat}
+                                    affix="| g"
+                                    />
+                                </View>
+                                
+                                <TouchableOpacity style={styles.addFoodButton} onPress={toggleModal}>
+                                    <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Save</Text>
+                                </TouchableOpacity>
+                        </TouchableOpacity>
+                        </TouchableOpacity>
             </Modal>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    bigWrapper: {
+        width: "100%"
+    },
     container: {
         flex: 1,
         justifyContent: 'center',
@@ -138,9 +143,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: 370,
-        padding: 20,
-        borderRadius: 10,
+        width: "90%",
+        height: "60%",
+        padding: 15,
+        borderRadius: 20,
         elevation: 5,
     },
     option: {
@@ -153,40 +159,30 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: (windowWidth * 0.13) / 2, // Half of the width for circular shape
     },
-    fieldText: {
-        color: '#45505B',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    fieldContainer: {
-        justifyContent: 'center',
-        alignItems: 'flex-start', // Align fields to the left
-    },
-    field: {
-        flex: 1,
-        marginHorizontal: 5,
-    },
     macros: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%',
     },
-    input: {
-        height: 40,
-        width: '100%',
-        maxWidth: 100,
-        marginVertical: 5,
-        borderWidth: 1,
-        padding: 10,
-    },
     addFoodButton: {
         backgroundColor: '#65CB2E',
-        paddingVertical: 15,
+        paddingVertical: 5,
         paddingHorizontal: 25,
         borderRadius: 50,
-        marginBottom: 20,
+        marginBottom: 1,
+        width: "50%"
     },
+    textButton: {
+        fontSize: 25,
+        fontWeight: "bold", 
+        textAlign: "center"
+    },
+    topButton: {
+        borderRadius: 500, 
+        width: 40, 
+        alignContent: "center"
+    }
 });
 
 export default ManuallyAddModal;

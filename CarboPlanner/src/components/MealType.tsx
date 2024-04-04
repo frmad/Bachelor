@@ -10,18 +10,3 @@ export function getCategory() {
         return 'Dinner';
     }
 }
-
-export function getCategoryIcon() {
-    const breakfastIcon = require("../../assets/flat-icons/morning_breakfast.png");
-    const lunchIcon = require("../../assets/flat-icons/lunch_bag.png");
-    const dinnerIcon = require("../../assets/flat-icons/dinner_turkey.png");
-
-    if (getCategory() == "Breakfast") {
-        return breakfastIcon;
-    } else if (getCategory() == "Lunch") {
-        return lunchIcon;
-    } else {
-        return dinnerIcon;
-    }
-
-}

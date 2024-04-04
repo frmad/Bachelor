@@ -1,29 +1,19 @@
-import {Text, SafeAreaView, TouchableOpacity, View, Image, StyleSheet, Button, ScrollView} from "react-native";
+import {Text, SafeAreaView, TouchableOpacity, View, Image, StyleSheet, Button} from "react-native";
 import Card from "../components/Card";
 import { useNavigation } from "@react-navigation/native";
-import React, {useState} from "react";
-import {getCategory, getCategoryIcon} from "../components/MealType";
+import React, {useEffect, useState} from "react";
+import {getCategory} from "../components/MealType";
 import {getMacros} from "../components/Macros";
 import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
-import HorizontalLine from "../components/HorizontalLine";
-import {
-    useFonts,
-    Inter_100Thin,
-    Inter_200ExtraLight,
-    Inter_300Light,
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-    Inter_700Bold,
-    Inter_800ExtraBold,
-    Inter_900Black,
-} from '@expo-google-fonts/inter';
-import {white} from "react-native-paper/lib/typescript/styles/themes/v2/colors";
+import { Float } from "react-native/Libraries/Types/CodegenTypes";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
 
 export default function Loading({route}) {
 
     const { base64 ,data } = route.params;
+
+    const [item, setItem] = useState<Recognition[]>();
 
     const navigation = useNavigation();
 
@@ -35,13 +25,22 @@ export default function Loading({route}) {
 
     const [changeText, setChangeText] = useState(false);
 
-    const [newText, setNewText] =  useState('')
+    const [newText, setNewText] =  useState('');
 
     const image: any = "data:image/png;base64," + base64;
 
-    const mealIcon = getCategoryIcon();
-
-    const [showErrorMessage, setShowErrorMessage] = useState(false);
+    interface Recognition{
+        xmin: number;
+        ymin: number;
+        xmax: number;
+        ymax: number;
+        confidence: number;
+        class: number;
+        name: String;
+    }
+    useEffect(()=> 
+    setItem(data)
+    )
 
     /**
      * Params for Yolov5
@@ -52,6 +51,13 @@ export default function Loading({route}) {
      * Xmin, XMax
      */
 
+    const food = ({item} : {item : Recognition}) =>(
+        <View style={styles.card}>
+                        <Text>{item.name}</Text>
+                        <Text>100g</Text>
+                        <Text>{Math.round(100 * item.confidence)}%</Text>
+                    </View>
+    )
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -128,17 +134,13 @@ export default function Loading({route}) {
                             <Text style={styles.cardTitleText}>Weight</Text>
                             <Text style={styles.cardTitleText}>Precision</Text>
                         </View>
-                        {data.map((items, index) => {
-                            return (
-                                <View style={styles.card} key={index}>
-                                    <Text style={styles.itemName}>{items.name}</Text>
-                                    <Text>100g</Text>
-                                    <Text>{Math.round(100 * items.confidence)}%</Text>
-                                </View>
-                            );
-                        })}
+                        <FlatList
+                        style={{height: "20%"}}
+                        data={item}
+                        renderItem={food}
+                        />
                         <View style={styles.buttonContainer}>
-                            <AddOptionModal></AddOptionModal>
+                            <AddOptionModal/>
                         </View>
                     </Card>
                     {/*save or cancel*/}

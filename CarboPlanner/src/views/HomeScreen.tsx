@@ -1,20 +1,7 @@
 import * as React from 'react';
-import Camera from '../components/Camera';
 
 
-import { Button, Platform, SafeAreaView, Text, TouchableOpacity, View, StyleSheet, Image, Pressable } from 'react-native';
-import {
-  useFonts,
-  Inter_100Thin,
-  Inter_200ExtraLight,
-  Inter_300Light,
-  Inter_400Regular,
-  Inter_500Medium,
-  Inter_600SemiBold,
-  Inter_700Bold,
-  Inter_800ExtraBold,
-  Inter_900Black,
-} from '@expo-google-fonts/inter';
+import { Button, Platform, SafeAreaView, Text, TouchableOpacity, View, StyleSheet, Image, Pressable, FlatList, ScrollView } from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
 import MacroSlider from '../components/MacroProgressBar';
@@ -25,6 +12,7 @@ import HorizontalLine from '../components/HorizontalLine';
 import { useNavigation } from '@react-navigation/native';
 
 
+
 export default function HomeScreen(){
   const navigation = useNavigation();
 
@@ -32,21 +20,10 @@ export default function HomeScreen(){
   function handlePress(){
     navigation.navigate('Camera');
   }
-
-  let [fontsLoaded] = useFonts({
-    Inter_100Thin,
-    Inter_200ExtraLight,
-    Inter_300Light,
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-    Inter_700Bold,
-    Inter_800ExtraBold,
-    Inter_900Black,
-  });
-
+  
   const data = [
       {
+        id: 0,
         name: "Pancakes",
         meals: [
           {
@@ -66,11 +43,12 @@ export default function HomeScreen(){
             fat: "12",
           },
         ],
-        icon: "../../assets/flat-icons/lunch_bag.png",
+        icon: "lunch",
       },
       {
+        id: 1,
         name: "Not Pancakes",
-        icon: "../../assets/flat-icons/midday_lunch.png",
+        icon: "midday",
         meals: [
           {
             name: "Item 5",
@@ -92,10 +70,41 @@ export default function HomeScreen(){
       },
     ];
 
+    interface Meal{
+      name: String
+      weight: String
+      calories: String
+      protein: String
+      fat: String
+  
+    }
+  
+    interface jsonData{
+      name: String
+      meals: Meal[]
+      icon: String
+    }
+
+    const renderMealItem = ({ item }: { item: jsonData }) => (
+      <List name={item.name} imageURI={item.icon}>
+        <HorizontalLine />
+        {item.meals.map((meal, index) => (
+          <ListItem
+            key={index.toString()} // Ensure each item has a unique key
+            weight={meal.weight}
+            name={meal.name}
+            calories={meal.calories}
+            protein={meal.protein}
+            carbs="32" // Assuming the carbs value is fixed
+            fat={meal.fat}
+          />
+        ))}
+      </List>
+    );
+
   return (
     <View style={styles.container}>
       <Text style={styles.header_text}>Today</Text>
-
       <Card>
         <View style={styles.row}>
           <CircularSlider value={1200} max={2000}/>
@@ -109,28 +118,13 @@ export default function HomeScreen(){
         </View>
       </Card>
 
-      <Card>
-        {data.map((meals, index) => {
-          return (
-          <List name={meals.name} imageURI={meals.icon}>
-            <HorizontalLine />
-          
-            {data[index].meals.map((items) => {
-              return (
-                <ListItem weight={items.weight} 
-                          name={items.name} 
-                          calories={items.calories} 
-                          protein={items.protein} 
-                          carbs={items.carbs} 
-                          fat={items.fat} />
-              );
-            })}
-            
-          </List> 
-          )
-        })}
-
-      </Card>
+      <Card customStyle={{maxHeight: "44%"}}>
+      <FlatList
+        data={data}
+        renderItem={renderMealItem}
+        keyExtractor={(item, index) => index.toString()} // Use index as the key
+      />
+    </Card>
       
       <TouchableOpacity onPress={handlePress} style={styles.camera_button} />
       
