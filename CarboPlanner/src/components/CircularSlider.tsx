@@ -42,10 +42,10 @@ const CircularSlider = (props: any) => {
         thumbRadius={0}
         unit={" / " + props.max}
         sliderWidth={15}
-        unitStyle={[{fontSize: 22, fontFamily: "Inter_700Bold", color: "#45505B"}]}
-        valueStyle={[{fontSize: 22, marginRight: -20,  fontFamily: "Inter_700Bold", color: "#45505B"}]}
+        unitStyle={[{fontSize: 22, color: "#45505B"}]}
+        valueStyle={[{fontSize: 22, marginRight: -20, color: "#45505B"}]}
         style={[{justifyContent: "center"}]}
-        subTitleStyle={[{fontSize: 18,  fontFamily: "Inter_300Light", color: "#45505B"}]}
+        subTitleStyle={[{fontSize: 18, color: "#45505B"}]}
         subTitle='kCal Intake'
         />
     </View>
