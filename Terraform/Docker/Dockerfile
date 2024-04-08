@@ -17,7 +17,7 @@ RUN pip install -r requirements.txt
 EXPOSE 5000
 
 # Set working directory to the flask api director to run restapi
-WORKDIR /yolov5/utils/flask_rest_api
+WORKDIR /yolov/utils/flask_rest_api
 
 # Run app.py when the container launches
 CMD ["python", "flaskapi.py", "--port=5000"]
