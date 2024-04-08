@@ -29,9 +29,8 @@ const ManuallyAddModal = () => {
         setCalories(parseInt(text) || 0);
     };
 
-
     const onChangeFat = (text) => {
-        setFat(prevFat => parseFloat(text) || prevFat);
+        setFat(parseInt(text) || 0);
     };
 
     const onChangeProtein = (text) => {
@@ -49,7 +48,6 @@ const ManuallyAddModal = () => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.option} onPress={toggleModal}></TouchableOpacity>
-            
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -57,7 +55,6 @@ const ManuallyAddModal = () => {
                 onRequestClose={toggleModal}
                 onTouchStart={stopPropagation}
                 statusBarTranslucent={true}
-                
             >
                 <TouchableOpacity onPress={toggleModal} style={styles.modalContainer}>
                     <TouchableOpacity activeOpacity={1} style={styles.modalContent}>
@@ -186,9 +183,6 @@ const styles = StyleSheet.create({
         width: 40, 
         alignContent: "center"
     }
-
-
-    
 });
 
 export default ManuallyAddModal;
