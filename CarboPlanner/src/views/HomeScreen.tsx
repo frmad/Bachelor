@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   header_text: {
-    fontFamily: "Inter_700Bold",
     fontSize: 40,
     marginLeft: "2%",
     paddingVertical: "1%",

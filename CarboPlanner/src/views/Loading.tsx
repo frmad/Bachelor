@@ -9,7 +9,6 @@ export default function Loading({route}) {
     const { base64 } = route.params;
 
     const api_url = process.env.EXPO_PUBLIC_API_URL;
-    console.log(api_url)
 
     const fetchData = async (base64) => {
 
