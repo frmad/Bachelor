@@ -10,32 +10,25 @@ import { getFirestore } from "firebase/firestore"
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
+const api_key = process.env.EXPO_PUBLIC_API_KEY; 
+
 const firebaseConfig = {
-
-  apiKey: "AIzaSyALG_9tVJZnA42z927RgkGVIInZkjqGlhk",
-
+  apiKey: api_key,
   authDomain: "carboplanner.firebaseapp.com",
-
   databaseURL: "https://carboplanner-default-rtdb.europe-west1.firebasedatabase.app",
-
   projectId: "carboplanner",
-
   storageBucket: "carboplanner.appspot.com",
-
   messagingSenderId: "300152421807",
-
-  appId: "1:300152421807:web:5096fa710d4b5a1a6fc35a",
-
-  measurementId: "G-G1Z0NB2P0W"
-
+  appId: "1:300152421807:web:ef0f16710f63b5186fc35a",
+  measurementId: "G-6ZT5WEXNH0"
 };
 
 
 // Initialize Firebase
-
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
+//Get  firestore database
+const db = getFirestore(app);
 
 
 export {db}
