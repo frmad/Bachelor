@@ -10,7 +10,6 @@ import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
 
-
 export default function Loading({route}) {
 
     const { base64 ,data } = route.params;
