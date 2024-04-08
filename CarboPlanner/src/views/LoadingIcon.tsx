@@ -25,7 +25,7 @@ const LoadingIcon = () => {
     return (
         <SafeAreaView style={styles.container}>
             <Animated.Image
-                source={require('../../assets/icons/loadingIcon.png')}
+                source={require('../image/loadingIcon.png')}
                 style={[
                     styles.icon,
                     {
