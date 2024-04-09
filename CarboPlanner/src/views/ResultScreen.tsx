@@ -9,11 +9,12 @@ import AddOptionModal from "../components/AddOptionModal";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
+import Carousel from "../components/Carousel";
 
 
-export default function Loading({route}) {
+export default function Result({route}) {
 
-    const { base64 ,data } = route.params;
+    const { base64 ,data, allImages} = route.params;
 
     const [item, setItem] = useState<Recognition[]>();
 
@@ -74,6 +75,7 @@ export default function Loading({route}) {
                         </View>
                     </View>
                     */}
+                    <Carousel {...allImages}/>
                     <Image source={{ uri: image }} style={styles.image} />
                     <Card>
                         <View>

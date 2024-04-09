@@ -64,12 +64,12 @@ export default function Camera(props: any){
 
       const data = await camera.takePictureAsync(options={base64:true});
       // Sets the Image URI to the data.uri (Base64)
-  
+
       const base64 = 'data:image/png;base64,' + data.base64;
 
       setImages(prevImageUris => [...prevImageUris, base64]);
 
-      
+
       // Splits the Base64 from the Type identifier made by Expo Camera, and sends the bare Base64 code
       //navigation.navigate('Loading', {base64: splitBase64String[1]});
     }
@@ -82,7 +82,10 @@ export default function Camera(props: any){
 
   const proceed = () => {
     //fetchData(splitBase64String[1]);
-    navigation.navigate('Loading', {base64: splitBase64String(images[0])});
+    //navigation.navigate('Loading', {base64: splitBase64String(images[0])});
+    const firstImageBase64 = splitBase64String(images[0]);
+    const allImagesBase64 = images.map(uri => splitBase64String(uri));
+    navigation.navigate('Loading', { firstImageBase64, allImagesBase64 });
   }
 
 
