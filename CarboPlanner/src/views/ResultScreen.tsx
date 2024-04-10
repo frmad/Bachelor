@@ -57,10 +57,13 @@ export default function Loading({route}) {
 
     const food = ({item} : {item : Recognition}) =>(
         <View style={styles.card}>
-                        <Text>{item.name}</Text>
-                        <Text>100g</Text>
-                        <Text>{Math.round(100 * item.confidence)}%</Text>
-                    </View>
+            <View style={styles.cardTitle}>
+                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.itemCal}>230cal</Text>
+            </View>
+            <Text style={styles.itemWeight}>100g</Text>
+            <Text style={styles.itemConfi}>{Math.round(100 * item.confidence)}%</Text>
+        </View>
     )
 
     return (
@@ -138,7 +141,7 @@ export default function Loading({route}) {
                             <Text style={styles.cardTitleText}>Precision</Text>
                         </View>
                         <FlatList
-                        style={{height: "20%"}}
+                        style={{height: "20%", marginTop: 10, marginBottom: 10}}
                         data={item}
                         renderItem={food}
                         />
@@ -185,10 +188,9 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     title: {
-        
-        fontSize: 40,
+        fontSize: 30,
         color: "#45505B",
-        marginRight: 80,
+        marginRight: 70,
     },
     card: {
         flexDirection: "row",
@@ -215,13 +217,13 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     macroText: {
-        
         fontSize: 12,
         color: "#45505B",
     },
     buttonContainer: {
         alignItems: 'center',
-        marginTop: 20,
+        margin: 10,
+        height: 70,
     },
     goBackButton: {
         backgroundColor: "#FFFFFF",
@@ -231,7 +233,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: "auto",
-        height: 250,
+        height: 220,
         borderRadius: 25,
         paddingVertical: '2%',
         paddingHorizontal: '2%',
@@ -252,18 +254,17 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     saveButtonText: {
-        
         color: 'white',
-        fontSize: 6,
+        fontSize: 12,
+        fontWeight: "bold",
     },
     cancelButton: {
         width: "auto",
         justifyContent: "center",
     },
     cancelButtonText: {
-        
         color: '#575757',
-        fontSize: 4,
+        fontSize: 10,
     },
     optionText: {
         color: 'white',
@@ -277,8 +278,8 @@ const styles = StyleSheet.create({
         marginBottom: 3,
     },
     mealIconContainer: {
-        width: 50,
-        height: 50,
+        width: 40,
+        height: 40,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -321,15 +322,47 @@ const styles = StyleSheet.create({
         marginTop: 7,
     },
     cardTitleText: {
-        
+
         fontSize: 12,
         color: "#45505B",
         textAlign: 'center',
         width: '33.33%',
     },
+    cardTitle:{
+        flexDirection: 'column',
+    },
     itemName: {
-        
-        fontSize: 16,
+        fontSize: 12,
         color: "#45505B",
-    }
+        fontWeight: "bold",
+    },
+    itemCal: {
+        fontSize: 10,
+        color: "#45505B",
+    },
+    itemWeight: {
+        fontSize: 10,
+        color: "#45505B",
+        borderColor: "#D9D9D9",
+        borderWidth: 2,
+        padding: 4,
+        borderRadius: 5,
+        textAlign: 'center',
+        lineHeight: 20,
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    itemConfi: {
+        fontSize: 10,
+        color: "#45505B",
+        borderColor: '#65CB2E',
+        borderWidth: 2,
+        padding: 4,
+        borderRadius: 20,
+        textAlign: 'center',
+        lineHeight: 20,
+        display: 'flex',
+        justifyContent: 'center',
+        backgroundColor: "transparent",
+    },
 });

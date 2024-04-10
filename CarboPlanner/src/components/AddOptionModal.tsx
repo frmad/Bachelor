@@ -14,12 +14,11 @@ const AddOptionModal = () => {
     const setFirstModal = () => {
         setIsVisible(false);
     }
-        
 
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.addFoodButton} onPress={toggleModal}>
-                <Text>{"Add food item"}</Text>
+                <Text style={styles.buttonText}>{"Add food item"}</Text>
             </TouchableOpacity>
             <Modal
                 animationType="slide"
@@ -74,12 +73,19 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         elevation: 5,
     },
+    buttonText: {
+        fontSize: 10,
+        textAlign: 'center',
+        color: 'white',
+        fontWeight: 'bold',
+        paddingHorizontal: 5,
+    },
     addFoodButton: {
         backgroundColor: '#65CB2E',
-        paddingVertical: 15,
-        paddingHorizontal: 25,
+        paddingVertical: 10,
+        paddingHorizontal: 2,
         borderRadius: 50,
-        marginBottom: 20,
+        marginBottom: 1,
     },
     option: {
         backgroundColor: '#65CB2E',
@@ -99,6 +105,11 @@ const styles = StyleSheet.create({
     optionContainer: {
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    saveButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: "bold",
     },
 });
 

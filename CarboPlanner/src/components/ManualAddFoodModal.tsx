@@ -47,7 +47,9 @@ const ManuallyAddModal = () => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.option} onPress={toggleModal}></TouchableOpacity>
+            <TouchableOpacity style={styles.option} onPress={toggleModal}>
+                {/*add icon*/}
+            </TouchableOpacity>
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -112,7 +114,6 @@ const ManuallyAddModal = () => {
                                     affix="| g"
                                     />
                                 </View>
-                                
                                 <TouchableOpacity style={styles.addFoodButton} onPress={toggleModal}>
                                     <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Save</Text>
                                 </TouchableOpacity>
