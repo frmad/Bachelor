@@ -6,7 +6,6 @@ import {getCategory} from "../components/MealType";
 import {getMacros} from "../components/Macros";
 import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
-import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
 
@@ -33,18 +32,16 @@ export default function Loading({route}) {
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
+    const [foodList, setFoodList] = useState<{ name: String; weight: string; carbs: string; protein: string; fat: string; }[]>([]);
+
+     const updateItem = (newItem) => {
+        setItem([...item, newItem]);
+      };
+
     interface Recognition{
-        xmin: number;
-        ymin: number;
-        xmax: number;
-        ymax: number;
         confidence: number;
-        class: number;
         name: String;
     }
-    useEffect(()=> 
-    setItem(data)
-    )
 
     /**
      * Params for Yolov5
@@ -54,6 +51,45 @@ export default function Loading({route}) {
      * Ymin, Ymax
      * Xmin, XMax
      */
+
+    useEffect(() => { 
+        if (data && data.length > 0 && !item.length) {
+            setItem(data);
+        };
+        setFoodList([]);
+        handleAddToList();
+    }, []);
+    
+    const addToFoodList = (newItem: { name: string; weight: string; carbs: string; protein: string; fat: string; }) => {
+        setFoodList(prevList => [...prevList, newItem]);
+      };
+
+      const handleAddToList = () => {
+        if (item) {
+          item.forEach(item => {
+            addToFoodList({
+              name: String(item.name),
+              weight: "",
+              carbs: "",
+              protein: "",
+              fat: ""
+            });
+          });
+        }
+      };
+
+      const saveData = 
+        {
+          id: 1232,
+          name: "Pancakes",
+          meals: foodList,
+          icon: mealtype,
+        };
+
+        
+    const print = () =>( 
+        console.log(saveData)
+    )
 
     const food = ({item} : {item : Recognition}) =>(
         <View style={styles.card}>
@@ -151,11 +187,11 @@ export default function Loading({route}) {
                     </Card>
                     {/*save or cancel*/}
                     <View style={styles.saveOrCancel}>
-                        <TouchableOpacity onPress={() => { navigation.navigate('Home'); }} style={styles.saveButton}>
+                        <TouchableOpacity onPress={() => {print()}} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
                         <Text style={{marginBottom: 5, marginTop: 5,}}>or</Text>
-                        <TouchableOpacity onPress={() => { navigation.navigate('Home'); }} style={styles.cancelButton}>
+                        <TouchableOpacity onPress={() => { handleAddToList(), print() }} style={styles.cancelButton}>
                             <Text style={styles.cancelButtonText}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
