@@ -35,7 +35,6 @@ export default function Loading({route}) {
         })
         .then(function(data) {
           // The JSON data from the WebServer is returned here
-          //navigation.navigate('Result', {base64: firstImageBase64, data: data});
             navigation.navigate('Result', {base64: firstImageBase64, data: data, allImages: allImagesBase64});
         
 

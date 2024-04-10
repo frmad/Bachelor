@@ -14,6 +14,8 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import {Simulate} from "react-dom/test-utils";
+import emptied = Simulate.emptied;
 
 
 const flashLogo = require('../../assets/icons/lightning-bolt-filled.png');
@@ -81,10 +83,8 @@ export default function Camera(props: any){
 
 
   const proceed = () => {
-    //fetchData(splitBase64String[1]);
-    //navigation.navigate('Loading', {base64: splitBase64String(images[0])});
     const firstImageBase64 = splitBase64String(images[0]);
-    const allImagesBase64 = images.map(uri => splitBase64String(uri));
+    const allImagesBase64 = images.map(uri => splitBase64String(uri)); //For each uri in the images array, it applies the splitBase64String function and stores the result in the allImagesBase64 array.
     navigation.navigate('Loading', { firstImageBase64, allImagesBase64 });
   }
 

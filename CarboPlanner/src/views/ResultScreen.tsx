@@ -9,7 +9,7 @@ import AddOptionModal from "../components/AddOptionModal";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
-import Carousel from "../components/Carousel";
+import ImageCarousel from "../components/ImageCarousel";
 
 
 export default function Result({route}) {
@@ -64,6 +64,12 @@ export default function Result({route}) {
                     </View>
     )
 
+    if (allImages.length !== 0) {
+        console.log('not empty on result');
+    } else {
+        console.log('empty on result');
+    }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
                 <View style={styles.container}>
@@ -75,8 +81,8 @@ export default function Result({route}) {
                         </View>
                     </View>
                     */}
-                    <Carousel {...allImages}/>
-                    <Image source={{ uri: image }} style={styles.image} />
+                    <ImageCarousel images={allImages} />
+                    {/*<Image source={{ uri: image }} style={styles.image} />*/}
                     <Card>
                         <View>
                             {/*Title*/}
