@@ -1,50 +1,32 @@
 import {db} from "./databaseConfig"
-import { setDoc, doc, collection } from 'firebase/firestore';
+import { setDoc, doc, collection, getDoc, arrayUnion, updateDoc } from 'firebase/firestore';
 
 let today = new Date();
 
   let date = today.getDate() + "-"+ parseInt(today.getMonth()+1) +"-"+today.getFullYear()
   const mainDocRef = doc(db, process.env.EXPO_PUBLIC_UUID, date);
 
+  const data = [ ];
 
-  const data = [
-    {
-      id: 1232,
-      name: "Pancakes",
-      meals: [
-        {
-          name: "Item 1",
-          weight: "432",
-          calories: "320",
-          carbs: "32",
-          protein: "22",
-          fat: "12",
-        },
-        {
-          name: "Item 2",
-          weight: "123",
-          calories: "320",
-          carbs: "32",
-          protein: "22",
-          fat: "12",
-        },
-      ],
-      icon: "lunch",
+  const createInitialDocument = async () => {
+    const docSnapshot = await getDoc(mainDocRef);
+    console.log(docSnapshot.exists());
+    if (docSnapshot.exists()) {
+      return;
+    } else {
+      await setDoc(mainDocRef, {
+        data
+      });
     }
-  ];
+  };
 
-  const createData = async () => {
-    await setDoc(mainDocRef, {
-      data
-    })
+  const createData = async (newData) => {
+    createInitialDocument()
+
+    await updateDoc(mainDocRef, {
+      data: arrayUnion(newData)
+    });
   };
 
 
-  function save (prop : any) {
-
-
-
-
-  }
-
-  export {createData, save};
+  export {createData};

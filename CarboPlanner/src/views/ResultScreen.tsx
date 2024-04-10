@@ -8,6 +8,7 @@ import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
+import { createData } from "../utils/Database/DatabaseActions";
 
 
 export default function Loading({route}) {
@@ -32,7 +33,7 @@ export default function Loading({route}) {
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-    const [foodList, setFoodList] = useState<{ name: String; weight: string; carbs: string; protein: string; fat: string; }[]>([]);
+    const [foodList, setFoodList] = useState<{ name: String; weight: string; carbs: string; protein: string; fat: string; confidence: string}[]>([]);
 
      const updateItem = (newItem) => {
         setItem([...item, newItem]);
@@ -52,15 +53,28 @@ export default function Loading({route}) {
      * Xmin, XMax
      */
 
+    const start = async () => {
+        if (data && data.length > 0 && (!item || !item.length)) {
+            await setItem(data);
+        }
+    };
+
     useEffect(() => { 
-        if (data && data.length > 0 && !item.length) {
-            setItem(data);
-        };
+        start()
+    }, [data]);
+
+    const handleItemSet = () => {
         setFoodList([]);
         handleAddToList();
-    }, []);
+    };
+
+    useEffect(() => {
+        if (item && item.length) {
+            handleItemSet();
+        }
+    }, [item]);
     
-    const addToFoodList = (newItem: { name: string; weight: string; carbs: string; protein: string; fat: string; }) => {
+    const addToFoodList = (newItem: { name: string; weight: string; carbs: string; protein: string; fat: string; confidence: string}) => {
         setFoodList(prevList => [...prevList, newItem]);
       };
 
@@ -72,7 +86,8 @@ export default function Loading({route}) {
               weight: "",
               carbs: "",
               protein: "",
-              fat: ""
+              fat: "",
+              confidence: String(item.confidence),
             });
           });
         }
@@ -182,16 +197,16 @@ export default function Loading({route}) {
                         renderItem={food}
                         />
                         <View style={styles.buttonContainer}>
-                            <AddOptionModal/>
+                            <AddOptionModal {...{updateItem}}/>
                         </View>
                     </Card>
                     {/*save or cancel*/}
                     <View style={styles.saveOrCancel}>
-                        <TouchableOpacity onPress={() => {print()}} style={styles.saveButton}>
+                        <TouchableOpacity onPress={() => {createData(saveData)}} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
                         <Text style={{marginBottom: 5, marginTop: 5,}}>or</Text>
-                        <TouchableOpacity onPress={() => { handleAddToList(), print() }} style={styles.cancelButton}>
+                        <TouchableOpacity onPress={() => {navigation.navigate("Home")}} style={styles.cancelButton}>
                             <Text style={styles.cancelButtonText}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
