@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import { Images } from '../utils/images';
+import OptionButton from "./OptionsButton";
 
 export default function List(props: any) {
     const [expanded, setExpanded] = React.useState(false);
@@ -19,8 +20,9 @@ export default function List(props: any) {
             <TouchableOpacity onPress={handlePress}>
                 <View style={styles.row}>
                     <Image style={styles.tinyImage} source={Images[props.imageURI]} />
-                    <View style={styles.column}>
+                    <View style={styles.titleRow}>
                         <Text style={styles.bold}>{props.name}</Text>
+                        <OptionButton />
                     </View>
                     {expanded ? <Image source={require("../../assets/func-icon/Accordion-Up-Switch.png")} style={styles.accordionLogo} /> : <Image source={require("../../assets/func-icon/Accordion-Down-Switch.png")} style={styles.accordionLogo} />}
                 </View>
@@ -62,14 +64,15 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
     },
-    column: {
+    titleRow: {
         flex: 1,
-        flexDirection: "column",
+        flexDirection: "row",
         alignSelf: "center",
-        paddingHorizontal: "1%",
+        paddingHorizontal: "0.8%",
     },
     bold: {
         fontWeight: "bold",
         fontSize: 24,
+        color: "#45505B",
     },
 });

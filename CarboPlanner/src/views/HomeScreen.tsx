@@ -86,7 +86,7 @@ export default function HomeScreen(){
     }
 
     const renderMealItem = ({ item }: { item: jsonData }) => (
-      <List name={item.name} imageURI={item.icon}>
+        <List name={item.name} imageURI={item.icon}>
         <HorizontalLine />
         {item.meals.map((meal, index) => (
           <ListItem
