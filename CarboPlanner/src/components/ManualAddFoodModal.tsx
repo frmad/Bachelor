@@ -5,13 +5,27 @@ import {LongInput, ShortInput} from '../components/TextInput';
 
 const windowWidth = Dimensions.get('window').width;
 
-const ManuallyAddModal = () => {
+const ManuallyAddModal = ({updateItem}) => {
     const [isVisible, setIsVisible] = useState(false);
     const [name, setName] = useState("");
     const [calories, setCalories] = useState(0);
     const [fat, setFat] = useState(0);
     const [protein, setProtein] = useState(0);
     const [carb, setCarb] = useState(0);
+
+    const onSave = () => {
+        const newItem = {
+            name: name,
+            calories: calories,
+            fat: fat,
+            protein: protein,
+            carb: carb
+        };
+
+        updateItem(newItem);
+
+        toggleModal();
+    };
 
     const toggleModal = () => {
         setIsVisible(!isVisible);
@@ -114,7 +128,7 @@ const ManuallyAddModal = () => {
                                     affix="| g"
                                     />
                                 </View>
-                                <TouchableOpacity style={styles.addFoodButton} onPress={toggleModal}>
+                                <TouchableOpacity style={styles.addFoodButton} onPress={onSave}>
                                     <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Save</Text>
                                 </TouchableOpacity>
                         </TouchableOpacity>

@@ -4,7 +4,7 @@ import ManuallyAdd from "./ManualAddFoodModal";
 
 const windowWidth = Dimensions.get('window').width;
 
-const AddOptionModal = () => {
+const AddOptionModal = ({updateItem}) => {
     const [isVisible, setIsVisible] = useState(false);
 
     const toggleModal = () => {
@@ -36,7 +36,7 @@ const AddOptionModal = () => {
                     <View style={styles.modalContent}>
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Manually add food</Text>
-                            <ManuallyAdd/>
+                            <ManuallyAdd {...{updateItem}}/>
                         </View>
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Camera upload</Text>
