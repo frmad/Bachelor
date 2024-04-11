@@ -1,5 +1,5 @@
 import {db} from "./databaseConfig"
-import { setDoc, doc, collection, getDoc, arrayUnion, updateDoc } from 'firebase/firestore';
+import { setDoc, doc, getDoc, arrayUnion, updateDoc } from 'firebase/firestore';
 
 let today = new Date();
 
@@ -8,7 +8,7 @@ let today = new Date();
 
   const data = [ ];
 
-  const createInitialDocument = async () => {
+  const createData = async (newData) => {
     const docSnapshot = await getDoc(mainDocRef);
     console.log(docSnapshot.exists());
     if (docSnapshot.exists()) {
@@ -18,10 +18,6 @@ let today = new Date();
         data
       });
     }
-  };
-
-  const createData = async (newData) => {
-    createInitialDocument()
 
     await updateDoc(mainDocRef, {
       data: arrayUnion(newData)

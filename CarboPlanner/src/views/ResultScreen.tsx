@@ -6,7 +6,7 @@ import {getCategory} from "../components/MealType";
 import {getMacros} from "../components/Macros";
 import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
 import { createData } from "../utils/Database/DatabaseActions";
 
@@ -42,6 +42,10 @@ export default function Loading({route}) {
     interface Recognition{
         confidence: number;
         name: String;
+        weight: String;
+        carbs: String;
+        protein: String;
+        fat: String;
     }
 
     /**
@@ -53,14 +57,15 @@ export default function Loading({route}) {
      * Xmin, XMax
      */
 
-    const start = async () => {
+    const setInitialItem = async () => {
         if (data && data.length > 0 && (!item || !item.length)) {
             await setItem(data);
         }
     };
 
+    
     useEffect(() => { 
-        start()
+        setInitialItem()
     }, [data]);
 
     const handleItemSet = () => {
@@ -74,8 +79,9 @@ export default function Loading({route}) {
         }
     }, [item]);
     
-    const addToFoodList = (newItem: { name: string; weight: string; carbs: string; protein: string; fat: string; confidence: string}) => {
-        setFoodList(prevList => [...prevList, newItem]);
+    
+    const addToFoodList = (Recognition) => {
+        setFoodList(prevList => [...prevList, Recognition]);
       };
 
       const handleAddToList = () => {
@@ -100,11 +106,6 @@ export default function Loading({route}) {
           meals: foodList,
           icon: mealtype,
         };
-
-        
-    const print = () =>( 
-        console.log(saveData)
-    )
 
     const food = ({item} : {item : Recognition}) =>(
         <View style={styles.card}>
