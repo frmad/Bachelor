@@ -9,9 +9,7 @@ let today = new Date();
   const data = [ ];
 
   const createData = async (newData) => {
-    const docSnapshot = await getDoc(mainDocRef);
-    console.log(docSnapshot.exists());
-    if (!docSnapshot.exists()) {
+    if (!(await getDoc(mainDocRef)).exists()) {
       await setDoc(mainDocRef, {
         data
       });
@@ -22,5 +20,27 @@ let today = new Date();
     });
   };
 
+  const readData = async () => {
+    try {
+      const doc = await getDoc(mainDocRef);
+      
+      if (!doc.exists()) {
+        console.error("Document does not exist");
+        return null;
+      }
+  
+      const data = doc.data();
+      
+      if (!data || !data.data) {
+        console.error("Data is missing or invalid in the document");
+        return null;
+      }
+      
+      return data.data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return null;
+    }
+  };
 
-  export {createData};
+  export {createData, readData, mainDocRef};
