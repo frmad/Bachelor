@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     },
     calendarContainer: {
         margin: 10,
-        borderRadius: 20, // Adjust the value to control the roundness
-        overflow: 'hidden', // Ensure content does not overflow the rounded corners
+        borderRadius: 20,
+        overflow: 'hidden',
     }
 });

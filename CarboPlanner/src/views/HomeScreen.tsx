@@ -97,7 +97,14 @@ export default function HomeScreen(){
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header_text}>Today</Text>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Text style={styles.header_text}>Today</Text>
+        <TouchableOpacity onPress={goToCalendar}>
+          <View style={styles.calendarIconContainer}>
+            <Image source={require("../../assets/func-icon/calendar.png")} style={styles.calendarIcon} resizeMode="contain" />
+          </View>
+        </TouchableOpacity>
+      </View>
 
       <Card>
         <View style={styles.row}>
@@ -120,7 +127,9 @@ export default function HomeScreen(){
           
             {data[index].meals.map((items) => {
               return (
-                <ListItem weight={items.weight} 
+                <ListItem
+                    key={items.name}
+                          weight={items.weight}
                           name={items.name} 
                           calories={items.calories} 
                           protein={items.protein} 
@@ -128,16 +137,13 @@ export default function HomeScreen(){
                           fat={items.fat} />
               );
             })}
-            
           </List> 
           )
         })}
-
       </Card>
-      
+
       <TouchableOpacity onPress={handlePress} style={styles.camera_button} />
-      <TouchableOpacity onPress={goToCalendar} style={styles.camera_button} />
-      
+
       </View>
   );
 }
@@ -179,5 +185,20 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
+  },
+  calendarIconContainer: {
+    backgroundColor: '#65CB2E',
+    width: 40,
+    height: 40,
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 40,
+    marginLeft: 20,
+    marginTop: 10,
+  },
+  calendarIcon: {
+    width: '100%',
+    height: '100%',
   },
 });
