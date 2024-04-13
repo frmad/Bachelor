@@ -104,11 +104,11 @@ export default function HomeScreen(){
           <CircularSlider value={1200} max={2000}/>
         </View>
         <View style={styles.row}>
-            <MacroProgressBar name={"Carbs"} value={0.5} max={210} />
+            <MacroProgressBar name={"Carbs"} value={50} max={210} />
           
-            <MacroProgressBar name={"Protein"} value={1} max={180} />
+            <MacroProgressBar name={"Protein"} value={100} max={180} />
           
-            <MacroProgressBar name={"Fat"} value={0.2} max={200} />
+            <MacroProgressBar name={"Fat"} value={80} max={200} />
         </View>
       </Card>
 
