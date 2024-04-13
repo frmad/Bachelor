@@ -107,14 +107,16 @@ export default function CalendarComponent() {
 
     return (
         <View style={{ flex: 1 }}>
-            <Calendar
-                onDayPress={(day) => onSelectDate(new Date(day.timestamp))}
-                markedDates={{ [formattedDate]: { selected: true, selectedColor: '#65CB2E' } }}
-                theme={{
-                    arrowColor: '#65CB2E',
-                    todayTextColor: '#65CB2E',
-                }}
-            />
+            <View style={styles.calendarContainer}>
+                <Calendar
+                    onDayPress={(day) => onSelectDate(new Date(day.timestamp))}
+                    markedDates={{ [formattedDate]: { selected: true, selectedColor: '#65CB2E' } }}
+                    theme={{
+                        arrowColor: '#65CB2E',
+                        todayTextColor: '#65CB2E',
+                    }}
+                />
+            </View>
             <View style={{ marginTop: 20 }}>
                 <Text style={{ textAlign: 'center', fontFamily: 'Inter', color: "#45505B" }}>
                     <Text style={{ fontWeight: 'bold' }}>Agenda for {formattedDate}: </Text>
@@ -181,7 +183,11 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         gap: 10,
-        backgroundColor: '#EBEBEB',
         height: '100%',
     },
+    calendarContainer: {
+        margin: 10,
+        borderRadius: 20, // Adjust the value to control the roundness
+        overflow: 'hidden', // Ensure content does not overflow the rounded corners
+    }
 });
