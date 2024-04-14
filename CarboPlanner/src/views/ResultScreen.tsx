@@ -374,7 +374,6 @@ const styles = StyleSheet.create({
         marginTop: 7,
     },
     cardTitleText: {
-
         fontSize: 12,
         color: "#45505B",
         textAlign: 'center',
