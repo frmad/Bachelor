@@ -42,10 +42,14 @@ const AddOptionModal = ({updateItem}) => {
                     <View style={styles.modalContent}>
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Manually add food</Text>
+<<<<<<< HEAD
                             <TouchableOpacity style={styles.option} onPress={openModal}>
                                 {/*add icon*/}
                             </TouchableOpacity>
                             <ManuallyAdd {...{updateItem}} modalVisible={isModalVisible} closeModal={closeModal}/>
+=======
+                            <ManuallyAdd {...{updateItem}}/>
+>>>>>>> main
                         </View>
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Camera upload</Text>

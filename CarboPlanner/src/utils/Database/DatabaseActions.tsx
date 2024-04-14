@@ -9,15 +9,32 @@ let today = new Date();
   const data = [ ];
 
   const createData = async (newData) => {
+<<<<<<< HEAD
     if (!(await getDoc(mainDocRef)).exists()) {
       await setDoc(mainDocRef, {
         data
       });
     };
+=======
+    const docSnapshot = await getDoc(mainDocRef);
+    console.log(docSnapshot.exists());
+    if (docSnapshot.exists()) {
+      return;
+    } else {
+      await setDoc(mainDocRef, {
+        data
+      });
+    }
+>>>>>>> main
 
     await updateDoc(mainDocRef, {
       data: arrayUnion(newData)
     });
   };
 
+<<<<<<< HEAD
   export {createData, mainDocRef};
+=======
+
+  export {createData};
+>>>>>>> main

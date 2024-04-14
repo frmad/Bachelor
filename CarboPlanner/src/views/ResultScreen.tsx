@@ -34,15 +34,16 @@ export default function Loading({route}) {
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
+
     const [foodList, setFoodList] = useState<Recognition[]>([]);
 
      const updateItem = (newItem) => {
         setItem([...item, newItem]);
       };
 
-
     interface Recognition{
         confidence: number;
+        class: number;
         name: String;
         weight: Number;
         carbs: String;
@@ -387,7 +388,6 @@ const styles = StyleSheet.create({
         marginTop: 7,
     },
     cardTitleText: {
-
         fontSize: 12,
         color: "#45505B",
         textAlign: 'center',
