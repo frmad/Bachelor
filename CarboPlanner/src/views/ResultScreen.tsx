@@ -12,6 +12,7 @@ import { createData } from "../utils/Database/DatabaseActions";
 import { Images } from "../utils/images";
 
 
+
 export default function Loading({route}) {
 
     const { base64 ,data } = route.params;
@@ -44,7 +45,7 @@ export default function Loading({route}) {
     interface Recognition{
         confidence: number;
         name: String;
-        weight: Number;
+        weight: String;
         carbs: String;
         protein: String;
         fat: String;
@@ -72,6 +73,7 @@ export default function Loading({route}) {
             await setItem(initialItems);
         }
         console.log(data)
+            await setItem(data);
     };
 
     
@@ -104,6 +106,10 @@ export default function Loading({route}) {
               carbs: String(item.carbs),
               protein: String(item.protein),
               fat: String(item.fat),
+              weight: "",
+              carbs: "",
+              protein: "",
+              fat: "",
               confidence: String(item.confidence),
             });
           });

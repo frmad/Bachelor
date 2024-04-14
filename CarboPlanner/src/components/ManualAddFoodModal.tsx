@@ -29,6 +29,20 @@ const ManuallyAddModal = ({updateItem}) => {
         toggleModal();
     };
 
+    const onSave = () => {
+        const newItem = {
+            name: name,
+            calories: calories,
+            fat: fat,
+            protein: protein,
+            carb: carb
+        };
+
+        updateItem(newItem);
+
+        toggleModal();
+    };
+
     const toggleModal = () => {
         setIsVisible(!isVisible);
     };
