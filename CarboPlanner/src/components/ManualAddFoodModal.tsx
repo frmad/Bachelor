@@ -5,8 +5,7 @@ import {LongInput, ShortInput} from '../components/TextInput';
 
 const windowWidth = Dimensions.get('window').width;
 
-const ManuallyAddModal = ({updateItem}) => {
-    const [isVisible, setIsVisible] = useState(false);
+const ManuallyAddModal = ({updateItem, modalVisible, closeModal}) => {
     const [name, setName] = useState("");
     const [calories, setCalories] = useState(0);
     const [fat, setFat] = useState(0);
@@ -30,7 +29,7 @@ const ManuallyAddModal = ({updateItem}) => {
     };
 
     const toggleModal = () => {
-        setIsVisible(!isVisible);
+        closeModal();
     };
 
     const onChangeName = (text) => {
@@ -63,13 +62,11 @@ const ManuallyAddModal = ({updateItem}) => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.option} onPress={toggleModal}>
-                {/*add icon*/}
-            </TouchableOpacity>
+            
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={isVisible}
+                visible={modalVisible}
                 onRequestClose={toggleModal}
                 onTouchStart={stopPropagation}
                 statusBarTranslucent={true}

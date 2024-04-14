@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 30,
         color: "#45505B",
-        marginRight: 70,
+        marginRight: "20%",
     },
     card: {
         flexDirection: "row",
