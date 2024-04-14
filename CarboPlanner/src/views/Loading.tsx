@@ -8,6 +8,8 @@ export default function Loading({route}) {
 
     const { base64 } = route.params;
 
+    const api_url = process.env.EXPO_PUBLIC_API_URL;
+
     const fetchData = async (base64) => {
 
         const requestBody = {
@@ -15,7 +17,7 @@ export default function Loading({route}) {
         };
     
         //Sends POST request to this URL, sends using the Base64 Image from the Expo Camera
-        fetch('http://localhost:5000/v1/object-detection/yolov5s', {
+        fetch(api_url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -33,6 +35,7 @@ export default function Loading({route}) {
         .then(function(data) {
           // The JSON data from the WebServer is returned here
           navigation.navigate('Result', {base64: base64, data: data});
+        
 
           return data;
         })
@@ -67,15 +70,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#65CB2E',
         padding: '13%',
+        width: '100%',
     },
     header: {
-        transformOrigin: 'center',
+        alignItems: 'center',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: 17,
     },
     text: {
-        transformOrigin: 'center',
+        alignItems: 'center',
         color: 'white',
         marginTop: '1%',
         marginBottom: '10%',
@@ -90,13 +94,13 @@ const styles = StyleSheet.create({
         bottom: 50,
     },
     fact_header: {
-        transformOrigin: 'center',
+        alignItems: 'center',
         color: 'white',
         fontWeight: 'bold',
         fontSize: 24,
     },
     fact_text: {
-        transformOrigin: 'center',
+        alignItems: 'center',
         color: 'white',
         marginTop: '1%',
         fontSize: 18,

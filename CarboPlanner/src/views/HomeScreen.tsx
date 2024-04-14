@@ -1,20 +1,7 @@
 import * as React from 'react';
-import Camera from '../components/Camera';
 
 
-import { Button, Platform, SafeAreaView, Text, TouchableOpacity, View, StyleSheet, Image, Pressable } from 'react-native';
-import {
-  useFonts,
-  Inter_100Thin,
-  Inter_200ExtraLight,
-  Inter_300Light,
-  Inter_400Regular,
-  Inter_500Medium,
-  Inter_600SemiBold,
-  Inter_700Bold,
-  Inter_800ExtraBold,
-  Inter_900Black,
-} from '@expo-google-fonts/inter';
+import { Button, Platform, SafeAreaView, Text, TouchableOpacity, View, StyleSheet, Image, Pressable, FlatList, ScrollView } from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
 import MacroSlider from '../components/MacroProgressBar';
@@ -47,9 +34,10 @@ export default function HomeScreen(){
     Inter_800ExtraBold,
     Inter_900Black,
   });
-
+        
   const data = [
       {
+        id: 0,
         name: "Pancakes",
         meals: [
           {
@@ -69,11 +57,12 @@ export default function HomeScreen(){
             fat: "12",
           },
         ],
-        icon: "../../assets/flat-icons/lunch_bag.png",
+        icon: "lunch",
       },
       {
+        id: 1,
         name: "Not Pancakes",
-        icon: "../../assets/flat-icons/midday_lunch.png",
+        icon: "midday",
         meals: [
           {
             name: "Item 5",
@@ -94,6 +83,38 @@ export default function HomeScreen(){
         ],
       },
     ];
+
+    interface Meal{
+      name: String
+      weight: String
+      calories: String
+      protein: String
+      fat: String
+  
+    }
+  
+    interface jsonData{
+      name: String
+      meals: Meal[]
+      icon: String
+    }
+
+    const renderMealItem = ({ item }: { item: jsonData }) => (
+      <List name={item.name} imageURI={item.icon}>
+        <HorizontalLine />
+        {item.meals.map((meal, index) => (
+          <ListItem
+            key={index.toString()} // Ensure each item has a unique key
+            weight={meal.weight}
+            name={meal.name}
+            calories={meal.calories}
+            protein={meal.protein}
+            carbs="32" // Assuming the carbs value is fixed
+            fat={meal.fat}
+          />
+        ))}
+      </List>
+    );
 
   return (
     <View style={styles.container}>
@@ -119,43 +140,31 @@ export default function HomeScreen(){
         </View>
       </Card>
 
-      <Card>
-        {data.map((meals, index) => {
-          return (
-          <List name={meals.name} imageURI={meals.icon}>
-            <HorizontalLine />
-          
-            {data[index].meals.map((items) => {
-              return (
-                <ListItem
-                    key={items.name}
-                          weight={items.weight}
-                          name={items.name} 
-                          calories={items.calories} 
-                          protein={items.protein} 
-                          carbs={items.carbs} 
-                          fat={items.fat} />
-              );
-            })}
-          </List> 
-          )
-        })}
-      </Card>
-
-      <TouchableOpacity onPress={handlePress} style={styles.camera_button} />
-
+      <Card customStyle={{maxHeight: "44%"}}>
+      <FlatList
+        data={data}
+        renderItem={renderMealItem}
+        keyExtractor={(item, index) => index.toString()} // Use index as the key
+      />
+    </Card>
+      
+      <View style={styles.cameraFunc}>
+        <TouchableOpacity onPress={handlePress} style={styles.camera_button}>
+          <Text style={styles.photo}>+</Text>
+        </TouchableOpacity>
+      </View> 
       </View>
   );
 }
 
 const styles = StyleSheet.create({
   camera_button: {
-      backgroundColor: "#FFFFFF",
-      padding: 25,
-      width: 25,
-      justifyContent: "center",
-
-      borderRadius: 50,
+    backgroundColor: "#65CB2E",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   container: {
       flex: 1,
@@ -163,6 +172,7 @@ const styles = StyleSheet.create({
       gap: 10,
       backgroundColor: '#EBEBEB',
       height: '100%',
+      paddingTop: 50,
   },
   center: {
     flex: 1,
@@ -174,7 +184,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   header_text: {
-    fontFamily: "Inter_700Bold",
     fontSize: 40,
     marginLeft: "2%",
     paddingVertical: "1%",
@@ -200,5 +209,14 @@ const styles = StyleSheet.create({
   calendarIcon: {
     width: '100%',
     height: '100%',
+  photo: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  cameraFunc: {
+    flexDirection: "row",
+    justifyContent: "center",
+
   },
 });

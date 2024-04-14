@@ -1,9 +1,21 @@
 import * as React from 'react';
 import { Camera as CameraMode } from 'expo-camera';
 import { CameraType } from 'expo-camera';
-import { useState } from 'react';
-import { Button, Text, View, StyleSheet, Image, Pressable } from 'react-native';
+import {useRef, useState} from 'react';
+import {
+  Button,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  Pressable,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import {StatusBar} from "expo-status-bar";
+
 
 const flashLogo = require('../../assets/icons/lightning-bolt-filled.png');
 
@@ -12,11 +24,12 @@ export default function Camera(props: any){
   // @ts-ignore
   const [flashMode, setFlashMode] = useState(CameraMode.Constants.FlashMode.off);
   const [permission, requestPermission] = CameraMode.useCameraPermissions();
-  const [imageUri, setImageUri] = useState(null);
+  const [images, setImages] = useState([]);
+  const [base64Images, setBase64] = useState([])
   const [resons, setRespons] = useState(null);
   const [camera, setCamera] = useState(null);
-
   const navigation = useNavigation();
+  const scrollViewRef = useRef<ScrollView>(null);
 
 
   if (!permission) {
@@ -27,10 +40,10 @@ export default function Camera(props: any){
   if (!permission.granted) {
     // Camera permissions are not granted yet
     return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
-      </View>
+        <View style={styles.container}>
+          <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
+          <Button onPress={requestPermission} title="Grant permission" />
+        </View>
     );
   }
 
@@ -41,28 +54,38 @@ export default function Camera(props: any){
 
   function toggleFlashMode() {
     // Toggles Camera Flash
-     // @ts-ignore
+    // @ts-ignore
     setFlashMode(c => (c === CameraMode.Constants.FlashMode.off ? CameraMode.Constants.FlashMode.torch : CameraMode.Constants.FlashMode.off));
   }
-  
+
   const takePicture = async () => {
-    // Check if the camera is available and not null, if true, 
+    // Check if the camera is available and not null, if true,
     // it will use the takePictureAsync to take a picture and save it to the app's cache
     if (camera) {
-      const data = await camera.takePictureAsync(null);
+
+      const data = await camera.takePictureAsync(options={base64:true});
       // Sets the Image URI to the data.uri (Base64)
-      setImageUri(data.uri);
+  
+      const base64 = 'data:image/png;base64,' + data.base64;
 
+      setImages(prevImageUris => [...prevImageUris, base64]);
+
+      
       // Splits the Base64 from the Type identifier made by Expo Camera, and sends the bare Base64 code
-      const splitBase64String: string[] = data.uri.split(',');
-
-      //fetchData(splitBase64String[1]);
-
-      navigation.navigate('Loading', {base64: splitBase64String[1]});
+      //navigation.navigate('Loading', {base64: splitBase64String[1]});
     }
   }
 
-  
+  function splitBase64String (a) {
+    return (a.split(",")[1])
+  }
+
+
+  const proceed = () => {
+    //fetchData(splitBase64String[1]);
+    navigation.navigate('Loading', {base64: splitBase64String(images[0])});
+  }
+
 
   const fetchData = async (base64Image) => {
 
@@ -78,57 +101,73 @@ export default function Camera(props: any){
       },
       body: JSON.stringify(requestBody),
     })
-    .then(function(response) {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Request failed.');
-      }
-    })
-    .then(function(data) {
-      // The JSON data from the WebServer is returned here
-      return data;
-    })
-    .catch(function(error) {
-      return null;
-    });
+        .then(function(response) {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Request failed.');
+          }
+        })
+        .then(function(data) {
+          // The JSON data from the WebServer is returned here
+          return data;
+        })
+        .catch(function(error) {
+          return null;
+        });
   };
 
   return (
-    <View style={styles.container}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.statusbar}>
+          <StatusBar translucent backgroundColor="white" />
+        </View>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Pressable onPress={navigation.goBack} style={styles.button} >
+              <Text style={styles.goBackText}>{"<"}</Text>
+            </Pressable>
 
-      <View style={styles.header}>
-        <Pressable onPress={navigation.goBack} style={styles.button} >
-          <Text style={styles.text}>{"<"}</Text>
-        </Pressable>
-        
-        <Pressable onPress={toggleFlashMode} style={styles.button} >
-          <Image source={flashLogo} style={{width: 32, height: 32}} />
-        </Pressable>
-      </View>
+            <Pressable onPress={toggleFlashMode} style={styles.button} >
+              <Image source={flashLogo} style={{width: 32, height: 32}} />
+            </Pressable>
+          </View>
 
-      <View style={styles.cameraContainer}>
-        <CameraMode
-          flashMode={flashMode}
-          ref={(ref) => setCamera(ref)}
-          style={styles.fixedRatio}
-          type={type}
-          ratio={'1:1'}
-        />
-      </View>
-      
+          <View style={styles.cameraContainer}>
+            <CameraMode
+                flashMode={flashMode}
+                ref={(ref) => setCamera(ref)}
+                style={styles.fixedRatio}
+                type={type}
+                ratio={'1:1'}
+            />
+          </View>
 
-      <View style={styles.footer}>
-        <Pressable onPress={takePicture} style={styles.button} >
-          <Text style={styles.circle}></Text>
-        </Pressable>
-      </View>
-      
-    </View>
+          <View style={styles.bottomLeftContainer}>
+            <ScrollView horizontal ref={scrollViewRef} contentContainerStyle={styles.scrollViewContent}>
+              {images.map((uri, index) => (
+                  <Image key={index} source={{ uri }} style={styles.imageInScroll} />
+              ))}
+            </ScrollView>
+          </View>
+
+          <View style={styles.footer}>
+            <Pressable onPress={takePicture} style={styles.buttonCamera} >
+              <View style={styles.circle} />
+            </Pressable>
+            <TouchableOpacity onPress={proceed} style={[styles.proceedButton, { display: images.length === 0 ? 'none' : 'flex' }]}>
+              <Text style={styles.proceedText}>Proceed</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  statusbar: {
+    marginBottom: '0%',
+  },
   container: {
     backgroundColor: "black",
     flexDirection: "column",
@@ -138,32 +177,86 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  circle : {
-    padding: 15,
-    borderRadius: 50,
-    backgroundColor: "white",
-  },
-  text: {
+  goBackText: {
     color: "white",
     borderRadius: 5,
     fontSize: 24,
+    fontWeight: 'bold',
+  },
+  circle : {
+    padding: 20,
+    borderRadius: 50,
+    backgroundColor: "white",
+  },
+  buttonCamera: {
+    borderRadius: 40,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: 'gray',
+    borderWidth: 2,
   },
   button: {
-    borderRadius: 5,
-    padding: 10,
+    borderRadius: 50,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
     alignItems: 'center',
+    borderColor: 'gray',
+    borderWidth: 1,
+    margin: 17,
+    marginTop: 50,
+    marginBottom: 25,
   },
   cameraContainer: {
     flexDirection: 'row',
-    height: "80%",
+    height: "68%",
+    marginBottom: 15,
   },
   fixedRatio: {
     aspectRatio: 1,
     height: "100%",
   },
   footer: {
-    justifyContent: "center",
-    margin: "auto",
-    borderRadius: 2,
-  }
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  proceedButton: {
+    position: 'absolute',
+    right: 20,
+    bottom: 13,
+    borderRadius: 25,
+    backgroundColor: '#65CB2E',
+    paddingHorizontal: 20,
+    width: "auto",
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 40,
+  },
+  proceedText: {
+      color: "white",
+      fontSize: 18,
+    },
+  bottomLeftContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    marginBottom: 10,
+    marginLeft: 10,
+    maxHeight: 100,
+    width: '95%',
+  },
+  scrollViewContent: {
+    alignItems: 'center', // Center the content horizontally
+  },
+  imageInScroll: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
+    borderRadius: 5,
+  },
+
 });
