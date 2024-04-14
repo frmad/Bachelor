@@ -126,7 +126,11 @@ export default function HomeScreen(){
       />
     </Card>
       
-      <TouchableOpacity onPress={handlePress} style={styles.camera_button} />
+      <View style={styles.cameraFunc}>
+        <TouchableOpacity onPress={handlePress} style={styles.camera_button}>
+          <Text style={styles.photo}>+</Text>
+        </TouchableOpacity>
+      </View>
       
       </View>
   );
@@ -134,12 +138,12 @@ export default function HomeScreen(){
 
 const styles = StyleSheet.create({
   camera_button: {
-      backgroundColor: "#FFFFFF",
-      padding: 25,
-      width: 25,
-      justifyContent: "center",
-
-      borderRadius: 50,
+    backgroundColor: "#65CB2E",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   container: {
       flex: 1,
@@ -147,6 +151,7 @@ const styles = StyleSheet.create({
       gap: 10,
       backgroundColor: '#EBEBEB',
       height: '100%',
+      paddingTop: 50,
   },
   center: {
     flex: 1,
@@ -167,6 +172,15 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     textAlign: "center",
     alignItems: "center",
+    justifyContent: "center",
+  },
+  photo: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  cameraFunc: {
+    flexDirection: "row",
     justifyContent: "center",
   },
 });

@@ -14,9 +14,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import {Simulate} from "react-dom/test-utils";
-import emptied = Simulate.emptied;
-
+import {StatusBar} from "expo-status-bar";
 
 const flashLogo = require('../../assets/icons/lightning-bolt-filled.png');
 
@@ -43,7 +41,7 @@ export default function Camera(props: any){
     return (
         <View style={styles.container}>
           <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-          <Button onPress={requestPermission} title="grant permission" />
+          <Button onPress={requestPermission} title="Grant permission" />
         </View>
     );
   }
@@ -121,6 +119,9 @@ export default function Camera(props: any){
 
   return (
       <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.statusbar}>
+          <StatusBar translucent backgroundColor="white" />
+        </View>
         <View style={styles.container}>
           <View style={styles.header}>
             <Pressable onPress={navigation.goBack} style={styles.button} >
@@ -152,7 +153,7 @@ export default function Camera(props: any){
 
           <View style={styles.footer}>
             <Pressable onPress={takePicture} style={styles.buttonCamera} >
-              <Text style={styles.circle}></Text>
+              <View style={styles.circle} />
             </Pressable>
             <TouchableOpacity onPress={proceed} style={[styles.proceedButton, { display: images.length === 0 ? 'none' : 'flex' }]}>
               <Text style={styles.proceedText}>Proceed</Text>
@@ -164,6 +165,9 @@ export default function Camera(props: any){
 }
 
 const styles = StyleSheet.create({
+  statusbar: {
+    marginBottom: '0%',
+  },
   container: {
     backgroundColor: "black",
     flexDirection: "column",
@@ -177,6 +181,7 @@ const styles = StyleSheet.create({
     color: "white",
     borderRadius: 5,
     fontSize: 24,
+    fontWeight: 'bold',
   },
   circle : {
     padding: 20,
@@ -200,12 +205,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: 'gray',
     borderWidth: 1,
-    padding: 10,
     margin: 17,
+    marginTop: 50,
+    marginBottom: 25,
   },
   cameraContainer: {
     flexDirection: 'row',
-    height: "77%",
+    height: "68%",
     marginBottom: 15,
   },
   fixedRatio: {

@@ -6,11 +6,10 @@ import {getCategory} from "../components/MealType";
 import {getMacros} from "../components/Macros";
 import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
-import { Float } from "react-native/Libraries/Types/CodegenTypes";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
 import ImageCarousel from "../components/ImageCarousel";
-
+import { createData } from "../utils/Database/DatabaseActions";
 
 export default function Result({route}) {
 
@@ -34,18 +33,20 @@ export default function Result({route}) {
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
+    const [foodList, setFoodList] = useState<{ name: String; weight: string; carbs: string; protein: string; fat: string; confidence: string}[]>([]);
+
+     const updateItem = (newItem) => {
+        setItem([...item, newItem]);
+      };
+
     interface Recognition{
-        xmin: number;
-        ymin: number;
-        xmax: number;
-        ymax: number;
         confidence: number;
-        class: number;
         name: String;
+        weight: String;
+        carbs: String;
+        protein: String;
+        fat: String;
     }
-    useEffect(()=> 
-    setItem(data)
-    )
 
     /**
      * Params for Yolov5
@@ -56,12 +57,65 @@ export default function Result({route}) {
      * Xmin, XMax
      */
 
+    const setInitialItem = async () => {
+        if (data && data.length > 0 && (!item || !item.length)) {
+            await setItem(data);
+        }
+    };
+
+    
+    useEffect(() => { 
+        setInitialItem()
+    }, [data]);
+
+    const handleItemSet = () => {
+        setFoodList([]);
+        handleAddToList();
+    };
+
+    useEffect(() => {
+        if (item && item.length) {
+            handleItemSet();
+        }
+    }, [item]);
+    
+    
+    const addToFoodList = (Recognition) => {
+        setFoodList(prevList => [...prevList, Recognition]);
+      };
+
+      const handleAddToList = () => {
+        if (item) {
+          item.forEach(item => {
+            addToFoodList({
+              name: String(item.name),
+              weight: "",
+              carbs: "",
+              protein: "",
+              fat: "",
+              confidence: String(item.confidence),
+            });
+          });
+        }
+      };
+
+      const saveData = 
+        {
+          id: 1232,
+          name: "Pancakes",
+          meals: foodList,
+          icon: mealtype,
+        };
+
     const food = ({item} : {item : Recognition}) =>(
         <View style={styles.card}>
-                        <Text>{item.name}</Text>
-                        <Text>100g</Text>
-                        <Text>{Math.round(100 * item.confidence)}%</Text>
-                    </View>
+            <View style={styles.cardTitle}>
+                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.itemCal}>230cal</Text>
+            </View>
+            <Text style={styles.itemWeight}>100g</Text>
+            <Text style={styles.itemConfi}>{Math.round(100 * item.confidence)}%</Text>
+        </View>
     )
 
     if (allImages.length !== 0) {
@@ -146,21 +200,21 @@ export default function Result({route}) {
                             <Text style={styles.cardTitleText}>Precision</Text>
                         </View>
                         <FlatList
-                        style={{height: "20%"}}
+                        style={{height: "20%", marginTop: 10, marginBottom: 10}}
                         data={item}
                         renderItem={food}
                         />
                         <View style={styles.buttonContainer}>
-                            <AddOptionModal/>
+                            <AddOptionModal {...{updateItem}}/>
                         </View>
                     </Card>
                     {/*save or cancel*/}
                     <View style={styles.saveOrCancel}>
-                        <TouchableOpacity onPress={() => { navigation.navigate('Home'); }} style={styles.saveButton}>
+                        <TouchableOpacity onPress={() => {createData(saveData)}} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
                         <Text style={{marginBottom: 5, marginTop: 5,}}>or</Text>
-                        <TouchableOpacity onPress={() => { navigation.navigate('Home'); }} style={styles.cancelButton}>
+                        <TouchableOpacity onPress={() => {navigation.navigate("Home")}} style={styles.cancelButton}>
                             <Text style={styles.cancelButtonText}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
@@ -193,10 +247,9 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     title: {
-        
-        fontSize: 40,
+        fontSize: 30,
         color: "#45505B",
-        marginRight: 80,
+        marginRight: 70,
     },
     card: {
         flexDirection: "row",
@@ -223,13 +276,13 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     macroText: {
-        
         fontSize: 12,
         color: "#45505B",
     },
     buttonContainer: {
         alignItems: 'center',
-        marginTop: 20,
+        margin: 10,
+        height: 70,
     },
     goBackButton: {
         backgroundColor: "#FFFFFF",
@@ -239,7 +292,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: "auto",
-        height: 250,
+        height: 220,
         borderRadius: 25,
         paddingVertical: '2%',
         paddingHorizontal: '2%',
@@ -260,18 +313,17 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     saveButtonText: {
-        
         color: 'white',
-        fontSize: 6,
+        fontSize: 12,
+        fontWeight: "bold",
     },
     cancelButton: {
         width: "auto",
         justifyContent: "center",
     },
     cancelButtonText: {
-        
         color: '#575757',
-        fontSize: 4,
+        fontSize: 10,
     },
     optionText: {
         color: 'white',
@@ -285,8 +337,8 @@ const styles = StyleSheet.create({
         marginBottom: 3,
     },
     mealIconContainer: {
-        width: 50,
-        height: 50,
+        width: 40,
+        height: 40,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -329,15 +381,47 @@ const styles = StyleSheet.create({
         marginTop: 7,
     },
     cardTitleText: {
-        
+
         fontSize: 12,
         color: "#45505B",
         textAlign: 'center',
         width: '33.33%',
     },
+    cardTitle:{
+        flexDirection: 'column',
+    },
     itemName: {
-        
-        fontSize: 16,
+        fontSize: 12,
         color: "#45505B",
-    }
+        fontWeight: "bold",
+    },
+    itemCal: {
+        fontSize: 10,
+        color: "#45505B",
+    },
+    itemWeight: {
+        fontSize: 10,
+        color: "#45505B",
+        borderColor: "#D9D9D9",
+        borderWidth: 2,
+        padding: 4,
+        borderRadius: 5,
+        textAlign: 'center',
+        lineHeight: 20,
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    itemConfi: {
+        fontSize: 10,
+        color: "#45505B",
+        borderColor: '#65CB2E',
+        borderWidth: 2,
+        padding: 4,
+        borderRadius: 20,
+        textAlign: 'center',
+        lineHeight: 20,
+        display: 'flex',
+        justifyContent: 'center',
+        backgroundColor: "transparent",
+    },
 });

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         margin: '2%',
     },
     icon: {
-        transformOrigin: 'center',
+
     },
 });
 
