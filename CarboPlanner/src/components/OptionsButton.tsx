@@ -6,7 +6,7 @@ import {Inter_400Regular} from "@expo-google-fonts/inter";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default function OptionButton() {
+export default function OptionButton({item}) {
     const [isVisible, setIsVisible] = useState(false);
     const buttonRef = useRef(null);
     const textRef = useRef(null);

@@ -12,7 +12,13 @@ import { createData } from "../utils/Database/DatabaseActions";
 import { Images } from "../utils/images";
 
 
-export default function Loading({route}) {
+// 
+interface optionalProp {
+    route: any,
+    mealItem? : object
+}
+
+export default function Loading({route, mealItem} : optionalProp) {
 
     const { base64 ,data } = route.params;
 

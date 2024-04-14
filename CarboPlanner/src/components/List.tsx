@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import { Images } from '../utils/images';
 import OptionButton from "./OptionsButton";
 
-export default function List(props: any) {
+export default function List(props: any, item) {
     const [expanded, setExpanded] = React.useState(false);
 
     function handlePress() { 
@@ -22,7 +22,7 @@ export default function List(props: any) {
                     <Image style={styles.tinyImage} source={Images[props.imageURI]} />
                     <View style={styles.titleRow}>
                         <Text style={styles.bold}>{props.name}</Text>
-                        <OptionButton />
+                        <OptionButton item={item} />
                     </View>
                     {expanded ? <Image source={require("../../assets/func-icon/Accordion-Up-Switch.png")} style={styles.accordionLogo} /> : <Image source={require("../../assets/func-icon/Accordion-Down-Switch.png")} style={styles.accordionLogo} />}
                 </View>

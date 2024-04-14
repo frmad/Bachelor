@@ -53,7 +53,8 @@ export default function HomeScreen(){
     }
 
     const renderMealItem = ({ item }: { item: jsonData }) => (
-        <List name={item.name} imageURI={item.icon}>
+      // we give item to list so item can pass italong to the edit item modal
+        <List name={item.name} imageURI={item.icon} item={item}>
         <HorizontalLine />
         {item.meals.map((meal, index) => (
           <ListItem
