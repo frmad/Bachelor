@@ -18,7 +18,7 @@ export default function MacroProgressBar(props: any) {
                 <Text style={styles.regular}>{props.name}</Text>
             </View>
             <View style={styles.sub_container}>
-                <Progress.Bar progress={props.value} width={null} height={7} borderRadius={50} color='#339437' borderWidth={0} unfilledColor='#E5E5E5' />
+                <Progress.Bar progress={props.value/props.max} width={null} height={7} borderRadius={50} color='#339437' borderWidth={0} unfilledColor='#E5E5E5' />
             </View>
             <View style={styles.text_sub_container}>
                 <Text style={styles.bold}>{props.value + " / " + props.max + " g"}</Text>
