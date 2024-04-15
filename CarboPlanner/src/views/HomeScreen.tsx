@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Text, TouchableOpacity, View, StyleSheet, FlatList } from 'react-native';
+import { Text, TouchableOpacity, View, StyleSheet, FlatList, Image } from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
 import List from '../components/List';
@@ -173,4 +173,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
 
   },
-});
+}});

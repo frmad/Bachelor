@@ -72,7 +72,6 @@ export default function Result({route}) {
             }));
             await setItem(initialItems);
         }
-            await setItem(data);
     };
 
     
@@ -105,10 +104,6 @@ export default function Result({route}) {
               carbs: String(item.carbs),
               protein: String(item.protein),
               fat: String(item.fat),
-              weight: "",
-              carbs: "",
-              protein: "",
-              fat: "",
               confidence: String(item.confidence),
             });
           });
@@ -240,25 +235,6 @@ export default function Result({route}) {
         </SafeAreaView>
     );
 }
-
-{/*
-header: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        paddingHorizontal: 10,
-        marginTop: 20,
-        marginBottom: 30,
-    },
-    resultHeaderContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    resultHeaderText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-*/}
 
 const styles = StyleSheet.create({
     container: {
