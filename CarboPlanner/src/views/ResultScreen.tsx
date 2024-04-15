@@ -72,7 +72,6 @@ export default function Loading({route}) {
             }));
             await setItem(initialItems);
         }
-        console.log(data)
             await setItem(data);
     };
 
