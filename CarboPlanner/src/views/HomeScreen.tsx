@@ -12,8 +12,6 @@ import { useEffect, useState } from 'react';
 import { onSnapshot } from 'firebase/firestore';
 import { mainDocRef } from '../utils/Database/DatabaseActions';
 
-
-
 export default function HomeScreen(){
   const navigation = useNavigation();
 
@@ -21,6 +19,11 @@ export default function HomeScreen(){
   function handlePress(){
     navigation.navigate('Camera');
   }
+
+
+  function goToCalendar() {
+    navigation.navigate('Calendar');
+  } 
 
   const [data, setData] = useState('')
 
@@ -34,7 +37,6 @@ export default function HomeScreen(){
         }
     });
 }, []);
-  
 
     interface Meal{
       name: String
@@ -70,17 +72,25 @@ export default function HomeScreen(){
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header_text}>Today</Text>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Text style={styles.header_text}>Today</Text>
+        <TouchableOpacity onPress={goToCalendar}>
+          <View style={styles.calendarIconContainer}>
+            <Image source={require("../../assets/func-icon/calendar.png")} style={styles.calendarIcon} resizeMode="contain" />
+          </View>
+        </TouchableOpacity>
+      </View>
+
       <Card>
         <View style={styles.row}>
           <CircularSlider value={1200} max={2000}/>
         </View>
         <View style={styles.row}>
-            <MacroProgressBar name={"Carbs"} value={0.5} max={210} />
+            <MacroProgressBar name={"Carbs"} value={50} max={210} />
           
-            <MacroProgressBar name={"Protein"} value={1} max={180} />
+            <MacroProgressBar name={"Protein"} value={100} max={180} />
           
-            <MacroProgressBar name={"Fat"} value={0.2} max={200} />
+            <MacroProgressBar name={"Fat"} value={80} max={200} />
         </View>
       </Card>
 
@@ -96,8 +106,7 @@ export default function HomeScreen(){
         <TouchableOpacity onPress={handlePress} style={styles.camera_button}>
           <Text style={styles.photo}>+</Text>
         </TouchableOpacity>
-      </View>
-      
+      </View> 
       </View>
   );
 }
@@ -140,6 +149,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  calendarIconContainer: {
+    backgroundColor: '#65CB2E',
+    width: 40,
+    height: 40,
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 40,
+    marginLeft: 20,
+    marginTop: 10,
+  },
+  calendarIcon: {
+    width: '100%',
+    height: '100%',
   photo: {
     color: 'white',
     fontSize: 20,
@@ -148,5 +171,6 @@ const styles = StyleSheet.create({
   cameraFunc: {
     flexDirection: "row",
     justifyContent: "center",
+
   },
 });
