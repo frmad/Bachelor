@@ -1,17 +1,16 @@
 import * as React from 'react';
 
-
-import { Button, Platform, SafeAreaView, Text, TouchableOpacity, View, StyleSheet, Image, Pressable, FlatList, ScrollView } from 'react-native';
+import { Text, TouchableOpacity, View, StyleSheet, FlatList, Image } from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
-import MacroSlider from '../components/MacroProgressBar';
 import List from '../components/List';
 import ListItem from '../components/ListItem';
 import MacroProgressBar from '../components/MacroProgressBar';
 import HorizontalLine from '../components/HorizontalLine';
 import { useNavigation } from '@react-navigation/native';
-
-
+import { useEffect, useState } from 'react';
+import { onSnapshot } from 'firebase/firestore';
+import { mainDocRef } from '../utils/Database/DatabaseActions';
 
 export default function HomeScreen(){
   const navigation = useNavigation();
@@ -19,55 +18,24 @@ export default function HomeScreen(){
   function handlePress(){
     navigation.navigate('Camera');
   }
-  
-  const data = [
-      {
-        id: 0,
-        name: "Pancakes",
-        meals: [
-          {
-            name: "Item 1",
-            weight: "432",
-            calories: "320",
-            carbs: "32",
-            protein: "22",
-            fat: "12",
-          },
-          {
-            name: "Item 2",
-            weight: "123",
-            calories: "320",
-            carbs: "32",
-            protein: "22",
-            fat: "12",
-          },
-        ],
-        icon: "lunch",
-      },
-      {
-        id: 1,
-        name: "Not Pancakes",
-        icon: "midday",
-        meals: [
-          {
-            name: "Item 5",
-            weight: "12 ",
-            calories: "320",
-            carbs: "32",
-            protein: "22",
-            fat: "12",
-          },
-          {
-            name: "Item 3",
-            weight: "123",
-            calories: "320",
-            carbs: "32",
-            protein: "22",
-            fat: "12",
-          },
-        ],
-      },
-    ];
+
+
+  function goToCalendar() {
+    navigation.navigate('Calendar');
+  } 
+
+  const [data, setData] = useState('')
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(mainDocRef, (snapshot) => {
+        if (snapshot.exists()) {
+            const fetchedData = snapshot.data().data;
+            setData(fetchedData);
+        } else {
+          setData(undefined)
+        }
+    });
+}, []);
 
     interface Meal{
       name: String
@@ -103,17 +71,25 @@ export default function HomeScreen(){
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header_text}>Today</Text>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Text style={styles.header_text}>Today</Text>
+        <TouchableOpacity onPress={goToCalendar}>
+          <View style={styles.calendarIconContainer}>
+            <Image source={require("../../assets/func-icon/calendar.png")} style={styles.calendarIcon} resizeMode="contain" />
+          </View>
+        </TouchableOpacity>
+      </View>
+
       <Card>
         <View style={styles.row}>
           <CircularSlider value={1200} max={2000}/>
         </View>
         <View style={styles.row}>
-            <MacroProgressBar name={"Carbs"} value={0.5} max={210} />
+            <MacroProgressBar name={"Carbs"} value={50} max={210} />
           
-            <MacroProgressBar name={"Protein"} value={1} max={180} />
+            <MacroProgressBar name={"Protein"} value={100} max={180} />
           
-            <MacroProgressBar name={"Fat"} value={0.2} max={200} />
+            <MacroProgressBar name={"Fat"} value={80} max={200} />
         </View>
       </Card>
 
@@ -129,8 +105,7 @@ export default function HomeScreen(){
         <TouchableOpacity onPress={handlePress} style={styles.camera_button}>
           <Text style={styles.photo}>+</Text>
         </TouchableOpacity>
-      </View>
-      
+      </View> 
       </View>
   );
 }
@@ -173,6 +148,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  calendarIconContainer: {
+    backgroundColor: '#65CB2E',
+    width: 40,
+    height: 40,
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 40,
+    marginLeft: 20,
+    marginTop: 10,
+  },
+  calendarIcon: {
+    width: '100%',
+    height: '100%',
   photo: {
     color: 'white',
     fontSize: 20,
@@ -181,5 +170,6 @@ const styles = StyleSheet.create({
   cameraFunc: {
     flexDirection: "row",
     justifyContent: "center",
+
   },
-});
+}});

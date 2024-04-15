@@ -6,14 +6,15 @@ import LoadingIcon from "./LoadingIcon";
 export default function Loading({route}) {
     const navigation = useNavigation();
 
-    const { base64 } = route.params;
+    //const { base64 } = route.params;
+    const { firstImageBase64, allImagesBase64 } = route.params;
 
     const api_url = process.env.EXPO_PUBLIC_API_URL;
 
-    const fetchData = async (base64) => {
+    const fetchData = async (firstImageBase64) => {
 
         const requestBody = {
-          image: base64
+          image: firstImageBase64
         };
     
         //Sends POST request to this URL, sends using the Base64 Image from the Expo Camera
@@ -34,7 +35,7 @@ export default function Loading({route}) {
         })
         .then(function(data) {
           // The JSON data from the WebServer is returned here
-          navigation.navigate('Result', {base64: base64, data: data});
+            navigation.navigate('Result', {base64: firstImageBase64, data: data, allImages: allImagesBase64});
         
 
           return data;
@@ -47,7 +48,7 @@ export default function Loading({route}) {
 
     //Go back after some time
     useEffect(() => {
-        fetchData(base64);  
+        fetchData(firstImageBase64);
     });
 
     return (
