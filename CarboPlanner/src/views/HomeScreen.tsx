@@ -22,14 +22,14 @@ export default function HomeScreen(){
     navigation.navigate('Camera');
   }
 
-  const [data, setData] = useState('')
+  const [data, setData] = useState([])
 
   useEffect(() => {
     const unsubscribe = onSnapshot(mainDocRef, (snapshot) => {
         if (snapshot.exists()) {
             const fetchedData = snapshot.data().data;
-            console.log(fetchedData[0])
-            setData(fetchedData);
+            const formattedData = Object.values(fetchedData)
+            setData(formattedData);
         } else {
           setData(undefined)
         }
@@ -52,23 +52,27 @@ export default function HomeScreen(){
       icon: String
     }
 
-    const renderMealItem = ({ item }: { item: jsonData }) => (
-      // we give item to list so item can pass italong to the edit item modal
-        <List name={item.name} imageURI={item.icon} item={item}>
-        <HorizontalLine />
-        {item.meals.map((meal, index) => (
-          <ListItem
-            key={index.toString()} // Ensure each item has a unique key
-            weight={meal.weight}
-            name={meal.name}
-            calories={meal.calories}
-            protein={meal.protein}
-            carbs="32" // Assuming the carbs value is fixed
-            fat={meal.fat}
-          />
-        ))}
-      </List>
-    );
+    const renderMealItem = ({ item }: { item: jsonData }) => {
+      const uuidObject = Object.values(item)[0]; // Extracting the object with the UUID key
+      const mealsArray = uuidObject.meals; // Accessing the meals array from the UUID object
+    
+      return (
+        <List name={uuidObject.name} imageURI={uuidObject.icon} item={item}>
+          <HorizontalLine />
+          {mealsArray.map((meal, index) => (
+            <ListItem
+              key={index.toString()} // Ensure each item has a unique key
+              weight={meal.weight}
+              name={meal.name}
+              calories={meal.calories}
+              protein={meal.protein}
+              carbs="32" // Assuming the carbs value is fixed
+              fat={meal.fat}
+            />
+          ))}
+        </List>
+      );
+    };
 
   return (
     <View style={styles.container}>

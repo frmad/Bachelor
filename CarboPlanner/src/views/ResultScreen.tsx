@@ -80,7 +80,6 @@ export default function Loading({route, mealItem} : optionalProp) {
             }));
             await setItem(initialItems);
         }
-        console.log(data)
     };
 
     
@@ -120,13 +119,15 @@ export default function Loading({route, mealItem} : optionalProp) {
         }
       };
 
-      const saveData = 
-        {
-          uuid: uuid.v4(),
+      const uuidKey = uuid.v4();
+
+      const saveData = {
+        [uuidKey]: {
           name: newText,
           meals: foodList,
-          icon: mealtype,
-        };
+          icon: mealtype
+        }
+      };
 
     const food = ({item} : {item : Recognition}) =>(
         <View style={styles.card}>
