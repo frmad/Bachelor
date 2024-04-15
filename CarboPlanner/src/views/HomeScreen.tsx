@@ -4,22 +4,15 @@ import * as React from 'react';
 import { Button, Platform, SafeAreaView, Text, TouchableOpacity, View, StyleSheet, Image, Pressable, FlatList, ScrollView } from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
-import MacroSlider from '../components/MacroProgressBar';
 import List from '../components/List';
 import ListItem from '../components/ListItem';
 import MacroProgressBar from '../components/MacroProgressBar';
 import HorizontalLine from '../components/HorizontalLine';
-import { useNavigation } from '@react-navigation/native';
+import CameraButton from "../components/CameraButton";
 
 
 
 export default function HomeScreen(){
-  const navigation = useNavigation();
-
-
-  function handlePress(){
-    navigation.navigate('Camera');
-  }
   
   const data = [
       {
@@ -127,28 +120,14 @@ export default function HomeScreen(){
           />
         </Card>
       </ScrollView>
-      
-      <View style={styles.cameraFunc}>
-        <TouchableOpacity onPress={handlePress} style={styles.camera_button}>
-          <View style={styles.plusIconContainer}>
-            <Image source={require("../../assets/func-icon/plus.png")} style={styles.plusIcon} resizeMode="contain" />
-          </View>
-        </TouchableOpacity>
-      </View>
-      
+
+      <CameraButton />
+
       </View>
   );
 }
 
 const styles = StyleSheet.create({
-  camera_button: {
-    backgroundColor: "#65CB2E",
-    width: 45,
-    height: 45,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   container: {
       flex: 1,
       flexDirection: "column",
@@ -178,26 +157,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
-  },
-  photo: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  cameraFunc: {
-    position: 'absolute',
-    bottom: '2%',
-    left: '50%',
-    transform: [{ translateX: -22.5 }],
-  },
-  plusIconContainer: {
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  plusIcon: {
-    width: '100%',
-    height: '100%',
   },
 });
