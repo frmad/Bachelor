@@ -2,9 +2,11 @@ import React from 'react';
 import { View, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import { Images } from '../utils/images';
 import OptionButton from "./OptionsButton";
+import { useNavigation } from '@react-navigation/native';
 
-export default function List(props: any, item) {
+export default function List(props: any) {
     const [expanded, setExpanded] = React.useState(false);
+    const navigation = useNavigation();
 
     function handlePress() { 
         setExpanded(!expanded)
@@ -22,7 +24,7 @@ export default function List(props: any, item) {
                     <Image style={styles.tinyImage} source={Images[props.imageURI]} />
                     <View style={styles.titleRow}>
                         <Text style={styles.bold}>{props.name}</Text>
-                        <OptionButton item={item} />
+                        <OptionButton uuidKey={props.uuidKey}/>
                     </View>
                     {expanded ? <Image source={require("../../assets/func-icon/Accordion-Up-Switch.png")} style={styles.accordionLogo} /> : <Image source={require("../../assets/func-icon/Accordion-Down-Switch.png")} style={styles.accordionLogo} />}
                 </View>

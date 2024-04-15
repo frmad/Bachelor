@@ -2,11 +2,13 @@ import {View, StyleSheet, TouchableOpacity, Text, Modal, Dimensions, Image} from
 import * as React from "react";
 import { useState, useRef } from "react";
 import {Inter_400Regular} from "@expo-google-fonts/inter";
+import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default function OptionButton({item}) {
+export default function OptionButton(props: any) {
+    const navigation = useNavigation();
     const [isVisible, setIsVisible] = useState(false);
     const buttonRef = useRef(null);
     const textRef = useRef(null);
@@ -29,6 +31,9 @@ export default function OptionButton({item}) {
             });
         }
     };
+
+    const edit = () => {
+        navigation.navigate('Result', {uuidKey: props.uuidKey});};
 
     return (
         <View style={styles.container}>
@@ -62,7 +67,7 @@ export default function OptionButton({item}) {
                             <Text style={styles.optionText}>Add food item</Text>
                         </TouchableOpacity>
                         <View style={styles.line} />
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={edit}>
                             <Text style={styles.optionText}>Edit food item</Text>
                         </TouchableOpacity>
                         <View style={styles.line} />

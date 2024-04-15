@@ -78,25 +78,18 @@ export default function Loading({ route}) {
                 if (docSnapshot.exists()) {
                     const fetchedData = docSnapshot.data().data || [];
                     
-                    // initial index set
-                    let index = -1; 
+                    let index = -1; // Initialize index as -1
                     
-                    //for each loop that finds the index for the correct uuid
                     fetchedData.forEach((obj, i) => {
-                        const key = Object.keys(obj)[0]; 
+                        const key = Object.keys(obj)[0]; // Get the UUID key of the object
                         
-                        //sets index value for the mathing uuid found
                         if (key === uuidKey) {
-                            index = i; 
+                            index = i; // Update the index if UUID matches
                         }
                     });
                     
-                    //check if initial value has changed
                     if (index !== -1) {
-                        //Grab the value stored on the uuid key in the database
-                        const newItem = fetchedData[index][uuidKey];
-
-                        //set items and newText to the data from the database
+                        const newItem = fetchedData[index][uuidKey]; // Get the new item at the found index
                         setNewText(newItem.name)
                         setItem(newItem.meals);
                     }
