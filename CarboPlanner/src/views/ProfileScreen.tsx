@@ -12,7 +12,6 @@ export default function ProfileScreen() {
         const unsubscribe = onSnapshot(mainDocRef, (snapshot) => {
             if (snapshot.exists()) {
                 const fetchedData = snapshot.data().data;
-                console.log("Data changed:", fetchedData[0].meals);
             } else {
                 console.error("Document does not exist");
             }
