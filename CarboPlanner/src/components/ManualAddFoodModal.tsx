@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
-import { TextInput } from "react-native-paper";
 import {LongInput, ShortInput} from '../components/TextInput';
 
 const windowWidth = Dimensions.get('window').width;
@@ -22,20 +21,6 @@ const ManuallyAddModal = ({updateItem}) => {
             protein: protein,
             carbs: carb,
             weight: weight,
-        };
-
-        updateItem(newItem);
-
-        toggleModal();
-    };
-
-    const onSave = () => {
-        const newItem = {
-            name: name,
-            calories: calories,
-            fat: fat,
-            protein: protein,
-            carb: carb
         };
 
         updateItem(newItem);
