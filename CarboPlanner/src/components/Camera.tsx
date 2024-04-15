@@ -16,7 +16,6 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import {StatusBar} from "expo-status-bar";
 
-
 const flashLogo = require('../../assets/icons/lightning-bolt-filled.png');
 
 export default function Camera(props: any){
@@ -65,12 +64,12 @@ export default function Camera(props: any){
 
       const data = await camera.takePictureAsync(options={base64:true});
       // Sets the Image URI to the data.uri (Base64)
-  
+
       const base64 = 'data:image/png;base64,' + data.base64;
 
       setImages(prevImageUris => [...prevImageUris, base64]);
 
-      
+
       // Splits the Base64 from the Type identifier made by Expo Camera, and sends the bare Base64 code
       //navigation.navigate('Loading', {base64: splitBase64String[1]});
     }
@@ -82,8 +81,9 @@ export default function Camera(props: any){
 
 
   const proceed = () => {
-    //fetchData(splitBase64String[1]);
-    navigation.navigate('Loading', {base64: splitBase64String(images[0])});
+    const firstImageBase64 = splitBase64String(images[0]);
+    const allImagesBase64 = images.map(uri => splitBase64String(uri)); //For each uri in the images array, it applies the splitBase64String function and stores the result in the allImagesBase64 array.
+    navigation.navigate('Loading', { firstImageBase64, allImagesBase64 });
   }
 
 

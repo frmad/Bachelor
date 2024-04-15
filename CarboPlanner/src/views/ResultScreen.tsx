@@ -8,14 +8,14 @@ import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
 import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
+import ImageCarousel from "../components/ImageCarousel";
 import { createData } from "../utils/Database/DatabaseActions";
 import { Images } from "../utils/images";
 
 
+export default function Result({route}) {
 
-export default function Loading({route}) {
-
-    const { base64 ,data } = route.params;
+    const { base64 ,data, allImages} = route.params;
 
     const [item, setItem] = useState<Recognition[]>();
 
@@ -134,6 +134,12 @@ export default function Loading({route}) {
         </View>
     )
 
+    if (allImages.length !== 0) {
+        console.log('not empty on result');
+    } else {
+        console.log('empty on result');
+    }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
                 <View style={styles.container}>
@@ -145,7 +151,8 @@ export default function Loading({route}) {
                         </View>
                     </View>
                     */}
-                    <Image source={{ uri: image }} style={styles.image} />
+                    <ImageCarousel images={allImages} />
+                    {/*<Image source={{ uri: image }} style={styles.image} />*/}
                     <Card>
                         <View>
                             {/*Title*/}
