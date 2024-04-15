@@ -9,9 +9,10 @@ import AddOptionModal from "../components/AddOptionModal";
 import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
 import { createData } from "../utils/Database/DatabaseActions";
+import SaveConfirmationModal from "../components/SaveConfirmationModal";
 
 
-export default function Loading({route}) {
+export default function Result({route}) {
 
     const { base64 ,data } = route.params;
 
@@ -63,8 +64,8 @@ export default function Loading({route}) {
         }
     };
 
-    
-    useEffect(() => { 
+
+    useEffect(() => {
         setInitialItem()
     }, [data]);
 
@@ -78,8 +79,8 @@ export default function Loading({route}) {
             handleItemSet();
         }
     }, [item]);
-    
-    
+
+
     const addToFoodList = (Recognition) => {
         setFoodList(prevList => [...prevList, Recognition]);
       };
@@ -99,13 +100,20 @@ export default function Loading({route}) {
         }
       };
 
-      const saveData = 
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+      const saveData =
         {
           id: 1232,
           name: "Pancakes",
           meals: foodList,
           icon: mealtype,
         };
+
+    const handleSave = () => {
+        createData(saveData);
+        setIsModalVisible(!isModalVisible); // Show the confirmation modal
+    };
 
     const food = ({item} : {item : Recognition}) =>(
         <View style={styles.card}>
@@ -203,9 +211,11 @@ export default function Loading({route}) {
                     </Card>
                     {/*save or cancel*/}
                     <View style={styles.saveOrCancel}>
-                        <TouchableOpacity onPress={() => {createData(saveData)}} style={styles.saveButton}>
+                        <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
+                        <SaveConfirmationModal isVisible={isModalVisible} />
+
                         <Text style={{marginBottom: 5, marginTop: 5,}}>or</Text>
                         <TouchableOpacity onPress={() => {navigation.navigate("Home")}} style={styles.cancelButton}>
                             <Text style={styles.cancelButtonText}>Cancel</Text>
