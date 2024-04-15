@@ -10,6 +10,7 @@ import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
 import { createData } from "../utils/Database/DatabaseActions";
 import { Images } from "../utils/images";
+import uuid from 'react-native-uuid';
 
 
 // 
@@ -48,6 +49,7 @@ export default function Loading({route, mealItem} : optionalProp) {
       };
 
     interface Recognition{
+        uuid : String;
         confidence: number;
         class: number;
         name: String;
@@ -106,12 +108,13 @@ export default function Loading({route, mealItem} : optionalProp) {
         if (item) {
           item.forEach(item => {
             addToFoodList({
-              name: String(item.name),
-              weight: String(item.weight),
-              carbs: String(item.carbs),
-              protein: String(item.protein),
-              fat: String(item.fat),
-              confidence: String(item.confidence),
+                UUID: uuid.v4(),
+                name: String(item.name),
+                weight: String(item.weight),
+                carbs: String(item.carbs),
+                protein: String(item.protein),
+                fat: String(item.fat),
+                confidence: String(item.confidence),
             });
           });
         }
@@ -119,7 +122,7 @@ export default function Loading({route, mealItem} : optionalProp) {
 
       const saveData = 
         {
-          id: 1232,
+          uuid: uuid.v4(),
           name: newText,
           meals: foodList,
           icon: mealtype,
