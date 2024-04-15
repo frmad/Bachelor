@@ -15,7 +15,7 @@ export default function MacroProgressBar(props: any) {
     return (
         <View style={styles.container}>
             <View style={styles.text_sub_container}>
-                <Text>{props.name}</Text>
+                <Text style={styles.regular}>{props.name}</Text>
             </View>
             <View style={styles.sub_container}>
                 <Progress.Bar progress={props.value/props.max} width={null} height={7} borderRadius={50} color='#339437' borderWidth={0} unfilledColor='#E5E5E5' />
@@ -44,5 +44,9 @@ const styles = StyleSheet.create({
     },
     bold: {
         fontWeight: "bold",
+        color: "#45505B",
+    },
+    regular: {
+        color: "#45505B",
     },
 });

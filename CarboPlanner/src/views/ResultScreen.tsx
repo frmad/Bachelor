@@ -8,12 +8,14 @@ import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
 import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
+import ImageCarousel from "../components/ImageCarousel";
 import { createData } from "../utils/Database/DatabaseActions";
+import { Images } from "../utils/images";
 
 
-export default function Loading({route}) {
+export default function Result({route}) {
 
-    const { base64 ,data } = route.params;
+    const { base64 ,data, allImages} = route.params;
 
     const [item, setItem] = useState<Recognition[]>();
 
@@ -27,17 +29,18 @@ export default function Loading({route}) {
 
     const [changeText, setChangeText] = useState(false);
 
-    const [newText, setNewText] =  useState('');
+    const [newText, setNewText] =  useState(mealtype);
 
     const image: any = "data:image/png;base64," + base64;
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-    const [foodList, setFoodList] = useState<{ name: String; weight: string; carbs: string; protein: string; fat: string; confidence: string}[]>([]);
+    const [foodList, setFoodList] = useState<Recognition[]>([]);
 
      const updateItem = (newItem) => {
         setItem([...item, newItem]);
       };
+
 
     interface Recognition{
         confidence: number;
@@ -59,8 +62,17 @@ export default function Loading({route}) {
 
     const setInitialItem = async () => {
         if (data && data.length > 0 && (!item || !item.length)) {
-            await setItem(data);
+            const initialItems = data.map(item => ({
+                ...item,
+                // Set default values for properties other than confidence and name
+                weight: '100',
+                carbs: '33',
+                protein: '12',
+                fat: '8',
+            }));
+            await setItem(initialItems);
         }
+            await setItem(data);
     };
 
     
@@ -89,6 +101,10 @@ export default function Loading({route}) {
           item.forEach(item => {
             addToFoodList({
               name: String(item.name),
+              weight: String(item.weight),
+              carbs: String(item.carbs),
+              protein: String(item.protein),
+              fat: String(item.fat),
               weight: "",
               carbs: "",
               protein: "",
@@ -102,7 +118,7 @@ export default function Loading({route}) {
       const saveData = 
         {
           id: 1232,
-          name: "Pancakes",
+          name: newText,
           meals: foodList,
           icon: mealtype,
         };
@@ -118,6 +134,12 @@ export default function Loading({route}) {
         </View>
     )
 
+    if (allImages.length !== 0) {
+        console.log('not empty on result');
+    } else {
+        console.log('empty on result');
+    }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
                 <View style={styles.container}>
@@ -129,7 +151,8 @@ export default function Loading({route}) {
                         </View>
                     </View>
                     */}
-                    <Image source={{ uri: image }} style={styles.image} />
+                    <ImageCarousel images={allImages} />
+                    {/*<Image source={{ uri: image }} style={styles.image} />*/}
                     <Card>
                         <View>
                             {/*Title*/}
@@ -139,15 +162,17 @@ export default function Loading({route}) {
                                         <Text style={styles.errorMessage}>Please enter a name for the meal</Text>
                                     )}
                                     <View style={styles.editView}>
-                                        <TextInput
-                                            onChangeText={setNewText}
+                                        <TextInput 
+                                            style={{width:"80%", backgroundColor: "white"}}
+                                            theme={{roundness: 10}}
+                                            activeUnderlineColor="#65CB2E"
+                                            mode='flat'
                                             placeholder="Name for the meal"
-                                            style={styles.input}
-                                            underlineColorAndroid="#65CB2E" //only works on android
-                                        />
+                                            activeOutlineColor='black'
+                                            onChangeText={setNewText}
+                                            />
                                         <TouchableOpacity onPress={() => {
                                             if (newText.trim() !== '') {
-                                                setMealtype(newText);
                                                 setChangeText(false);
                                                 setShowErrorMessage(false);
                                             } else {
@@ -162,9 +187,9 @@ export default function Loading({route}) {
                                 <View>
                                     <View style={styles.mealTitle}>
                                         <View style={styles.mealIconContainer}>
-                                            <Image source={{}} style={styles.mealIcon} resizeMode="contain" />
+                                            <Image source={Images[mealtype]} style={styles.mealIcon} resizeMode="contain" />
                                         </View>
-                                        <Text style={styles.title}>{mealtype}</Text>
+                                        <Text style={styles.title}>{newText}</Text>
                                         <TouchableOpacity onPress={() => {
                                             setChangeText(true);
                                             setNewText('');
@@ -374,7 +399,6 @@ const styles = StyleSheet.create({
         marginTop: 7,
     },
     cardTitleText: {
-
         fontSize: 12,
         color: "#45505B",
         textAlign: 'center',
