@@ -12,6 +12,22 @@ const ManuallyAddModal = ({updateItem}) => {
     const [fat, setFat] = useState(0);
     const [protein, setProtein] = useState(0);
     const [carb, setCarb] = useState(0);
+    const [weight, setWeight] = useState(0);
+
+    const onSave = () => {
+        const newItem = {
+            name: name,
+            calories: calories,
+            fat: fat,
+            protein: protein,
+            carbs: carb,
+            weight: weight,
+        };
+
+        updateItem(newItem);
+
+        toggleModal();
+    };
 
     const onSave = () => {
         const newItem = {
@@ -36,7 +52,7 @@ const ManuallyAddModal = ({updateItem}) => {
     };
 
     const onChangeWeight = (text) => {
-        setCalories(parseInt(text) || 0);
+        setWeight(parseInt(text) || 0);
     };
 
     const onChangeCalories = (text) => {
