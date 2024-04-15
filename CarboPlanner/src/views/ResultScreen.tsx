@@ -8,22 +8,16 @@ import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
 import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
-import { createData } from "../utils/Database/DatabaseActions";
+import { createData, edit, mainDocRef } from "../utils/Database/DatabaseActions";
 import { Images } from "../utils/images";
 import uuid from 'react-native-uuid';
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../utils/Database/databaseConfig";
 
+export default function Loading({ route}) {
+    let { base64, data} = route.params;
 
-// 
-interface optionalProp {
-    route: any,
-    mealItem? : object
-}
-
-export default function Loading({route, mealItem} : optionalProp) {
-
-    const { base64 ,data } = route.params;
-
-    const [item, setItem] = useState<Recognition[]>();
+    const [items, setItem] = useState<Recognition[]>();
 
     const navigation = useNavigation();
 
@@ -34,8 +28,7 @@ export default function Loading({route, mealItem} : optionalProp) {
     const [mealtype, setMealtype] = useState(getCategory());
 
     const [changeText, setChangeText] = useState(false);
-
-    const [newText, setNewText] =  useState(mealtype);
+    const [newText, setNewText] = useState(mealtype);
 
     const image: any = "data:image/png;base64," + base64;
 
@@ -45,7 +38,7 @@ export default function Loading({route, mealItem} : optionalProp) {
     const [foodList, setFoodList] = useState<Recognition[]>([]);
 
      const updateItem = (newItem) => {
-        setItem([...item, newItem]);
+        setItem([...items, newItem]);
       };
 
     interface Recognition{
@@ -59,18 +52,11 @@ export default function Loading({route, mealItem} : optionalProp) {
         fat: String;
     }
 
-    /**
-     * Params for Yolov5
-     * -----------------
-     * name
-     * Confindence
-     * Ymin, Ymax
-     * Xmin, XMax
-     */
-
     const setInitialItem = async () => {
-        if (data && data.length > 0 && (!item || !item.length)) {
-            const initialItems = data.map(item => ({
+        let initialItems;
+
+        if (data && data.length > 0 && (!items || !items.length)) {
+            initialItems = data.map(item => ({
                 ...item,
                 // Set default values for properties other than confidence and name
                 weight: '100',
@@ -78,14 +64,54 @@ export default function Loading({route, mealItem} : optionalProp) {
                 protein: '12',
                 fat: '8',
             }));
-            await setItem(initialItems);
+            
+            
         }
+        await setItem(initialItems);
+        
     };
-
+    useEffect(() => {
+        async function fetchData() {
+            if (route.params.uuidKey) {
+                const docSnapshot = await getDoc(mainDocRef);
     
+                if (docSnapshot.exists()) {
+                    const fetchedData = docSnapshot.data().data || [];
+                    
+                    // initial index set
+                    let index = -1; 
+                    
+                    //for each loop that finds the index for the correct uuid
+                    fetchedData.forEach((obj, i) => {
+                        const key = Object.keys(obj)[0]; 
+                        
+                        //sets index value for the mathing uuid found
+                        if (key === uuidKey) {
+                            index = i; 
+                        }
+                    });
+                    
+                    //check if initial value has changed
+                    if (index !== -1) {
+                        //Grab the value stored on the uuid key in the database
+                        const newItem = fetchedData[index][uuidKey];
+
+                        //set items and newText to the data from the database
+                        setNewText(newItem.name)
+                        setItem(newItem.meals);
+                    }
+                }
+            }
+        }
+        
+        fetchData();
+    }, [route.params.uuidKey, data]);
+
     useEffect(() => { 
         setInitialItem()
     }, [data]);
+
+
 
     const handleItemSet = () => {
         setFoodList([]);
@@ -93,10 +119,10 @@ export default function Loading({route, mealItem} : optionalProp) {
     };
 
     useEffect(() => {
-        if (item && item.length) {
+        if (items && items.length) {
             handleItemSet();
         }
-    }, [item]);
+    }, [items]);
     
     
     const addToFoodList = (Recognition) => {
@@ -104,10 +130,9 @@ export default function Loading({route, mealItem} : optionalProp) {
       };
 
       const handleAddToList = () => {
-        if (item) {
-          item.forEach(item => {
+        if (items) {
+          items.forEach(item => {
             addToFoodList({
-                UUID: uuid.v4(),
                 name: String(item.name),
                 weight: String(item.weight),
                 carbs: String(item.carbs),
@@ -119,15 +144,21 @@ export default function Loading({route, mealItem} : optionalProp) {
         }
       };
 
-      const uuidKey = uuid.v4();
+      //check for uuid prop, if found uuidKey variable points to the prop
+      const uuidKey = route.params.uuidKey || String(uuid.v4());
 
-      const saveData = {
-        [uuidKey]: {
-          name: newText,
-          meals: foodList,
-          icon: mealtype
-        }
-      };
+      const saveData = () => {
+        return {
+            [uuidKey]: { 
+                name: newText,
+                meals: foodList,
+                icon: mealtype
+            }
+        };
+    };
+    
+    
+
 
     const food = ({item} : {item : Recognition}) =>(
         <View style={styles.card}>
@@ -140,21 +171,23 @@ export default function Loading({route, mealItem} : optionalProp) {
         </View>
     )
 
+    //Handles which saving method touse
+    const handleSaveButtonPress = () => {
+        if (route.params.uuidKey) {
+            console.log(saveData())
+            edit(saveData(), uuidKey);
+        } else {
+            createData(saveData());
+        }
+    };
+
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
                 <View style={styles.container}>
-                    {/*
-                    <View style={styles.header}>
-                        <TouchableOpacity onPress={() => { navigation.navigate('Home'); }} style={styles.goBackButton} />
-                        <View style={styles.resultHeaderContainer}>
-                            <Text style={styles.resultHeaderText}>Result</Text>
-                        </View>
-                    </View>
-                    */}
                     <Image source={{ uri: image }} style={styles.image} />
                     <Card>
                         <View>
-                            {/*Title*/}
                             {changeText ? ( // If changeText is true
                                 <View>
                                     {showErrorMessage && (
@@ -218,7 +251,7 @@ export default function Loading({route, mealItem} : optionalProp) {
                         </View>
                         <FlatList
                         style={{height: "20%", marginTop: 10, marginBottom: 10}}
-                        data={item}
+                        data={items}
                         renderItem={food}
                         />
                         <View style={styles.buttonContainer}>
@@ -227,7 +260,7 @@ export default function Loading({route, mealItem} : optionalProp) {
                     </Card>
                     {/*save or cancel*/}
                     <View style={styles.saveOrCancel}>
-                        <TouchableOpacity onPress={() => {createData(saveData)}} style={styles.saveButton}>
+                        <TouchableOpacity onPress={() => {handleSaveButtonPress()}} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
                         <Text style={{marginBottom: 5, marginTop: 5,}}>or</Text>
@@ -239,25 +272,6 @@ export default function Loading({route, mealItem} : optionalProp) {
         </SafeAreaView>
     );
 }
-
-{/*
-header: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        paddingHorizontal: 10,
-        marginTop: 20,
-        marginBottom: 30,
-    },
-    resultHeaderContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    resultHeaderText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-*/}
 
 const styles = StyleSheet.create({
     container: {
