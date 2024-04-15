@@ -8,22 +8,16 @@ import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
 import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
-import { createData } from "../utils/Database/DatabaseActions";
+import { createData, edit, mainDocRef } from "../utils/Database/DatabaseActions";
 import { Images } from "../utils/images";
 import uuid from 'react-native-uuid';
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../utils/Database/databaseConfig";
 
+export default function Loading({ route}) {
+    let { base64, data} = route.params;
 
-// 
-interface optionalProp {
-    route: any,
-    mealItem? : object
-}
-
-export default function Loading({route, mealItem} : optionalProp) {
-
-    const { base64 ,data } = route.params;
-
-    const [item, setItem] = useState<Recognition[]>();
+    const [items, setItem] = useState<Recognition[]>();
 
     const navigation = useNavigation();
 
@@ -34,8 +28,7 @@ export default function Loading({route, mealItem} : optionalProp) {
     const [mealtype, setMealtype] = useState(getCategory());
 
     const [changeText, setChangeText] = useState(false);
-
-    const [newText, setNewText] =  useState(mealtype);
+    const [newText, setNewText] = useState(mealtype);
 
     const image: any = "data:image/png;base64," + base64;
 
@@ -45,7 +38,7 @@ export default function Loading({route, mealItem} : optionalProp) {
     const [foodList, setFoodList] = useState<Recognition[]>([]);
 
      const updateItem = (newItem) => {
-        setItem([...item, newItem]);
+        setItem([...items, newItem]);
       };
 
     interface Recognition{
@@ -69,8 +62,10 @@ export default function Loading({route, mealItem} : optionalProp) {
      */
 
     const setInitialItem = async () => {
-        if (data && data.length > 0 && (!item || !item.length)) {
-            const initialItems = data.map(item => ({
+        let initialItems;
+
+        if (data && data.length > 0 && (!items || !items.length)) {
+            initialItems = data.map(item => ({
                 ...item,
                 // Set default values for properties other than confidence and name
                 weight: '100',
@@ -78,14 +73,47 @@ export default function Loading({route, mealItem} : optionalProp) {
                 protein: '12',
                 fat: '8',
             }));
-            await setItem(initialItems);
+            
+            
         }
+        await setItem(initialItems);
+        
     };
-
+    useEffect(() => {
+        async function fetchData() {
+            if (route.params.uuidKey) {
+                const docSnapshot = await getDoc(mainDocRef);
     
+                if (docSnapshot.exists()) {
+                    const fetchedData = docSnapshot.data().data || [];
+                    
+                    let index = -1; // Initialize index as -1
+                    
+                    fetchedData.forEach((obj, i) => {
+                        const key = Object.keys(obj)[0]; // Get the UUID key of the object
+                        
+                        if (key === uuidKey) {
+                            index = i; // Update the index if UUID matches
+                        }
+                    });
+                    
+                    if (index !== -1) {
+                        const newItem = fetchedData[index][uuidKey]; // Get the new item at the found index
+                        setNewText(newItem.name)
+                        setItem(newItem.meals);
+                    }
+                }
+            }
+        }
+        
+        fetchData();
+    }, [route.params.uuidKey, data]);
+
     useEffect(() => { 
         setInitialItem()
     }, [data]);
+
+
 
     const handleItemSet = () => {
         setFoodList([]);
@@ -93,10 +121,10 @@ export default function Loading({route, mealItem} : optionalProp) {
     };
 
     useEffect(() => {
-        if (item && item.length) {
+        if (items && items.length) {
             handleItemSet();
         }
-    }, [item]);
+    }, [items]);
     
     
     const addToFoodList = (Recognition) => {
@@ -104,10 +132,9 @@ export default function Loading({route, mealItem} : optionalProp) {
       };
 
       const handleAddToList = () => {
-        if (item) {
-          item.forEach(item => {
+        if (items) {
+          items.forEach(item => {
             addToFoodList({
-                UUID: uuid.v4(),
                 name: String(item.name),
                 weight: String(item.weight),
                 carbs: String(item.carbs),
@@ -119,15 +146,20 @@ export default function Loading({route, mealItem} : optionalProp) {
         }
       };
 
-      const uuidKey = uuid.v4();
+      const uuidKey = route.params.uuidKey || String(uuid.v4());
 
-      const saveData = {
-        [uuidKey]: {
-          name: newText,
-          meals: foodList,
-          icon: mealtype
-        }
-      };
+      const saveData = () => {
+        return {
+            [uuidKey]: { 
+                name: newText,
+                meals: foodList,
+                icon: mealtype
+            }
+        };
+    };
+    
+    
+
 
     const food = ({item} : {item : Recognition}) =>(
         <View style={styles.card}>
@@ -139,6 +171,16 @@ export default function Loading({route, mealItem} : optionalProp) {
             <Text style={styles.itemConfi}>{Math.round(100 * item.confidence)}%</Text>
         </View>
     )
+
+    const handleSaveButtonPress = () => {
+        if (route.params.uuidKey) {
+            console.log(saveData())
+            edit(saveData(), uuidKey);
+        } else {
+            createData(saveData());
+        }
+    };
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -218,7 +260,7 @@ export default function Loading({route, mealItem} : optionalProp) {
                         </View>
                         <FlatList
                         style={{height: "20%", marginTop: 10, marginBottom: 10}}
-                        data={item}
+                        data={items}
                         renderItem={food}
                         />
                         <View style={styles.buttonContainer}>
@@ -227,7 +269,7 @@ export default function Loading({route, mealItem} : optionalProp) {
                     </Card>
                     {/*save or cancel*/}
                     <View style={styles.saveOrCancel}>
-                        <TouchableOpacity onPress={() => {createData(saveData)}} style={styles.saveButton}>
+                        <TouchableOpacity onPress={() => {handleSaveButtonPress(), console.log("HELO"),console.log(items)}} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
                         <Text style={{marginBottom: 5, marginTop: 5,}}>or</Text>
@@ -239,25 +281,6 @@ export default function Loading({route, mealItem} : optionalProp) {
         </SafeAreaView>
     );
 }
-
-{/*
-header: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        paddingHorizontal: 10,
-        marginTop: 20,
-        marginBottom: 30,
-    },
-    resultHeaderContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    resultHeaderText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-*/}
 
 const styles = StyleSheet.create({
     container: {

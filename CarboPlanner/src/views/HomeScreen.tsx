@@ -53,11 +53,11 @@ export default function HomeScreen(){
     }
 
     const renderMealItem = ({ item }: { item: jsonData }) => {
-      const uuidObject = Object.values(item)[0]; // Extracting the object with the UUID key
+      const uuidKey = Object.keys(item)[0]; // Extracting the UUID key
+      const uuidObject = item[uuidKey]; // Getting the object with the UUID key
       const mealsArray = uuidObject.meals; // Accessing the meals array from the UUID object
-    
       return (
-        <List name={uuidObject.name} imageURI={uuidObject.icon} item={item}>
+        <List name={uuidObject.name} imageURI={uuidObject.icon} uuidKey={uuidKey}>
           <HorizontalLine />
           {mealsArray.map((meal, index) => (
             <ListItem
