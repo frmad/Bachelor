@@ -15,7 +15,6 @@ let today = new Date();
       });
     };
 
-
     await updateDoc(mainDocRef, {
       data: arrayUnion(newData)
     });

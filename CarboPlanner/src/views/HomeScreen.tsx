@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-
 import { Text, TouchableOpacity, View, StyleSheet, FlatList } from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
@@ -30,6 +29,8 @@ export default function HomeScreen(){
         if (snapshot.exists()) {
             const fetchedData = snapshot.data().data;
             setData(fetchedData);
+        } else {
+          setData(undefined)
         }
     });
 }, []);
@@ -51,7 +52,7 @@ export default function HomeScreen(){
     }
 
     const renderMealItem = ({ item }: { item: jsonData }) => (
-      <List name={item.name} imageURI={item.icon}>
+        <List name={item.name} imageURI={item.icon}>
         <HorizontalLine />
         {item.meals.map((meal, index) => (
           <ListItem
