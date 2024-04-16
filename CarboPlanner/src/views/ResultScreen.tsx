@@ -186,7 +186,11 @@ export default function Result({route}) {
                         </View>
                     </View>
                     */}
-                    <ImageCarousel images={allImages} />
+                    {route.params.uuidKey ? (
+                    <View></View>
+                    ):(
+                        <ImageCarousel images={allImages} />
+                    )}
                     {/*<Image source={{ uri: image }} style={styles.image} />*/}
                     <Card>
                         <View>
