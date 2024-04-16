@@ -9,13 +9,15 @@ import AddOptionModal from "../components/AddOptionModal";
 import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
 import { createData, edit, mainDocRef } from "../utils/Database/DatabaseActions";
-import { Images } from "../utils/images";
 import uuid from 'react-native-uuid';
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../utils/Database/databaseConfig";
+import ImageCarousel from "../components/ImageCarousel";;
+import { Images } from "../utils/images";
+import { getDoc } from "firebase/firestore";
 
-export default function Loading({ route}) {
-    let { base64, data} = route.params;
+
+export default function Result({route}) {
+
+    const { base64 ,data, allImages} = route.params;
 
     const [items, setItem] = useState<Recognition[]>();
 
@@ -34,12 +36,12 @@ export default function Loading({ route}) {
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-
     const [foodList, setFoodList] = useState<Recognition[]>([]);
 
      const updateItem = (newItem) => {
         setItem([...items, newItem]);
       };
+
 
     interface Recognition{
         uuid : String;
@@ -64,8 +66,6 @@ export default function Loading({ route}) {
                 protein: '12',
                 fat: '8',
             }));
-            
-            
         }
         await setItem(initialItems);
         
@@ -178,7 +178,16 @@ export default function Loading({ route}) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
                 <View style={styles.container}>
-                    <Image source={{ uri: image }} style={styles.image} />
+                    {/*
+                    <View style={styles.header}>
+                        <TouchableOpacity onPress={() => { navigation.navigate('Home'); }} style={styles.goBackButton} />
+                        <View style={styles.resultHeaderContainer}>
+                            <Text style={styles.resultHeaderText}>Result</Text>
+                        </View>
+                    </View>
+                    */}
+                    <ImageCarousel images={allImages} />
+                    {/*<Image source={{ uri: image }} style={styles.image} />*/}
                     <Card>
                         <View>
                             {changeText ? ( // If changeText is true

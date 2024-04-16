@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
-import { TextInput } from "react-native-paper";
 import {LongInput, ShortInput} from '../components/TextInput';
 
 const windowWidth = Dimensions.get('window').width;

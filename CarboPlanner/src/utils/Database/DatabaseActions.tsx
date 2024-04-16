@@ -18,8 +18,6 @@ let today = new Date();
       });
     };
 
-    console.log(newData)
-
     await updateDoc(mainDocRef, {
       data: arrayUnion(newData)
     });
