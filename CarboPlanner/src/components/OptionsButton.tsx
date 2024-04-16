@@ -2,11 +2,13 @@ import {View, StyleSheet, TouchableOpacity, Text, Modal, Dimensions, Image} from
 import * as React from "react";
 import { useState, useRef } from "react";
 import {Inter_400Regular} from "@expo-google-fonts/inter";
+import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default function OptionButton() {
+export default function OptionButton(props: any) {
+    const navigation = useNavigation();
     const [isVisible, setIsVisible] = useState(false);
     const buttonRef = useRef(null);
     const textRef = useRef(null);
@@ -29,6 +31,9 @@ export default function OptionButton() {
             });
         }
     };
+
+    const edit = () => {
+        navigation.navigate('Result', {uuidKey: props.uuidKey});};
 
     return (
         <View style={styles.container}>
@@ -53,15 +58,16 @@ export default function OptionButton() {
                 statusBarTranslucent={true}
             >
                 <TouchableOpacity
-                    style={[styles.modalContainer, modalPosition]}
+                    activeOpacity={1}
                     onPress={toggleModal}
-                >
-                    <View style={styles.modalContent}>
+                    style={styles.modalCloseContainer}
+                />
+                    <View style={[styles.modalContainer,modalPosition]}>
                         <TouchableOpacity ref={textRef}>
                             <Text style={styles.optionText}>Add food item</Text>
                         </TouchableOpacity>
                         <View style={styles.line} />
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={edit}>
                             <Text style={styles.optionText}>Edit food item</Text>
                         </TouchableOpacity>
                         <View style={styles.line} />
@@ -69,7 +75,6 @@ export default function OptionButton() {
                             <Text style={styles.optionText}>Delete meal</Text>
                         </TouchableOpacity>
                     </View>
-                </TouchableOpacity>
             </Modal>
         </View>
     );
@@ -81,10 +86,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'transparent', // Make it transparent
+    },
     modalContainer: {
         position: 'absolute',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        padding: 0,
+        backgroundColor: 'white',
+        padding: 20,
         borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: {
@@ -94,6 +107,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 4,
         elevation: 8, // This is for Android elevation
+    },
+    modalCloseContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
     },
     modalContent: {
         backgroundColor: 'white',

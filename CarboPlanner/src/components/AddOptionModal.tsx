@@ -7,13 +7,19 @@ const windowWidth = Dimensions.get('window').width;
 const AddOptionModal = ({updateItem}) => {
     const [isVisible, setIsVisible] = useState(false);
 
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const openModal = () => {
+      setIsModalVisible(true);
+    };
+  
+    const closeModal = () => {
+      setIsModalVisible(false);
+    };
+
     const toggleModal = () => {
         setIsVisible(!isVisible);
     };
-
-    const setFirstModal = () => {
-        setIsVisible(false);
-    }
 
     return (
         <View style={styles.container}>
@@ -36,7 +42,10 @@ const AddOptionModal = ({updateItem}) => {
                     <View style={styles.modalContent}>
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Manually add food</Text>
-                            <ManuallyAdd {...{updateItem}}/>
+                            <TouchableOpacity style={styles.option} onPress={openModal}>
+                                {/*add icon*/}
+                            </TouchableOpacity>
+                            <ManuallyAdd {...{updateItem}} modalVisible={isModalVisible} closeModal={closeModal}/>
                         </View>
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Camera upload</Text>
