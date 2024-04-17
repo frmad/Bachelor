@@ -68,18 +68,19 @@ export default function HomeScreen(){
     }
 
     const renderMealItem = ({ item }) => {
-      const [uuidKey, uuidObject] = item; // Destructure the UUID key and object
-      console.log('UUID Object:', uuidObject); // Log the uuidObject to see if it's defined
+
+      //deconstruct item into its key valute pair 
+      const [uuidKey, meal] = item; 
     
-      // Ensure uuidObject is defined before accessing its properties
-      if (!uuidObject) {
-        return null; // Return null if uuidObject is undefined
+      // Ensure meal exsists
+      if (!meal) {
+        return null; 
       }
     
-      const mealsArray = uuidObject.meals || []; // Access the meals array from the UUID object
+      const mealsArray = meal.meals || []; // Access the meals array from meal
     
       return (
-        <List key={uuidKey} name={uuidObject.name} imageURI={uuidObject.icon} uuidKey={uuidKey}>
+        <List key={uuidKey} name={meal.name} imageURI={meal.icon} uuidKey={uuidKey}>
           <HorizontalLine />
           {mealsArray.map((meal, index) => (
             <ListItem

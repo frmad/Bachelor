@@ -1,7 +1,6 @@
 import {View, StyleSheet, TouchableOpacity, Text, Modal, Dimensions, Image} from 'react-native';
 import * as React from "react";
 import { useState, useRef } from "react";
-import {Inter_400Regular} from "@expo-google-fonts/inter";
 import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;

@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
 import {db} from "./databaseConfig"
-import { setDoc, doc, getDoc, arrayUnion, updateDoc, onSnapshot } from 'firebase/firestore';
+import { setDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 
 let today = new Date();
 
@@ -17,30 +16,28 @@ let today = new Date();
         data
       });
     };
-
+    //get exsisting data
     const docSnapshot = await getDoc(mainDocRef);
-    const exsistingData = docSnapshot.data().data || [];
+    const exsistingData = docSnapshot.data().data;
 
+    //Add new data into the object 
     const updateData = {
       ...exsistingData, [uuidKey]: newData
     }
 
+    //uopdate document with updated dat
     await updateDoc(mainDocRef, {
       data: updateData
     });
   };
 
   const edit = async (data, uuid) => {
-    if (!data || !uuid) {
-        console.log("Data and UUID are required.");
-        return;
-    }
 
     const docSnapshot = await getDoc(mainDocRef);
     if (docSnapshot.exists()) {
         const fetchedData = docSnapshot.data().data || [];
 
-        // Update the data at the specific UUID key with the provided data
+        // Update the data at the specific UUID
         fetchedData[uuid] = data;
         console.log("Updated data:", fetchedData[uuid]);
 

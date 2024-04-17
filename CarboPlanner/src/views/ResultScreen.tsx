@@ -1,4 +1,4 @@
-import {Text, SafeAreaView, TouchableOpacity, View, Image, StyleSheet, Button} from "react-native";
+import {Text, SafeAreaView, TouchableOpacity, View, Image, StyleSheet} from "react-native";
 import Card from "../components/Card";
 import { useNavigation } from "@react-navigation/native";
 import React, {useEffect, useState} from "react";
@@ -170,20 +170,11 @@ export default function Result({route}) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
                 <View style={styles.container}>
-                    {/*
-                    <View style={styles.header}>
-                        <TouchableOpacity onPress={() => { navigation.navigate('Home'); }} style={styles.goBackButton} />
-                        <View style={styles.resultHeaderContainer}>
-                            <Text style={styles.resultHeaderText}>Result</Text>
-                        </View>
-                    </View>
-                    */}
                     {route.params.uuidKey ? (
                     <View></View>
                     ):(
                         <ImageCarousel images={allImages} />
                     )}
-                    {/*<Image source={{ uri: image }} style={styles.image} />*/}
                     <Card>
                         <View>
                             {changeText ? ( // If changeText is true
