@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Text, TouchableOpacity, View, StyleSheet, FlatList, Image } from 'react-native';
+import { Text, TouchableOpacity, View, StyleSheet, FlatList } from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
 import List from '../components/List';
@@ -12,6 +12,8 @@ import { useEffect, useState } from 'react';
 import { onSnapshot } from 'firebase/firestore';
 import { mainDocRef } from '../utils/Database/DatabaseActions';
 
+
+
 export default function HomeScreen(){
   const navigation = useNavigation();
 
@@ -20,19 +22,14 @@ export default function HomeScreen(){
     navigation.navigate('Camera');
   }
 
-
-  function goToCalendar() {
-    navigation.navigate('Calendar');
-  } 
-
-  const [data, setData] = useState('')
+  const [data, setData] = useState([])
 
   useEffect(() => {
     const unsubscribe = onSnapshot(mainDocRef, (snapshot) => {
         if (snapshot.exists()) {
             const fetchedData = snapshot.data().data;
-            const formattedData = Object.values(fetchedData)
-            setData(formattedData);
+            console.log(data)
+            setData(fetchedData);
         } else {
           setData(undefined)
         }
@@ -40,7 +37,7 @@ export default function HomeScreen(){
 }, []);
   
 
-    interface Meal{
+    interface mealItems{
       name: String
       weight: String
       calories: String
@@ -49,22 +46,44 @@ export default function HomeScreen(){
   
     }
   
-    interface jsonData{
+    interface Meal{
       name: String
-      meals: Meal[]
+      meals: mealItems[]
       icon: String
     }
 
-    const renderMealItem = ({ item }: { item: jsonData }) => {
-      const uuidKey = Object.keys(item)[0]; // Extracting the UUID key
-      const uuidObject = item[uuidKey]; // Getting the object with the UUID key
-      const mealsArray = uuidObject.meals; // Accessing the meals array from the UUID object
+    interface mealItems{
+      name: String
+      weight: String
+      calories: String
+      protein: String
+      fat: String
+  
+    }
+  
+    interface Meal{
+      name: String
+      meals: mealItems[]
+      icon: String
+    }
+
+    const renderMealItem = ({ item }) => {
+      const [uuidKey, uuidObject] = item; // Destructure the UUID key and object
+      console.log('UUID Object:', uuidObject); // Log the uuidObject to see if it's defined
+    
+      // Ensure uuidObject is defined before accessing its properties
+      if (!uuidObject) {
+        return null; // Return null if uuidObject is undefined
+      }
+    
+      const mealsArray = uuidObject.meals || []; // Access the meals array from the UUID object
+    
       return (
-        <List name={uuidObject.name} imageURI={uuidObject.icon} uuidKey={uuidKey}>
+        <List key={uuidKey} name={uuidObject.name} imageURI={uuidObject.icon} uuidKey={uuidKey}>
           <HorizontalLine />
           {mealsArray.map((meal, index) => (
             <ListItem
-              key={index.toString()} // Ensure each item has a unique key
+              key={`${uuidKey}_${index}`} // Ensure each item has a unique key
               weight={meal.weight}
               name={meal.name}
               calories={meal.calories}
@@ -76,44 +95,42 @@ export default function HomeScreen(){
         </List>
       );
     };
+    
+    
+    
+
 
   return (
     <View style={styles.container}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Text style={styles.header_text}>Today</Text>
-        <TouchableOpacity onPress={goToCalendar}>
-          <View style={styles.calendarIconContainer}>
-            <Image source={require("../../assets/func-icon/calendar.png")} style={styles.calendarIcon} resizeMode="contain" />
-          </View>
-        </TouchableOpacity>
-      </View>
-
+      <Text style={styles.header_text}>Today</Text>
       <Card>
         <View style={styles.row}>
           <CircularSlider value={1200} max={2000}/>
         </View>
         <View style={styles.row}>
-            <MacroProgressBar name={"Carbs"} value={50} max={210} />
+            <MacroProgressBar name={"Carbs"} value={0.5} max={210} />
           
-            <MacroProgressBar name={"Protein"} value={100} max={180} />
+            <MacroProgressBar name={"Protein"} value={1} max={180} />
           
-            <MacroProgressBar name={"Fat"} value={80} max={200} />
+            <MacroProgressBar name={"Fat"} value={0.2} max={200} />
         </View>
       </Card>
 
       <Card customStyle={{maxHeight: "44%"}}>
       <FlatList
-        data={data}
+        data={Object.entries(data)}
         renderItem={renderMealItem}
-        keyExtractor={(item, index) => index.toString()} // Use index as the key
-      />
+        keyExtractor={(item) => item[0]} // Use the UUID as the key
+/>
+
     </Card>
       
       <View style={styles.cameraFunc}>
         <TouchableOpacity onPress={handlePress} style={styles.camera_button}>
           <Text style={styles.photo}>+</Text>
         </TouchableOpacity>
-      </View> 
+      </View>
+      
       </View>
   );
 }
@@ -156,20 +173,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  calendarIconContainer: {
-    backgroundColor: '#65CB2E',
-    width: 40,
-    height: 40,
-    padding: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 40,
-    marginLeft: 20,
-    marginTop: 10,
-  },
-  calendarIcon: {
-    width: '100%',
-    height: '100%',
   photo: {
     color: 'white',
     fontSize: 20,
@@ -178,6 +181,5 @@ const styles = StyleSheet.create({
   cameraFunc: {
     flexDirection: "row",
     justifyContent: "center",
-
   },
-}});
+});
