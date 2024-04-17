@@ -206,6 +206,7 @@ export default function Result({route}) {
                                             activeUnderlineColor="#65CB2E"
                                             mode='flat'
                                             placeholder="Name for the meal"
+                                            placeholderTextColor={'#45505B'}
                                             activeOutlineColor='black'
                                             onChangeText={setNewText}
                                             />
@@ -217,7 +218,7 @@ export default function Result({route}) {
                                                 setShowErrorMessage(true);
                                             }
                                         }} style={styles.goBackButton}>
-                                            <Text>Save</Text>
+                                            <Text style={{ color: '#45505B'}}>Save</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -242,10 +243,22 @@ export default function Result({route}) {
                             )}
                             {/*Macros are hard coded*/}
                             <View style={styles.macros}>
-                                <Text style={styles.macroText}>Calories: {mealMacros.totalCalories}</Text>
-                                <Text style={styles.macroText}>Carbs: {mealMacros.totalCarb}</Text>
-                                <Text style={styles.macroText}>Fat: {mealMacros.totalProtein}</Text>
-                                <Text style={styles.macroText}>Protein: {mealMacros.totalFat}</Text>
+                                <View style={styles.macroItem}>
+                                    <Text style={styles.macroTextHeader}>Total Kcal</Text>
+                                    <Text style={styles.macroText}>{mealMacros.totalCalories} kcal</Text>
+                                </View>
+                                <View style={styles.macroItem}>
+                                    <Text style={styles.macroTextHeader}>Total Carbs</Text>
+                                    <Text style={styles.macroText}>{mealMacros.totalCarb} g</Text>
+                                </View>
+                                <View style={styles.macroItem}>
+                                    <Text style={styles.macroTextHeader}>Total Protein</Text>
+                                    <Text style={styles.macroText}>{mealMacros.totalProtein} g</Text>
+                                </View>
+                                <View style={styles.macroItem}>
+                                    <Text style={styles.macroTextHeader}>Total Fat</Text>
+                                    <Text style={styles.macroText}>{mealMacros.totalFat} g</Text>
+                                </View>
                             </View>
                             <HorizontalLine />
                         </View>
@@ -256,7 +269,7 @@ export default function Result({route}) {
                             <Text style={styles.cardTitleText}>Precision</Text>
                         </View>
                         <FlatList
-                        style={{height: "20%", marginTop: 10, marginBottom: 10}}
+                        style={{height: "23%", marginTop: 0, marginBottom: 0,}}
                         data={items}
                         renderItem={food}
                         />
@@ -269,7 +282,7 @@ export default function Result({route}) {
                         <TouchableOpacity onPress={() => {handleSaveButtonPress()}} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
-                        <Text style={{marginBottom: 5, marginTop: 5,}}>or</Text>
+                        <Text style={{marginBottom: 2.5, marginTop: 2.5, fontWeight: '300',}}>or</Text>
                         <TouchableOpacity onPress={() => {navigation.navigate("Home")}} style={styles.cancelButton}>
                             <Text style={styles.cancelButtonText}>Cancel</Text>
                         </TouchableOpacity>
@@ -287,6 +300,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: "#45505B",
         marginRight: "20%",
+        fontWeight: 'bold',
     },
     card: {
         flexDirection: "row",
@@ -309,12 +323,18 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 20,
-        marginBottom: 20,
+        paddingHorizontal: 7,
+        margin: 10,
     },
     macroText: {
         fontSize: 12,
         color: "#45505B",
+        fontWeight: "bold",
+    },
+    macroTextHeader: {
+        fontSize: 10,
+        color: "#45505B",
+        fontWeight: "300",
     },
     buttonContainer: {
         alignItems: 'center',
@@ -343,16 +363,17 @@ const styles = StyleSheet.create({
     },
     saveButton: {
         backgroundColor: '#65CB2E',
-        paddingVertical: '2%',
-        paddingHorizontal: '7%',
+        paddingVertical: '0.7%',
+        paddingHorizontal: '10%',
         justifyContent: "center",
         borderRadius: 50,
-        marginTop: 20,
+        marginTop: 10,
     },
     saveButtonText: {
         color: 'white',
-        fontSize: 12,
-        fontWeight: "bold",
+        fontSize: 25,
+        fontWeight: "700",
+        letterSpacing: 1,
     },
     cancelButton: {
         width: "auto",
@@ -360,7 +381,8 @@ const styles = StyleSheet.create({
     },
     cancelButtonText: {
         color: '#575757',
-        fontSize: 10,
+        fontSize: 13,
+        fontWeight: '600',
     },
     optionText: {
         color: 'white',
@@ -371,17 +393,22 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: 3,
+        marginBottom: 2,
     },
     mealIconContainer: {
-        width: 40,
-        height: 40,
+        width: 70,
+        height: 70,
         justifyContent: 'center',
         alignItems: 'center',
     },
     mealIcon: {
         width: '100%',
         height: '100%',
+    },
+    macroItem: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     errorMessage: {
         color: 'red',
@@ -414,7 +441,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: 3,
+        marginBottom: 1,
         marginTop: 7,
     },
     cardTitleText: {
@@ -422,6 +449,7 @@ const styles = StyleSheet.create({
         color: "#45505B",
         textAlign: 'center',
         width: '33.33%',
+        fontWeight: '300',
     },
     cardTitle:{
         flexDirection: 'column',
