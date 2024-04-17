@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 1,
-        marginTop: 7,
+        marginTop: 6,
     },
     cardTitleText: {
         fontSize: 12,
@@ -453,14 +453,15 @@ const styles = StyleSheet.create({
     },
     cardTitle:{
         flexDirection: 'column',
+        alignItems: 'center',
     },
     itemName: {
-        fontSize: 12,
+        fontSize: 13,
         color: "#45505B",
         fontWeight: "bold",
     },
     itemCal: {
-        fontSize: 10,
+        fontSize: 11,
         color: "#45505B",
     },
     itemWeight: {
@@ -468,6 +469,7 @@ const styles = StyleSheet.create({
         color: "#45505B",
         borderColor: "#D9D9D9",
         borderWidth: 2,
+        paddingTop: 7,
         padding: 4,
         borderRadius: 5,
         textAlign: 'center',
@@ -476,10 +478,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     itemConfi: {
-        fontSize: 10,
+        fontSize: 11,
         color: "#45505B",
         borderColor: '#65CB2E',
         borderWidth: 2,
+        paddingTop: 7,
         padding: 4,
         borderRadius: 20,
         textAlign: 'center',
