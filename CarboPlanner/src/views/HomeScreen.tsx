@@ -7,16 +7,14 @@ import List from '../components/List';
 import ListItem from '../components/ListItem';
 import MacroProgressBar from '../components/MacroProgressBar';
 import HorizontalLine from '../components/HorizontalLine';
+import CameraButton from "../components/CameraButton";
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { onSnapshot } from 'firebase/firestore';
 import { mainDocRef } from '../utils/Database/DatabaseActions';
 
-
-
 export default function HomeScreen(){
   const navigation = useNavigation();
-
 
   function handlePress(){
     navigation.navigate('Camera');
@@ -43,7 +41,7 @@ export default function HomeScreen(){
       calories: String
       protein: String
       fat: String
-  
+ 
     }
   
     interface Meal{
@@ -96,11 +94,7 @@ export default function HomeScreen(){
         </List>
       );
     };
-    
-    
-    
-
-
+   
   return (
     <View style={styles.container}>
       <Text style={styles.header_text}>Today</Text>
@@ -117,41 +111,31 @@ export default function HomeScreen(){
         </View>
       </Card>
 
-      <Card customStyle={{maxHeight: "44%"}}>
-      <FlatList
-        data={Object.entries(data)}
-        renderItem={renderMealItem}
-        keyExtractor={(item) => item[0]} // Use the UUID as the key
-/>
+      <ScrollView style={{paddingBottom: 10}}>
+        <Card customStyle={{maxHeight: "100%"}}>
+          <FlatList
+            data={Object.entries(data)}
+            renderItem={renderMealItem}
+            keyExtractor={(item) => item[0]} // Use the UUID as the key
+          />
+        </Card>
+      </ScrollView>
 
-    </Card>
-      
-      <View style={styles.cameraFunc}>
-        <TouchableOpacity onPress={handlePress} style={styles.camera_button}>
-          <Text style={styles.photo}>+</Text>
-        </TouchableOpacity>
-      </View>
-      
+      <CameraButton />
+    
       </View>
   );
 }
 
 const styles = StyleSheet.create({
-  camera_button: {
-    backgroundColor: "#65CB2E",
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   container: {
       flex: 1,
       flexDirection: "column",
       gap: 10,
       backgroundColor: '#EBEBEB',
       height: '100%',
-      paddingTop: 50,
+      paddingHorizontal: 5,
+      paddingTop: 40,
   },
   center: {
     flex: 1,
@@ -174,13 +158,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  photo: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  cameraFunc: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
 });
+
