@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
-import { TextInput } from "react-native-paper";
 import {LongInput, ShortInput} from '../components/TextInput';
 
 const windowWidth = Dimensions.get('window').width;
 
-const ManuallyAddModal = ({updateItem}) => {
-    const [isVisible, setIsVisible] = useState(false);
+const ManuallyAddModal = ({updateItem, modalVisible, closeModal}) => {
     const [name, setName] = useState("");
     const [calories, setCalories] = useState(0);
     const [fat, setFat] = useState(0);
@@ -29,22 +27,8 @@ const ManuallyAddModal = ({updateItem}) => {
         toggleModal();
     };
 
-    const onSave = () => {
-        const newItem = {
-            name: name,
-            calories: calories,
-            fat: fat,
-            protein: protein,
-            carb: carb
-        };
-
-        updateItem(newItem);
-
-        toggleModal();
-    };
-
     const toggleModal = () => {
-        setIsVisible(!isVisible);
+        closeModal();
     };
 
     const onChangeName = (text) => {
@@ -77,13 +61,11 @@ const ManuallyAddModal = ({updateItem}) => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.option} onPress={toggleModal}>
-                {/*add icon*/}
-            </TouchableOpacity>
+            
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={isVisible}
+                visible={modalVisible}
                 onRequestClose={toggleModal}
                 onTouchStart={stopPropagation}
                 statusBarTranslucent={true}

@@ -8,16 +8,18 @@ import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
 import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
-import ImageCarousel from "../components/ImageCarousel";
-import { createData } from "../utils/Database/DatabaseActions";
+import { createData, edit, mainDocRef } from "../utils/Database/DatabaseActions";
+import uuid from 'react-native-uuid';
+import ImageCarousel from "../components/ImageCarousel";;
 import { Images } from "../utils/images";
+import { getDoc } from "firebase/firestore";
 
 
 export default function Result({route}) {
 
     const { base64 ,data, allImages} = route.params;
 
-    const [item, setItem] = useState<Recognition[]>();
+    const [items, setItem] = useState<Recognition[]>();
 
     const navigation = useNavigation();
 
@@ -28,8 +30,7 @@ export default function Result({route}) {
     const [mealtype, setMealtype] = useState(getCategory());
 
     const [changeText, setChangeText] = useState(false);
-
-    const [newText, setNewText] =  useState(mealtype);
+    const [newText, setNewText] = useState(mealtype);
 
     const image: any = "data:image/png;base64," + base64;
 
@@ -38,31 +39,26 @@ export default function Result({route}) {
     const [foodList, setFoodList] = useState<Recognition[]>([]);
 
      const updateItem = (newItem) => {
-        setItem([...item, newItem]);
+        setItem([...items, newItem]);
       };
 
 
     interface Recognition{
+        uuid : String;
         confidence: number;
+        class: number;
         name: String;
-        weight: String;
+        weight: Number;
         carbs: String;
         protein: String;
         fat: String;
     }
 
-    /**
-     * Params for Yolov5
-     * -----------------
-     * name
-     * Confindence
-     * Ymin, Ymax
-     * Xmin, XMax
-     */
-
     const setInitialItem = async () => {
-        if (data && data.length > 0 && (!item || !item.length)) {
-            const initialItems = data.map(item => ({
+        let initialItems;
+
+        if (data && data.length > 0 && (!items || !items.length)) {
+            initialItems = data.map(item => ({
                 ...item,
                 // Set default values for properties other than confidence and name
                 weight: '100',
@@ -70,15 +66,45 @@ export default function Result({route}) {
                 protein: '12',
                 fat: '8',
             }));
-            await setItem(initialItems);
         }
-            await setItem(data);
+        await setItem(initialItems);
+        
     };
-
+    useEffect(() => {
+        async function fetchData() {
+            if (route.params.uuidKey) {
+                const docSnapshot = await getDoc(mainDocRef);
     
+                if (docSnapshot.exists()) {
+                    const fetchedData = docSnapshot.data().data || [];
+                    
+                    let index = -1; // Initialize index as -1
+                    
+                    fetchedData.forEach((obj, i) => {
+                        const key = Object.keys(obj)[0]; // Get the UUID key of the object
+                        
+                        if (key === uuidKey) {
+                            index = i; // Update the index if UUID matches
+                        }
+                    });
+                    
+                    if (index !== -1) {
+                        const newItem = fetchedData[index][uuidKey]; // Get the new item at the found index
+                        setNewText(newItem.name)
+                        setItem(newItem.meals);
+                    }
+                }
+            }
+        }
+        
+        fetchData();
+    }, [route.params.uuidKey, data]);
+
     useEffect(() => { 
         setInitialItem()
     }, [data]);
+
+
 
     const handleItemSet = () => {
         setFoodList([]);
@@ -86,10 +112,10 @@ export default function Result({route}) {
     };
 
     useEffect(() => {
-        if (item && item.length) {
+        if (items && items.length) {
             handleItemSet();
         }
-    }, [item]);
+    }, [items]);
     
     
     const addToFoodList = (Recognition) => {
@@ -97,31 +123,35 @@ export default function Result({route}) {
       };
 
       const handleAddToList = () => {
-        if (item) {
-          item.forEach(item => {
+        if (items) {
+          items.forEach(item => {
             addToFoodList({
-              name: String(item.name),
-              weight: String(item.weight),
-              carbs: String(item.carbs),
-              protein: String(item.protein),
-              fat: String(item.fat),
-              weight: "",
-              carbs: "",
-              protein: "",
-              fat: "",
-              confidence: String(item.confidence),
+                name: String(item.name),
+                weight: String(item.weight),
+                carbs: String(item.carbs),
+                protein: String(item.protein),
+                fat: String(item.fat),
+                confidence: String(item.confidence),
             });
           });
         }
       };
 
-      const saveData = 
-        {
-          id: 1232,
-          name: newText,
-          meals: foodList,
-          icon: mealtype,
+      //check for uuid prop, if found uuidKey variable points to the prop
+      const uuidKey = route.params.uuidKey || String(uuid.v4());
+
+      const saveData = () => {
+        return {
+            [uuidKey]: { 
+                name: newText,
+                meals: foodList,
+                icon: mealtype
+            }
         };
+    };
+    
+    
+
 
     const food = ({item} : {item : Recognition}) =>(
         <View style={styles.card}>
@@ -134,11 +164,16 @@ export default function Result({route}) {
         </View>
     )
 
-    if (allImages.length !== 0) {
-        console.log('not empty on result');
-    } else {
-        console.log('empty on result');
-    }
+    //Handles which saving method touse
+    const handleSaveButtonPress = () => {
+        if (route.params.uuidKey) {
+            console.log(saveData())
+            edit(saveData(), uuidKey);
+        } else {
+            createData(saveData());
+        }
+    };
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -151,11 +186,14 @@ export default function Result({route}) {
                         </View>
                     </View>
                     */}
-                    <ImageCarousel images={allImages} />
+                    {route.params.uuidKey ? (
+                    <View></View>
+                    ):(
+                        <ImageCarousel images={allImages} />
+                    )}
                     {/*<Image source={{ uri: image }} style={styles.image} />*/}
                     <Card>
                         <View>
-                            {/*Title*/}
                             {changeText ? ( // If changeText is true
                                 <View>
                                     {showErrorMessage && (
@@ -219,7 +257,7 @@ export default function Result({route}) {
                         </View>
                         <FlatList
                         style={{height: "20%", marginTop: 10, marginBottom: 10}}
-                        data={item}
+                        data={items}
                         renderItem={food}
                         />
                         <View style={styles.buttonContainer}>
@@ -228,7 +266,7 @@ export default function Result({route}) {
                     </Card>
                     {/*save or cancel*/}
                     <View style={styles.saveOrCancel}>
-                        <TouchableOpacity onPress={() => {createData(saveData)}} style={styles.saveButton}>
+                        <TouchableOpacity onPress={() => {handleSaveButtonPress()}} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
                         <Text style={{marginBottom: 5, marginTop: 5,}}>or</Text>
@@ -241,25 +279,6 @@ export default function Result({route}) {
     );
 }
 
-{/*
-header: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        paddingHorizontal: 10,
-        marginTop: 20,
-        marginBottom: 30,
-    },
-    resultHeaderContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    resultHeaderText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-*/}
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -267,7 +286,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 30,
         color: "#45505B",
-        marginRight: 70,
+        marginRight: "20%",
     },
     card: {
         flexDirection: "row",

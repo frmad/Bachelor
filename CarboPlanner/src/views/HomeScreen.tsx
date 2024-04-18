@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Text, TouchableOpacity, View, StyleSheet, FlatList } from 'react-native';
+import { Text, TouchableOpacity, View, StyleSheet, FlatList, Image } from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
 import List from '../components/List';
@@ -32,12 +32,14 @@ export default function HomeScreen(){
     const unsubscribe = onSnapshot(mainDocRef, (snapshot) => {
         if (snapshot.exists()) {
             const fetchedData = snapshot.data().data;
-            setData(fetchedData);
+            const formattedData = Object.values(fetchedData)
+            setData(formattedData);
         } else {
           setData(undefined)
         }
     });
 }, []);
+  
 
     interface Meal{
       name: String
@@ -54,22 +56,27 @@ export default function HomeScreen(){
       icon: String
     }
 
-    const renderMealItem = ({ item }: { item: jsonData }) => (
-        <List name={item.name} imageURI={item.icon}>
-        <HorizontalLine />
-        {item.meals.map((meal, index) => (
-          <ListItem
-            key={index.toString()} // Ensure each item has a unique key
-            weight={meal.weight}
-            name={meal.name}
-            calories={meal.calories}
-            protein={meal.protein}
-            carbs="32" // Assuming the carbs value is fixed
-            fat={meal.fat}
-          />
-        ))}
-      </List>
-    );
+    const renderMealItem = ({ item }: { item: jsonData }) => {
+      const uuidKey = Object.keys(item)[0]; // Extracting the UUID key
+      const uuidObject = item[uuidKey]; // Getting the object with the UUID key
+      const mealsArray = uuidObject.meals; // Accessing the meals array from the UUID object
+      return (
+        <List name={uuidObject.name} imageURI={uuidObject.icon} uuidKey={uuidKey}>
+          <HorizontalLine />
+          {mealsArray.map((meal, index) => (
+            <ListItem
+              key={index.toString()} // Ensure each item has a unique key
+              weight={meal.weight}
+              name={meal.name}
+              calories={meal.calories}
+              protein={meal.protein}
+              carbs="32" // Assuming the carbs value is fixed
+              fat={meal.fat}
+            />
+          ))}
+        </List>
+      );
+    };
 
   return (
     <View style={styles.container}>
@@ -143,3 +150,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
