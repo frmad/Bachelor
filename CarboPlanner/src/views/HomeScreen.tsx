@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Text, TouchableOpacity, View, StyleSheet, FlatList } from 'react-native';
+import {Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView} from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
 import List from '../components/List';
@@ -111,15 +111,13 @@ export default function HomeScreen(){
         </View>
       </Card>
 
-      <ScrollView style={{paddingBottom: 10}}>
-        <Card customStyle={{maxHeight: "100%"}}>
-          <FlatList
-            data={Object.entries(data)}
-            renderItem={renderMealItem}
-            keyExtractor={(item) => item[0]} // Use the UUID as the key
-          />
+        <Card customStyle={{maxHeight: "42%"}}>
+            <FlatList
+                data={Object.entries(data)}
+                renderItem={renderMealItem}
+                keyExtractor={(item) => item[0]} // Use the UUID as the key
+            />
         </Card>
-      </ScrollView>
 
       <CameraButton />
     
