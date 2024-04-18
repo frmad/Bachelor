@@ -1,5 +1,5 @@
 import {db} from "./databaseConfig"
-import { setDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { setDoc, doc, getDoc, updateDoc, deleteField } from 'firebase/firestore';
 
 let today = new Date();
 
@@ -10,7 +10,7 @@ let today = new Date();
 
   const data = {};
 
-  const createData = async (uuidKey, newData) => {
+  const saveData = async (uuidKey, newData) => {
     if (!(await getDoc(mainDocRef)).exists()) {
       await setDoc(mainDocRef, {
         data
@@ -39,18 +39,28 @@ let today = new Date();
 
         // Update the data at the specific UUID
         fetchedData[uuid] = data;
-        console.log("Updated data:", fetchedData[uuid]);
 
         // Update the document with the changes
         await updateDoc(mainDocRef, { data: fetchedData });
-        console.log("Document updated successfully.");
-    } else {
-        console.log("Document does not exist.");
     }
 };
 
 
-  export {createData, mainDocRef, edit};
+const deleteMeal = async (uuidKey) => {
+  const docSnapshot = await getDoc(mainDocRef);
+  const exsistingData = docSnapshot.data().data;
+
+  const updateData = {...exsistingData}
+  delete updateData[uuidKey]
+
+  //uopdate document with updated dat
+  await updateDoc(mainDocRef, {
+    data: updateData
+  });
+}
+
+
+  export {saveData, mainDocRef, edit, deleteMeal};
   
 
 

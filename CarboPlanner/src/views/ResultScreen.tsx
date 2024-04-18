@@ -8,7 +8,7 @@ import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
 import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
-import { createData, edit, mainDocRef } from "../utils/Database/DatabaseActions";
+import { saveData, edit, mainDocRef } from "../utils/Database/DatabaseActions";
 import uuid from 'react-native-uuid';
 import ImageCarousel from "../components/ImageCarousel";;
 import { Images } from "../utils/images";
@@ -44,7 +44,7 @@ export default function Result({route}) {
 
 
     interface Recognition{
-        uuid : String;
+        uuidKey: {
         confidence: number;
         class: number;
         name: String;
@@ -52,6 +52,7 @@ export default function Result({route}) {
         carbs: String;
         protein: String;
         fat: String;
+        }
     }
 
     const setInitialItem = async () => {
@@ -112,9 +113,10 @@ export default function Result({route}) {
     }, [items]);
     
     
-    const addToFoodList = (Recognition) => {
-        setFoodList(prevList => [...prevList, Recognition]);
-      };
+    const addToFoodList = (recognition: Recognition) => {
+        const uuidKey = uuid.v4();
+        setFoodList(prevList => [...prevList, { [uuidKey]: { ...recognition } }]);
+    };
 
       const handleAddToList = () => {
         if (items) {
@@ -134,7 +136,7 @@ export default function Result({route}) {
       //check for uuid prop, if found uuidKey variable points to the prop
       const uuidKey = route.params.uuidKey || String(uuid.v4());
 
-      const saveData = () => {
+      const createData = () => {
         return { 
                 name: newText,
                 meals: foodList,
@@ -160,9 +162,9 @@ export default function Result({route}) {
     //Handles which saving method touse
     const handleSaveButtonPress = () => {
         if (route.params.uuidKey) {
-            edit(saveData(), uuidKey);
+            edit(createData(), uuidKey);
         } else {
-            createData(uuidKey, saveData());
+            saveData(uuidKey, createData());
         }
     };
 
@@ -249,7 +251,7 @@ export default function Result({route}) {
                     </Card>
                     {/*save or cancel*/}
                     <View style={styles.saveOrCancel}>
-                        <TouchableOpacity onPress={() => {handleSaveButtonPress()}} style={styles.saveButton}>
+                        <TouchableOpacity onPress={() => {handleSaveButtonPress(), console.log(createData())}} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
                         <Text style={{marginBottom: 5, marginTop: 5,}}>or</Text>
