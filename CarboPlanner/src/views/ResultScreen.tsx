@@ -8,18 +8,25 @@ import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
 import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
-import { saveData, edit, mainDocRef } from "../utils/Database/DatabaseActions";
+import { saveData, edit, mainDocRef, deleteMeal } from "../utils/Database/DatabaseActions";
 import uuid from 'react-native-uuid';
 import ImageCarousel from "../components/ImageCarousel";;
 import { Images } from "../utils/images";
 import { getDoc } from "firebase/firestore";
+import ManuallyAdd from "../components/ManualAddFoodModal"
 
 
 export default function Result({route}) {
 
     const { base64 ,data, allImages} = route.params;
 
-    const [items, setItem] = useState<Recognition[]>();
+    const [selectedItem, setSelectedItem] = useState(null);
+
+    const [selectedUuid, setSelectedUuid] = useState(null);
+
+    const [uuids, setUuids] = useState([]);
+
+    const [items, setItem] = useState<Recognition[]>([]);
 
     const navigation = useNavigation();
 
@@ -36,41 +43,9 @@ export default function Result({route}) {
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-    const [foodList, setFoodList] = useState<Recognition[]>([]);
 
-     const updateItem = (newItem) => {
-        setItem([...items, newItem]);
-      };
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
-
-    interface Recognition{
-        uuidKey: {
-        confidence: number;
-        class: number;
-        name: String;
-        weight: Number;
-        carbs: String;
-        protein: String;
-        fat: String;
-        }
-    }
-
-    const setInitialItem = async () => {
-        let initialItems;
-
-        if (data && data.length > 0 && (!items || !items.length)) {
-            initialItems = data.map(item => ({
-                ...item,
-                // Set default values for properties other than confidence and name
-                weight: '100',
-                carbs: '33',
-                protein: '12',
-                fat: '8',
-            }));
-        }
-        await setItem(initialItems);
-        
-    };
     useEffect(() => {
         async function fetchData() {
           if (route.params.uuidKey) {
@@ -85,7 +60,14 @@ export default function Result({route}) {
               if (newItem) {
                 // Update state with the new item's name and meals
                 setNewText(newItem.name);
-                setItem(newItem.meals);
+                const mealsObject = newItem.meals || {};
+
+                // Get the keys of the meals object as an array of UUIDs
+                const mealUuids = Object.keys(mealsObject);
+      
+                // Set the state with the meals object and the array of UUIDs
+                setItem(mealsObject);
+                setUuids(mealUuids);
               }
             }
           }
@@ -93,45 +75,69 @@ export default function Result({route}) {
       
         fetchData();
       }, [route.params.uuidKey]); // Include route.params.uuidKey in the dependency array
-      
 
-    useEffect(() => { 
+
+      useEffect(() => { 
         setInitialItem()
     }, [data]);
 
-
-
-    const handleItemSet = () => {
-        setFoodList([]);
-        handleAddToList();
-    };
-
     useEffect(() => {
-        if (items && items.length) {
-            handleItemSet();
+        if (selectedItem) {
+            openModal();
         }
-    }, [items]);
-    
-    
-    const addToFoodList = (recognition: Recognition) => {
-        const uuidKey = uuid.v4();
-        setFoodList(prevList => [...prevList, { [uuidKey]: { ...recognition } }]);
+    }, [selectedItem,selectedUuid]);
+
+    const openModal = () => {
+      setIsModalVisible(true);
+    };
+  
+    const closeModal = () => {
+        setIsModalVisible(false);
+        setSelectedItem(null);
     };
 
-      const handleAddToList = () => {
-        if (items) {
-          items.forEach(item => {
-            addToFoodList({
-                name: String(item.name),
-                weight: String(item.weight),
-                carbs: String(item.carbs),
-                protein: String(item.protein),
-                fat: String(item.fat),
-                confidence: String(item.confidence),
+
+    const saveItem = (newItem) => {
+        const uuidKey = String(uuid.v4());
+        setItem((prevItems) => ({
+          ...prevItems,
+          [uuidKey]: newItem,
+        }));
+        setUuids((prevUuids) => [...prevUuids, uuidKey]);
+    };
+
+      const updateItem = (uuidKey, updatedItem) => {
+        setItem((prevItems) => ({
+          ...prevItems,
+          [uuidKey]: updatedItem,
+        }));
+    };
+
+
+    const setInitialItem = async () => {
+        let initialItems = {};
+    
+        if (data && data.length > 0 && (!items || !items.length)) {
+            data.forEach(item => {
+                const uuidKey = uuid.v4(); // Generate a UUID for the item
+                const { /* Fields to keep */ confidence, name } = item;
+                initialItems[uuidKey] = {
+                    confidence,
+                    name,
+                    // Set default values for properties other than confidence and name
+                    weight: '100',
+                    carbs: '33',
+                    protein: '12',
+                    fat: '8'
+                };
             });
-          });
         }
-      };
+        await setItem(initialItems);
+        setUuids(Object.keys(initialItems)); // Update uuids with the UUIDs of all items
+    };
+   
+    
+
 
       //check for uuid prop, if found uuidKey variable points to the prop
       const uuidKey = route.params.uuidKey || String(uuid.v4());
@@ -139,33 +145,75 @@ export default function Result({route}) {
       const createData = () => {
         return { 
                 name: newText,
-                meals: foodList,
+                meals: items,
                 icon: mealtype
             }
         };
 
-    
+        interface Recognition{
+            confidence: number;
+            class: number;
+            name: String;
+            weight: Number;
+            carbs: String;
+            protein: String;
+            fat: String;
+        }
     
 
 
-    const food = ({item} : {item : Recognition}) =>(
-        <View style={styles.card}>
-            <View style={styles.cardTitle}>
-                <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemCal}>230cal</Text>
-            </View>
-            <Text style={styles.itemWeight}>100g</Text>
-            <Text style={styles.itemConfi}>{Math.round(100 * item.confidence)}%</Text>
-        </View>
-    )
+        const food = (uuidKey: string) => {
+            const item = items[uuidKey]; // Look up the item using its UUID key
+            if (!item) return null; // Return null if item is not found
+          
+            return (
+              <TouchableOpacity onPress={() => handleFoodItemPress(item, uuidKey)}>
+                <View style={styles.card}>
+                  <View style={styles.cardTitle}>
+                    <Text style={styles.itemName}>{item.name}</Text>
+                    <Text style={styles.itemCal}>230cal</Text>
+                  </View>
+                  <Text style={styles.itemWeight}>100g</Text>
+                  <Text style={styles.itemConfi}>{Math.round(100 * item.confidence)}%</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          };
 
     //Handles which saving method touse
     const handleSaveButtonPress = () => {
+        console.log("hello")
         if (route.params.uuidKey) {
+            if(items.length === 0){
+                deleteMeal(uuidKey)
+                return
+            }
             edit(createData(), uuidKey);
         } else {
             saveData(uuidKey, createData());
         }
+    };
+
+ const deleteItem = (itemToDeleteKey) => {
+    const updatedItems = { ...items };
+
+    // Check if the item to delete exists in the items object
+    if (updatedItems.hasOwnProperty(itemToDeleteKey)) {
+        // Use the JavaScript delete operator to remove the item
+        delete updatedItems[itemToDeleteKey];
+        // Set the updated items object using setItem
+        setItem(updatedItems);
+    } else {
+        console.error('Item to delete does not exist');
+    }
+};
+
+    
+
+    const handleFoodItemPress = (item, uuid) => {    
+        setSelectedItem(item); // Set the selected meal item when it's pressed
+        setSelectedUuid(uuid)
+    
     };
 
 
@@ -241,23 +289,24 @@ export default function Result({route}) {
                             <Text style={styles.cardTitleText}>Precision</Text>
                         </View>
                         <FlatList
-                        style={{height: "20%", marginTop: 10, marginBottom: 10}}
-                        data={items}
-                        renderItem={food}
+                            style={{ height: "23%", marginTop: 0, marginBottom: 0 }}
+                            data={uuids} // Use uuids array instead of items
+                            renderItem={({ item }) => food(item)} // Pass the UUID key to the food function
                         />
                         <View style={styles.buttonContainer}>
-                            <AddOptionModal {...{updateItem}}/>
+                            <AddOptionModal saveItem={saveItem}/>
                         </View>
                     </Card>
                     {/*save or cancel*/}
                     <View style={styles.saveOrCancel}>
-                        <TouchableOpacity onPress={() => {handleSaveButtonPress(), console.log(createData())}} style={styles.saveButton}>
+                        <TouchableOpacity onPress={() => {handleSaveButtonPress()}} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
                         <Text style={{marginBottom: 5, marginTop: 5,}}>or</Text>
                         <TouchableOpacity onPress={() => {navigation.navigate("Home")}} style={styles.cancelButton}>
                             <Text style={styles.cancelButtonText}>Cancel</Text>
                         </TouchableOpacity>
+                        <ManuallyAdd updateItem={updateItem} saveItem={saveItem} selectedItem={selectedItem} modalVisible={isModalVisible} closeModal={closeModal} itemToDelete={deleteItem} uuid={selectedUuid}/>
                     </View>
                 </View>
         </SafeAreaView>

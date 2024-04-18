@@ -4,7 +4,7 @@ import ManuallyAdd from "./ManualAddFoodModal";
 
 const windowWidth = Dimensions.get('window').width;
 
-const AddOptionModal = ({updateItem}) => {
+const AddOptionModal = ({saveItem}) => {
     const [isVisible, setIsVisible] = useState(false);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -45,7 +45,7 @@ const AddOptionModal = ({updateItem}) => {
                             <TouchableOpacity style={styles.option} onPress={openModal}>
                                 {/*add icon*/}
                             </TouchableOpacity>
-                            <ManuallyAdd {...{updateItem}} modalVisible={isModalVisible} closeModal={closeModal}/>
+                            <ManuallyAdd saveItem={saveItem} modalVisible={isModalVisible} closeModal={closeModal} selectedItem={undefined} updateItem={undefined} itemToDelete={undefined} uuid={undefined}/>
                         </View>
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Camera upload</Text>
