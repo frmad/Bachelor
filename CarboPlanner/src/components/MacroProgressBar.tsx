@@ -1,17 +1,10 @@
-import Slider from '@react-native-community/slider';
+import React from 'react';
 import { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import * as Progress from 'react-native-progress';
 
 
-export default function MacroProgressBar(props: any) {
-    //const [value, setValue] = useState(props.value);
-
-    /**function setProgressValue(){
-        setValue(value);
-    }**/    
-
-    
+export default function MacroProgressBar(props: any) {    
     return (
         <View style={styles.container}>
             <View style={styles.text_sub_container}>
