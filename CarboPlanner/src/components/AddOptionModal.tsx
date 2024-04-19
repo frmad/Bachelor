@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions, Pressable } from 'react-native';
+import {View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions, Pressable, Image} from 'react-native';
 import ManuallyAdd from "./ManualAddFoodModal";
 
 const windowWidth = Dimensions.get('window').width;
@@ -23,8 +23,14 @@ const AddOptionModal = ({saveItem}) => {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.overButtonText}>{"Did your food not register?"}</Text>
             <TouchableOpacity style={styles.addFoodButton} onPress={toggleModal}>
-                <Text style={styles.buttonText}>{"Add food item"}</Text>
+                <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20,}}>
+                    <View style={styles.plusIconContainer}>
+                        <Image source={require("../../assets/icons/plusGray.png")} style={styles.plusIcon} resizeMode="contain" />
+                    </View>
+                    <Text style={styles.buttonText}>{"Add Food"}</Text>
+                </View>
             </TouchableOpacity>
             <Modal
                 animationType="slide"
@@ -83,18 +89,29 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     buttonText: {
+        fontSize: 13,
+        textAlign: 'center',
+        color: '#45505B',
+        fontWeight: 'bold',
+        paddingHorizontal: 10,
+    },
+    overButtonText: {
         fontSize: 10,
         textAlign: 'center',
-        color: 'white',
-        fontWeight: 'bold',
-        paddingHorizontal: 5,
+        color: '#45505B',
+        fontWeight: "400",
+        fontStyle: 'italic',
+        paddingBottom: 10,
     },
     addFoodButton: {
-        backgroundColor: '#65CB2E',
-        paddingVertical: 10,
-        paddingHorizontal: 2,
-        borderRadius: 50,
+        backgroundColor: '#FFFFFF',
+        paddingVertical: 9,
+        paddingHorizontal: 5,
+        borderRadius: 10,
         marginBottom: 1,
+        borderWidth: 2,
+        borderColor: '#65CB2E',
+        borderStyle: "dashed",
     },
     option: {
         backgroundColor: '#65CB2E',
@@ -119,6 +136,16 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: "bold",
+    },
+    plusIconContainer: {
+        width: 22,
+        height: 22,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    plusIcon: {
+        width: '100%',
+        height: '100%',
     },
 });
 
