@@ -1,9 +1,28 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LoadingIcon from "./LoadingIcon";
 
 export default function Loading({route}) {
+    const funFacts = [
+        "An avocado contains more potassium than a banana!",
+        "Broccoli is high in fiber and vitamin C, and low in calories!",
+        "Almonds are packed with healthy fats, protein, and fiber!",
+        "Salmon is rich in omega-3 fatty acids, which are good for heart health!",
+        "Spinach is a nutrient-rich leafy green vegetable that's low in calories!",
+        "Blueberries are loaded with antioxidants and can help improve memory!",
+        "Quinoa is a complete protein, containing all nine essential amino acids!",
+        "Greek yogurt is a great source of protein and probiotics for gut health!",
+        "Chia seeds are rich in fiber, omega-3 fatty acids, and antioxidants!",
+        "Sweet potatoes are high in beta-carotene, which is good for eye health!",
+    ];
+    const getRandomFactIndex = () => {
+        return Math.floor(Math.random() * funFacts.length);
+    }
+
+    const randomIndex = getRandomFactIndex();
+    const randomFact = funFacts[randomIndex];
+
     const navigation = useNavigation();
 
     //const { base64 } = route.params;
@@ -58,7 +77,7 @@ export default function Loading({route}) {
             <Text style={styles.text}>This may take a minute</Text>
             <View style={styles.fact_view}>
                 <Text style={styles.fact_header}>Did you know?</Text>
-                <Text style={styles.fact_text}>An avocado contains more potassium than a banana!</Text>
+                <Text style={styles.fact_text}>{randomFact}</Text>
             </View>
         </View>
     );
