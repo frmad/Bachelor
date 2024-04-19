@@ -2,7 +2,7 @@
   "name": "carboplanner",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start --go --tunnel",
+    "start": "expo start --go",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web"
@@ -31,7 +31,6 @@
     "firebase": "^10.10.0",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
-    "react-calendar": "^4.8.0",
     "react-dom": "18.2.0",
     "react-native": "0.73.6",
     "react-native-animated-nav-tab-bar": "^3.1.10",
@@ -42,7 +41,6 @@
     "react-native-paper": "^5.12.3",
     "react-native-progress": "^5.0.1",
     "react-native-radial-slider": "^1.1.0",
-    "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "14.1.0",
     "react-native-web": "~0.19.6",
     "react-navigation-tabbar-collection": "^1.0.0",
