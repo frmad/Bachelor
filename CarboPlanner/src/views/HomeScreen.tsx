@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Text, TouchableOpacity, View, StyleSheet, FlatList, Image } from 'react-native';
+import { Text, TouchableOpacity, View, StyleSheet, FlatList, Image, ScrollView } from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
 import List from '../components/List';
@@ -148,5 +148,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+    calendarIconContainer: {
+        backgroundColor: '#65CB2E',
+        width: 40,
+        height: 40,
+        padding: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 40,
+        marginLeft: 20,
+        marginTop: 10,
+    },
+    calendarIcon: {
+        width: '100%',
+        height: '100%',
+    },
 });
 
