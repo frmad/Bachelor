@@ -9,12 +9,13 @@ import AddOptionModal from "../components/AddOptionModal";
 import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
 import { saveData, edit, mainDocRef, deleteMeal } from "../utils/Database/DatabaseActions";
+import SaveConfirmationModal from "../components/SaveConfirmationModal";
+import { createData, edit, mainDocRef } from "../utils/Database/DatabaseActions";
 import uuid from 'react-native-uuid';
 import ImageCarousel from "../components/ImageCarousel";;
 import { Images } from "../utils/images";
 import { getDoc } from "firebase/firestore";
 import ManuallyAdd from "../components/ManualAddFoodModal"
-
 
 export default function Result({route}) {
 
@@ -139,7 +140,9 @@ export default function Result({route}) {
     
 
 
-      //check for uuid prop, if found uuidKey variable points to the prop
+      const [isModalVisible, setIsModalVisible] = useState(false);
+      
+            //check for uuid prop, if found uuidKey variable points to the prop
       const uuidKey = route.params.uuidKey || String(uuid.v4());
 
       const createData = () => {
@@ -160,8 +163,6 @@ export default function Result({route}) {
             fat: String;
         }
     
-
-
         const food = (uuidKey: string) => {
             const item = items[uuidKey]; // Look up the item using its UUID key
             if (!item) return null; // Return null if item is not found
@@ -180,9 +181,8 @@ export default function Result({route}) {
             );
           };
 
-    //Handles which saving method touse
+    //Handles which saving method to use
     const handleSaveButtonPress = () => {
-        console.log("hello")
         if (route.params.uuidKey) {
             if(items.length === 0){
                 deleteMeal(uuidKey)
@@ -192,6 +192,7 @@ export default function Result({route}) {
         } else {
             saveData(uuidKey, createData());
         }
+      setIsModalVisible(!isModalVisible); // Show the confirmation modal
     };
 
  const deleteItem = (itemToDeleteKey) => {
@@ -315,6 +316,9 @@ export default function Result({route}) {
                         <TouchableOpacity onPress={() => {handleSaveButtonPress()}} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
+                      
+                        <SaveConfirmationModal isVisible={isModalVisible} />
+                      
                         <Text style={{marginBottom: 2.5, marginTop: 2.5, fontWeight: '300',}}>or</Text>
                         <TouchableOpacity onPress={() => {navigation.navigate("Home")}} style={styles.cancelButton}>
                             <Text style={styles.cancelButtonText}>Cancel</Text>
