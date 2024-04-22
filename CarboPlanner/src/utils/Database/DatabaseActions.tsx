@@ -51,7 +51,7 @@ const deleteMeal = async (uuidKey) => {
   const exsistingData = docSnapshot.data().data;
 
   const updateData = {...exsistingData}
-  delete updateData[uuidKey]
+  delete meal[uuidKey]
 
   //uopdate document with updated dat
   await updateDoc(mainDocRef, {
