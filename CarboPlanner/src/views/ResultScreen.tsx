@@ -8,12 +8,12 @@ import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
 import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
-import { saveData, edit, mainDocRef } from "../utils/Database/DatabaseActions";
+import SaveConfirmationModal from "../components/SaveConfirmationModal";
+import { createData, edit, mainDocRef } from "../utils/Database/DatabaseActions";
 import uuid from 'react-native-uuid';
 import ImageCarousel from "../components/ImageCarousel";;
 import { Images } from "../utils/images";
 import { getDoc } from "firebase/firestore";
-
 
 export default function Result({route}) {
 
@@ -68,9 +68,9 @@ export default function Result({route}) {
                 fat: '8',
             }));
         }
-        await setItem(initialItems);
-        
+        await setItem(initialItems);    
     };
+    
     useEffect(() => {
         async function fetchData() {
           if (route.params.uuidKey) {
@@ -111,8 +111,7 @@ export default function Result({route}) {
             handleItemSet();
         }
     }, [items]);
-    
-    
+  
     const addToFoodList = (recognition: Recognition) => {
         const uuidKey = uuid.v4();
         setFoodList(prevList => [...prevList, { [uuidKey]: { ...recognition } }]);
@@ -133,7 +132,9 @@ export default function Result({route}) {
         }
       };
 
-      //check for uuid prop, if found uuidKey variable points to the prop
+      const [isModalVisible, setIsModalVisible] = useState(false);
+      
+            //check for uuid prop, if found uuidKey variable points to the prop
       const uuidKey = route.params.uuidKey || String(uuid.v4());
 
       const createData = () => {
@@ -144,9 +145,10 @@ export default function Result({route}) {
             }
         };
 
-    
-    
-
+    const handleSave = () => {
+        createData(saveData);
+        setIsModalVisible(!isModalVisible); // Show the confirmation modal
+    };
 
     const food = ({item} : {item : Recognition}) =>(
         <View style={styles.card}>
@@ -166,8 +168,8 @@ export default function Result({route}) {
         } else {
             saveData(uuidKey, createData());
         }
+      setIsModalVisible(!isModalVisible); // Show the confirmation modal
     };
-
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -267,6 +269,9 @@ export default function Result({route}) {
                         <TouchableOpacity onPress={() => handleSaveButtonPress()} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
+                      
+                        <SaveConfirmationModal isVisible={isModalVisible} />
+                      
                         <Text style={{marginBottom: 2.5, marginTop: 2.5, fontWeight: '300',}}>or</Text>
                         <TouchableOpacity onPress={() => {navigation.navigate("Home")}} style={styles.cancelButton}>
                             <Text style={styles.cancelButtonText}>Cancel</Text>
