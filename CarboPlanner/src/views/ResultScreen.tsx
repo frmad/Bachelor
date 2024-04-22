@@ -2,8 +2,8 @@ import {Text, SafeAreaView, TouchableOpacity, View, Image, StyleSheet} from "rea
 import Card from "../components/Card";
 import { useNavigation } from "@react-navigation/native";
 import React, {useEffect, useState} from "react";
-import {getCategory} from "../components/MealType";
-import {getMacros} from "../components/Macros";
+import {getCategory} from "../utils/MealType";
+import {getMacros} from "../utils/Macros";
 import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
 import { FlatList } from "react-native-gesture-handler";

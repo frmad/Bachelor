@@ -17,7 +17,7 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
     useEffect(() => {
         if (selectedItem) {
             setName(selectedItem.name || "");
-            setCalories(String(selectedItem.calories) || "0");
+            setCalories("100")
             setFat(String(selectedItem.fat) || "0");
             setProtein(String(selectedItem.protein) || "0");
             setCarb(String(selectedItem.carbs) || "0");
@@ -36,11 +36,8 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
             weight: weight,
             confidence: 1
         };
-            
             saveItem(newItem);
-
-    
-        toggleModal();
+            toggleModal();
     };
 
     const onUpdate = () => {
@@ -53,11 +50,9 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
             weight: weight,
             confidence: 1
         };
-            
             updateItem(uuid,newItem);
-
-    
-        toggleModal();
+            console.log(newItem)
+            toggleModal();  
     };
 
     const onDelete = () => {
@@ -191,7 +186,6 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
                                         </TouchableOpacity>
                                     )
                                     }
-                                
                         </TouchableOpacity>
                         </TouchableOpacity>
             </Modal>
