@@ -113,7 +113,7 @@ export default function HomeScreen(){
         </View>
       </Card>
       <ScrollView style={{paddingBottom: 10}}>
-        <Card customStyle={{maxHeight: "44%"}}>
+        <Card customStyle={{maxHeight: "42%"}}>
           <FlatList
             data={Object.entries(data)}
             renderItem={renderMealItem}
