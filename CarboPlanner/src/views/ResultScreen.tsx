@@ -10,7 +10,6 @@ import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
 import { saveData, edit, mainDocRef, deleteMeal } from "../utils/Database/DatabaseActions";
 import SaveConfirmationModal from "../components/SaveConfirmationModal";
-import { createData, edit, mainDocRef } from "../utils/Database/DatabaseActions";
 import uuid from 'react-native-uuid';
 import ImageCarousel from "../components/ImageCarousel";;
 import { Images } from "../utils/images";
@@ -43,7 +42,6 @@ export default function Result({route}) {
     const image: any = "data:image/png;base64," + base64;
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
-
 
     const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -88,11 +86,11 @@ export default function Result({route}) {
     }, [selectedItem,selectedUuid]);
 
     const openModal = () => {
-      setIsModalVisible(true);
+      setIsResultModalVisible(true);
     };
   
     const closeModal = () => {
-        setIsModalVisible(false);
+        setIsResultModalVisible(false);
         setSelectedItem(null);
     };
 
@@ -137,7 +135,7 @@ export default function Result({route}) {
     
 
 
-      const [isModalVisible, setIsModalVisible] = useState(false);
+      const [isResultModalVisible, setIsResultModalVisible] = useState(false);
       
             //check for uuid prop, if found uuidKey variable points to the prop
       const uuidKey = route.params.uuidKey || String(uuid.v4());
@@ -192,21 +190,20 @@ export default function Result({route}) {
       setIsModalVisible(!isModalVisible); // Show the confirmation modal
     };
 
- const deleteItem = (itemToDeleteKey) => {
-    const updatedItems = { ...items };
+    const deleteItem = (itemToDeleteKey) => {
+        const updatedItems = { ...items };
 
-    // Check if the item to delete exists in the items object
-    if (updatedItems.hasOwnProperty(itemToDeleteKey)) {
-        // Use the JavaScript delete operator to remove the item
-        delete updatedItems[itemToDeleteKey];
-        // Set the updated items object using setItem
-        setItem(updatedItems);
-    } else {
-        console.error('Item to delete does not exist');
-    }
-};
+        // Check if the item to delete exists in the items object
+        if (updatedItems.hasOwnProperty(itemToDeleteKey)) {
+            // Use the JavaScript delete operator to remove the item
+            delete updatedItems[itemToDeleteKey];
+            // Set the updated items object using setItem
+            setItem(updatedItems);
+        } else {
+            console.error('Item to delete does not exist');
+            }
+    };
 
-    
 
     const handleFoodItemPress = (item, uuid) => {    
         setSelectedItem(item); // Set the selected meal item when it's pressed
@@ -319,7 +316,7 @@ export default function Result({route}) {
                         <TouchableOpacity onPress={() => {navigation.navigate("Home")}} style={styles.cancelButton}>
                             <Text style={styles.cancelButtonText}>Cancel</Text>
                         </TouchableOpacity>
-                        <ManuallyAdd updateItem={updateItem} saveItem={saveItem} selectedItem={selectedItem} modalVisible={isModalVisible} closeModal={closeModal} itemToDelete={deleteItem} uuid={selectedUuid}/>
+                        <ManuallyAdd updateItem={updateItem} saveItem={saveItem} selectedItem={selectedItem} modalVisible={isResultModalVisible} closeModal={closeModal} itemToDelete={deleteItem} uuid={selectedUuid}/>
                     </View>
                 </View>
         </SafeAreaView>

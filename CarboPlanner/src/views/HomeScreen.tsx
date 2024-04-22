@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView} from 'react-native';
+import {Text, TouchableOpacity, View, StyleSheet, FlatList, Image} from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
 import List from '../components/List';
@@ -82,12 +82,6 @@ export default function HomeScreen(){
         </List>
       );
     };
-
-    
-    
-    
-    
-
 
   return (
     <View style={styles.container}>
