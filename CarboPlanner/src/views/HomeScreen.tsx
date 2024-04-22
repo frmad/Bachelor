@@ -16,7 +16,6 @@ import { mainDocRef } from '../utils/Database/DatabaseActions';
 export default function HomeScreen(){
   const navigation = useNavigation();
 
-
   function handlePress(){
     navigation.navigate('Camera');
   }
