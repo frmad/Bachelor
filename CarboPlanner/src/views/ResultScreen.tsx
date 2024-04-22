@@ -1,4 +1,4 @@
-import {Text, SafeAreaView, TouchableOpacity, View, Image, StyleSheet, Button} from "react-native";
+import {Text, SafeAreaView, TouchableOpacity, View, Image, StyleSheet} from "react-native";
 import Card from "../components/Card";
 import { useNavigation } from "@react-navigation/native";
 import React, {useEffect, useState} from "react";
@@ -72,33 +72,27 @@ export default function Result({route}) {
     
     useEffect(() => {
         async function fetchData() {
-            if (route.params.uuidKey) {
-                const docSnapshot = await getDoc(mainDocRef);
-    
-                if (docSnapshot.exists()) {
-                    const fetchedData = docSnapshot.data().data || [];
-                    
-                    let index = -1; // Initialize index as -1
-                    
-                    fetchedData.forEach((obj, i) => {
-                        const key = Object.keys(obj)[0]; // Get the UUID key of the object
-                        
-                        if (key === uuidKey) {
-                            index = i; // Update the index if UUID matches
-                        }
-                    });
-                    
-                    if (index !== -1) {
-                        const newItem = fetchedData[index][uuidKey]; // Get the new item at the found index
-                        setNewText(newItem.name)
-                        setItem(newItem.meals);
-                    }
-                }
+          if (route.params.uuidKey) {
+            const docSnapshot = await getDoc(mainDocRef);
+      
+            if (docSnapshot.exists()) {
+              const fetchedData = docSnapshot.data().data || [];
+      
+              // Find the object with the matching UUID key
+              const newItem = fetchedData[route.params.uuidKey];
+      
+              if (newItem) {
+                // Update state with the new item's name and meals
+                setNewText(newItem.name);
+                setItem(newItem.meals);
+              }
             }
+          }
         }
-        
+      
         fetchData();
-    }, [route.params.uuidKey, data]);
+      }, [route.params.uuidKey]); // Include route.params.uuidKey in the dependency array
+      
 
     useEffect(() => { 
         setInitialItem()
@@ -142,14 +136,13 @@ export default function Result({route}) {
       const uuidKey = route.params.uuidKey || String(uuid.v4());
 
       const saveData = () => {
-        return {
-            [uuidKey]: { 
+        return { 
                 name: newText,
                 meals: foodList,
                 icon: mealtype
             }
         };
-    };
+
     
     
 
@@ -173,10 +166,9 @@ export default function Result({route}) {
     //Handles which saving method touse
     const handleSaveButtonPress = () => {
         if (route.params.uuidKey) {
-            console.log(saveData())
             edit(saveData(), uuidKey);
         } else {
-            createData(saveData());
+            createData(uuidKey, saveData());
         }
       setIsModalVisible(!isModalVisible); // Show the confirmation modal
     };
@@ -185,20 +177,11 @@ export default function Result({route}) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
                 <View style={styles.container}>
-                    {/*
-                    <View style={styles.header}>
-                        <TouchableOpacity onPress={() => { navigation.navigate('Home'); }} style={styles.goBackButton} />
-                        <View style={styles.resultHeaderContainer}>
-                            <Text style={styles.resultHeaderText}>Result</Text>
-                        </View>
-                    </View>
-                    */}
                     {route.params.uuidKey ? (
                     <View></View>
                     ):(
                         <ImageCarousel images={allImages} />
                     )}
-                    {/*<Image source={{ uri: image }} style={styles.image} />*/}
                     <Card>
                         <View>
                             {changeText ? ( // If changeText is true

@@ -14,8 +14,6 @@ export default function List(props: any) {
 
     const body = <View>{props.children}</View>;
 
-    const image = {uri: 'file://' + props.imageURI};
-
 
     return (
         <View>
