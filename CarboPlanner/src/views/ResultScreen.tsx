@@ -44,7 +44,7 @@ export default function Result({route}) {
 
 
     interface Recognition{
-        uuid : String;
+        uuidKey: {
         confidence: number;
         class: number;
         name: String;
@@ -52,6 +52,7 @@ export default function Result({route}) {
         carbs: String;
         protein: String;
         fat: String;
+        }
     }
 
     const setInitialItem = async () => {
@@ -110,10 +111,11 @@ export default function Result({route}) {
             handleItemSet();
         }
     }, [items]);
-   
-    const addToFoodList = (Recognition) => {
-        setFoodList(prevList => [...prevList, Recognition]);
-      };
+  
+    const addToFoodList = (recognition: Recognition) => {
+        const uuidKey = uuid.v4();
+        setFoodList(prevList => [...prevList, { [uuidKey]: { ...recognition } }]);
+    };
 
       const handleAddToList = () => {
         if (items) {
@@ -135,17 +137,13 @@ export default function Result({route}) {
             //check for uuid prop, if found uuidKey variable points to the prop
       const uuidKey = route.params.uuidKey || String(uuid.v4());
 
-      const saveData = () => {
+      const createData = () => {
         return { 
                 name: newText,
                 meals: foodList,
                 icon: mealtype
             }
         };
-
-    
-    
-
 
     const handleSave = () => {
         createData(saveData);
@@ -169,10 +167,10 @@ export default function Result({route}) {
             edit(saveData(), uuidKey);
         } else {
             createData(uuidKey, saveData());
+
         }
       setIsModalVisible(!isModalVisible); // Show the confirmation modal
     };
-
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -269,7 +267,7 @@ export default function Result({route}) {
                     </Card>
                     {/*save or cancel*/}
                     <View style={styles.saveOrCancel}>
-                        <TouchableOpacity onPress={() => {handleSaveButtonPress()}} style={styles.saveButton}>
+                        <TouchableOpacity onPress={() => handleSaveButtonPress()} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
                       

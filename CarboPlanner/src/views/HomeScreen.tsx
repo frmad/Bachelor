@@ -13,6 +13,8 @@ import { useEffect, useState } from 'react';
 import { onSnapshot } from 'firebase/firestore';
 import { mainDocRef } from '../utils/Database/DatabaseActions';
 
+
+
 export default function HomeScreen(){
   const navigation = useNavigation();
 
@@ -20,6 +22,9 @@ export default function HomeScreen(){
     navigation.navigate('Camera');
   }
 
+  function goToCalendar() {
+    navigation.navigate('Calendar');
+  } 
   const [data, setData] = useState([])
 
   useEffect(() => {
@@ -28,26 +33,13 @@ export default function HomeScreen(){
             const fetchedData = snapshot.data().data;
             setData(fetchedData);
         } else {
-          setData(undefined)
+          setData([]);
         }
     });
 }, []);
+
   
 
-    interface mealItems{
-      name: String
-      weight: String
-      calories: String
-      protein: String
-      fat: String
- 
-    }
-  
-    interface Meal{
-      name: String
-      meals: mealItems[]
-      icon: String
-    }
 
     interface mealItems{
       name: String
@@ -65,38 +57,49 @@ export default function HomeScreen(){
     }
 
     const renderMealItem = ({ item }) => {
-
-      //deconstruct item into its key valute pair 
+      // deconstruct item into its key value pair 
       const [uuidKey, meal] = item; 
+
     
-      // Ensure meal exsists
-      if (!meal) {
-        return null; 
-      }
-    
-      const mealsArray = meal.meals || []; // Access the meals array from meal
+      const mealsArray = meal.meals // Access the meals array from the UUID object
     
       return (
         <List key={uuidKey} name={meal.name} imageURI={meal.icon} uuidKey={uuidKey}>
           <HorizontalLine />
-          {mealsArray.map((meal, index) => (
-            <ListItem
-              key={`${uuidKey}_${index}`} // Ensure each item has a unique key
-              weight={meal.weight}
-              name={meal.name}
-              calories={meal.calories}
-              protein={meal.protein}
-              carbs="32" // Assuming the carbs value is fixed
-              fat={meal.fat}
-            />
-          ))}
+          {mealsArray.map((mealData, index) => {
+            const [mealUuid, mealInfo] = Object.entries(mealData)[0]; // Extract the UUID and meal info
+            return (
+              <ListItem
+                key={`${uuidKey}_${index}`} // Ensure each item has a unique key
+                weight={mealInfo.weight}
+                name={mealInfo.name}
+                calories={mealInfo.calories}
+                protein={mealInfo.protein}
+                carbs={mealInfo.carbs}
+                fat={mealInfo.fat}
+              />
+            );
+          })}
         </List>
       );
     };
-   
+    
+    
+    
+    
+
+
   return (
     <View style={styles.container}>
+    <View style={{flexDirection: 'row', alignItems: 'center'}}>
       <Text style={styles.header_text}>Today</Text>
+      <TouchableOpacity onPress={goToCalendar}>
+        <View style={styles.calendarIconContainer}>
+          <Image source={require("../../assets/func-icon/calendar.png")} style={styles.calendarIcon} resizeMode="contain" />
+        </View>
+      </TouchableOpacity>
+    </View>
+
       <Card>
         <View style={styles.row}>
           <CircularSlider value={1200} max={2000}/>
@@ -109,17 +112,16 @@ export default function HomeScreen(){
             <MacroProgressBar name={"Fat"} value={0.2} max={200} />
         </View>
       </Card>
-
         <Card customStyle={{maxHeight: "42%"}}>
             <FlatList
                 data={Object.entries(data)}
                 renderItem={renderMealItem}
                 keyExtractor={(item) => item[0]} // Use the UUID as the key
             />
+
         </Card>
 
       <CameraButton />
-    
       </View>
   );
 }
@@ -156,4 +158,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
