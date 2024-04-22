@@ -13,6 +13,7 @@ return (
     activeOutlineColor='black'
     keyboardType={props.keyboard}
     onChangeText={props.onChange}
+    defaultValue={props.value}
     right={<TextInput.Affix text={props.affix}/>}
 />
 )
@@ -29,6 +30,7 @@ export const ShortInput = (props : any) => {
         activeOutlineColor='black'
         keyboardType={props.keyboard}
         onChangeText={props.onChangeText}
+        defaultValue={props.value}
         right={<TextInput.Affix text={props.affix}/>}
     />
     )
