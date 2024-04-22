@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import CalendarComponent from '../components/CalendarComponent';
 import { useNavigation } from "@react-navigation/native";
 
@@ -7,7 +7,7 @@ export default function Calendar() {
     const navigation = useNavigation();
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => { navigation.navigate('Home'); }} style={styles.goBackButton}>
                     <Text style={styles.goBackText}>{'<'}</Text>
@@ -18,14 +18,14 @@ export default function Calendar() {
             </View>
             <View style={styles.greenLine} />
             <CalendarComponent />
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 0,
+        backgroundColor: '#EBEBEB',
     },
     header: {
         flexDirection: "row",
@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
         color: "#45505B",
     },
     headerText: {
-        fontFamily: "Inter_700Bold",
         fontSize: 30,
         color: "#45505B",
     },

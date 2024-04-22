@@ -212,12 +212,13 @@ export default function Result({route}) {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-                <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
                     {route.params.uuidKey ? (
                     <View></View>
                     ):(
-                        <ImageCarousel images={allImages} />
+                        <View style={{height:"35%", marginTop:"-6%"}}>
+                        <ImageCarousel images={allImages}/>
+                        </View>
                     )}
                     <Card>
                         <View>
@@ -296,7 +297,7 @@ export default function Result({route}) {
                             <Text style={styles.cardTitleText}>Precision</Text>
                         </View>
                         <FlatList
-                            style={{ height: "23%", marginTop: 0, marginBottom: 0 }}
+                            style={{ maxHeight: "40%", marginTop: 0, marginBottom: 0 }}
                             data={uuids} // Use uuids array instead of items
                             renderItem={({ item }) => food(item)} // Pass the UUID key to the food function
                         />
@@ -318,7 +319,6 @@ export default function Result({route}) {
                         </TouchableOpacity>
                         <ManuallyAdd updateItem={updateItem} saveItem={saveItem} selectedItem={selectedItem} modalVisible={isResultModalVisible} closeModal={closeModal} itemToDelete={deleteItem} uuid={selectedUuid}/>
                     </View>
-                </View>
         </SafeAreaView>
     );
 }
@@ -349,6 +349,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 5,
         elevation: 5, // for Android elevation
+        flex: 1
     },
     macros: {
         display: 'flex',
@@ -398,7 +399,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: '10%',
         justifyContent: "center",
         borderRadius: 50,
-        marginTop: 10,
+        marginTop: "8%",
     },
     saveButtonText: {
         color: 'white',
@@ -409,6 +410,7 @@ const styles = StyleSheet.create({
     cancelButton: {
         width: "auto",
         justifyContent: "center",
+        marginBottom: "5%"
     },
     cancelButtonText: {
         color: '#575757',

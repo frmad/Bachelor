@@ -112,7 +112,6 @@ export default function HomeScreen(){
                 renderItem={renderMealItem}
                 keyExtractor={(item) => item[0]} // Use the UUID as the key
             />
-
         </Card>
       <CameraButton />
       </View>
@@ -149,5 +148,18 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
+  },calendarIconContainer: {
+    backgroundColor: '#65CB2E',
+    width: 40,
+    height: 40,
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 40,
+    marginLeft: 20,
+    marginTop: 10,
   },
-});
+  calendarIcon: {
+    width: '100%',
+    height: '100%',
+}});
