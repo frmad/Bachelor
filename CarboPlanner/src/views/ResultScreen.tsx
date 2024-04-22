@@ -264,7 +264,7 @@ export default function Result({route}) {
                     </Card>
                     {/*save or cancel*/}
                     <View style={styles.saveOrCancel}>
-                        <TouchableOpacity onPress={() => {handleSaveButtonPress(), console.log(createData())}} style={styles.saveButton}>
+                        <TouchableOpacity onPress={() => handleSaveButtonPress()} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
                         <Text style={{marginBottom: 2.5, marginTop: 2.5, fontWeight: '300',}}>or</Text>
