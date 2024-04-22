@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, Dimensions } from 'react-native';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { View, Image, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
+import Carousel from 'react-native-banner-carousel';
 
 const { width } = Dimensions.get('window');
 
@@ -9,47 +9,32 @@ interface ImageCarouselProps {
 }
 
 const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
-    const [activeSlide, setActiveSlide] = useState(0);
+    const [ activeSlide ] = useState(0);
+    const lastSlide = images.length === 0 ? activeSlide : activeSlide-1 ;
+    const nextSlide = images.length === 0 ? activeSlide : activeSlide+1 ;
 
-    const renderItem = ({ item }: any) => {
+    const renderPage = (image, index) => {
+        const first = index === 0 ? images.length-1 : index-1;
+        const last = index === images.length-1 ? 0 : index+1;
+
         return (
-            <View style={styles.fullWidthSlide}>
-                <Image
-                    /*
-                    The URI 'data:image/jpeg;base64,' indicates that the image data is encoded in base64 format.
-                    When the image component renders with this URI, it decodes the base64-encoded image data, which allows the image to be displayed.
-                    */
-                    source={{ uri: `data:image/jpeg;base64,${item}` }}
-                    style={styles.slideImage}
-                />
+            <View key={index} style={styles.fullWidthSlide}>
+                <Image style={styles.rightSlideImage} source={{ uri: `data:image/jpeg;base64,${images[first]}` }} />
+                <Image style={styles.parentImage} source={{ uri: `data:image/jpeg;base64,${image}` }} />
+                <Image style={styles.leftSlideImage} source={{ uri: `data:image/jpeg;base64,${images[last]}` }} />
             </View>
         );
-    };
+    }
 
     const sliderWidth = width;
     const itemWidth = width;
 
     return (
-        <View style={styles.container}>
-            <Carousel
-                data={images}
-                renderItem={renderItem}
-                sliderWidth={sliderWidth}
-                itemWidth={itemWidth}
-                loop
-                onSnapToItem={(index) => setActiveSlide(index)}
-            />
-            <Pagination
-                dotsLength={images.length}
-                activeDotIndex={activeSlide}
-                containerStyle={styles.paginationContainer}
-                dotColor="#65CB2E"
-                dotStyle={styles.dotStyle}
-                inactiveDotColor="#C4C4C4"
-                inactiveDotOpacity={0.4}
-                inactiveDotScale={0.6}
-            />
-        </View>
+        <SafeAreaView style={styles.container}>
+            <Carousel>
+                {images.map((image, index) => renderPage(image, index))}
+            </Carousel>
+        </SafeAreaView>
     );
 };
 
@@ -58,37 +43,43 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        margin: 5,
+        margin: 5
     },
     fullWidthSlide: {
         width: width,
         height: 200,
         justifyContent: 'center',
-        alignItems: 'center'
-    },
-    slideImage: {
-        width: '50%',
-        height: '100%',
-        resizeMode: 'contain',
-        marginTop: 50,
-    },
-    paginationContainer: {
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        position: 'absolute',
-        top: 230,
-        left: 0,
-        right: 0,
         alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row'
+        paddingTop: 10,
+        flex: 1,
+        flexDirection: "row",
     },
-    dotStyle: {
-        width: 10,
-        height: 10,
-        borderRadius: 5,
-        marginHorizontal: 8,
-    }
+    leftSlideImage: {
+        width: '30%',
+        marginLeft: -20,
+        overflow: "visible",
+        height: '50%',
+        resizeMode: "cover",
+        marginTop: 50,
+        borderRadius: 15
+    },
+    rightSlideImage: {
+        width: '30%',
+        marginRight: -20,
+        overflow: "visible",
+        height: '50%',
+        resizeMode: "cover",
+        marginTop: 50,
+        borderRadius: 15 
+    },
+    parentImage: {
+        width: '42.5%',
+        height: '60%',
+        resizeMode: "cover",
+        marginTop: 50,
+        borderRadius: 15,
+        zIndex: 30
+    },
 });
 
 export default ImageCarousel;
