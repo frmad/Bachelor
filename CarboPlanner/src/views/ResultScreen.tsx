@@ -164,9 +164,10 @@ export default function Result({route}) {
     //Handles which saving method touse
     const handleSaveButtonPress = () => {
         if (route.params.uuidKey) {
-            edit(createData(), uuidKey);
+            edit(saveData(), uuidKey);
         } else {
-            saveData(uuidKey, createData());
+            createData(uuidKey, saveData());
+
         }
       setIsModalVisible(!isModalVisible); // Show the confirmation modal
     };

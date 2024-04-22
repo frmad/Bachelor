@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Text, TouchableOpacity, View, StyleSheet, FlatList, Image } from 'react-native';
+import {Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView} from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
 import List from '../components/List';
@@ -25,7 +25,6 @@ export default function HomeScreen(){
   function goToCalendar() {
     navigation.navigate('Calendar');
   } 
-
   const [data, setData] = useState([])
 
   useEffect(() => {
@@ -40,6 +39,7 @@ export default function HomeScreen(){
 }, []);
 
   
+
 
     interface mealItems{
       name: String
@@ -105,21 +105,21 @@ export default function HomeScreen(){
           <CircularSlider value={1200} max={2000}/>
         </View>
         <View style={styles.row}>
-            <MacroProgressBar name={"Carbs"} value={50} max={210} />
+            <MacroProgressBar name={"Carbs"} value={0.5} max={210} />
           
             <MacroProgressBar name={"Protein"} value={1} max={180} />
           
             <MacroProgressBar name={"Fat"} value={0.2} max={200} />
         </View>
       </Card>
-      <ScrollView style={{paddingBottom: 10}}>
-       <Card customStyle={{maxHeight: "44%"}}>
-      <FlatList
-        data={Object.entries(data)}
-        renderItem={renderMealItem}
-        keyExtractor={(item) => item[0]} // Use the UUID as the key
+        <Card customStyle={{maxHeight: "42%"}}>
+            <FlatList
+                data={Object.entries(data)}
+                renderItem={renderMealItem}
+                keyExtractor={(item) => item[0]} // Use the UUID as the key
+            />
+
         </Card>
-      </ScrollView>
 
       <CameraButton />
       </View>
