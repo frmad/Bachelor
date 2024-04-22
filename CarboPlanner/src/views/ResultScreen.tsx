@@ -77,7 +77,6 @@ export default function Result({route}) {
         fetchData();
       }, [route.params.uuidKey]); // Include route.params.uuidKey in the dependency array
 
-
       useEffect(() => { 
         setInitialItem()
     }, [data]);
@@ -97,7 +96,6 @@ export default function Result({route}) {
         setSelectedItem(null);
     };
 
-
     const saveItem = (newItem) => {
         const uuidKey = String(uuid.v4());
         setItem((prevItems) => ({
@@ -113,7 +111,6 @@ export default function Result({route}) {
           [uuidKey]: updatedItem,
         }));
     };
-
 
     const setInitialItem = async () => {
         let initialItems = {};
@@ -217,7 +214,6 @@ export default function Result({route}) {
     
     };
 
-
     return (
         <SafeAreaView style={{ flex: 1 }}>
                 <View style={styles.container}>
@@ -313,7 +309,7 @@ export default function Result({route}) {
                     </Card>
                     {/*save or cancel*/}
                     <View style={styles.saveOrCancel}>
-                        <TouchableOpacity onPress={() => {handleSaveButtonPress()}} style={styles.saveButton}>
+                        <TouchableOpacity onPress={() => handleSaveButtonPress()} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
                       

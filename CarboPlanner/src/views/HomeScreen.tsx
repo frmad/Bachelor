@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Text, TouchableOpacity, View, StyleSheet, FlatList, Image } from 'react-native';
+import {Text, TouchableOpacity, View, StyleSheet, FlatList, ScrollView} from 'react-native';
 import Card from '../components/Card';
 import CircularSlider from '../components/CircularSlider';
 import List from '../components/List';
@@ -25,7 +25,7 @@ export default function HomeScreen(){
   function goToCalendar() {
     navigation.navigate('Calendar');
   } 
-
+  
   const [data, setData] = useState([])
 
   useEffect(() => {
@@ -38,8 +38,6 @@ export default function HomeScreen(){
         }
     });
 }, []);
-
-  
 
     interface mealItems{
       name: String
@@ -82,7 +80,9 @@ export default function HomeScreen(){
             );
           })}
         </List>
-      )};
+      );
+    };
+
     
     
     
@@ -112,15 +112,14 @@ export default function HomeScreen(){
             <MacroProgressBar name={"Fat"} value={0.2} max={200} />
         </View>
       </Card>
-      <ScrollView style={{paddingBottom: 10}}>
         <Card customStyle={{maxHeight: "42%"}}>
-          <FlatList
-            data={Object.entries(data)}
-            renderItem={renderMealItem}
-            keyExtractor={(item) => item[0]} // Use the UUID as the key
-          />
+            <FlatList
+                data={Object.entries(data)}
+                renderItem={renderMealItem}
+                keyExtractor={(item) => item[0]} // Use the UUID as the key
+            />
+
         </Card>
-      </ScrollView>
       <CameraButton />
       </View>
   );
