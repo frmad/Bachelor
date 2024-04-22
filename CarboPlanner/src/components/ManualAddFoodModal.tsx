@@ -1,16 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import {LongInput, ShortInput} from '../components/TextInput';
 
 const windowWidth = Dimensions.get('window').width;
 
-const ManuallyAddModal = ({updateItem, modalVisible, closeModal}) => {
+const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, itemToDelete, saveItem, uuid}) => {
+    
     const [name, setName] = useState("");
     const [calories, setCalories] = useState(0);
     const [fat, setFat] = useState(0);
     const [protein, setProtein] = useState(0);
     const [carb, setCarb] = useState(0);
     const [weight, setWeight] = useState(0);
+    
+
+    useEffect(() => {
+        if (selectedItem) {
+            setName(selectedItem.name || "");
+            setCalories(String(selectedItem.calories) || "0");
+            setFat(String(selectedItem.fat) || "0");
+            setProtein(String(selectedItem.protein) || "0");
+            setCarb(String(selectedItem.carbs) || "0");
+            setWeight(String(selectedItem.weight) || "0");
+        }
+    }, [selectedItem]);
+    
 
     const onSave = () => {
         const newItem = {
@@ -20,12 +34,36 @@ const ManuallyAddModal = ({updateItem, modalVisible, closeModal}) => {
             protein: protein,
             carbs: carb,
             weight: weight,
+            confidence: 1
         };
+            
+            saveItem(newItem);
 
-        updateItem(newItem);
-
+    
         toggleModal();
     };
+
+    const onUpdate = () => {
+        const newItem = {
+            name: name,
+            calories: calories,
+            fat: fat,
+            protein: protein,
+            carbs: carb,
+            weight: weight,
+            confidence: 1
+        };
+            
+            updateItem(uuid,newItem);
+
+    
+        toggleModal();
+    };
+
+    const onDelete = () => {
+        itemToDelete(uuid)
+        toggleModal();
+    } 
 
     const toggleModal = () => {
         closeModal();
@@ -63,6 +101,7 @@ const ManuallyAddModal = ({updateItem, modalVisible, closeModal}) => {
         <View style={styles.container}>
             
             <Modal
+                key={selectedItem ? selectedItem.id : null}
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
@@ -76,7 +115,12 @@ const ManuallyAddModal = ({updateItem, modalVisible, closeModal}) => {
                                     <TouchableOpacity style={styles.topButton} onPress={toggleModal}>
                                         <Text style={styles.textButton}>{"<"}</Text>
                                     </TouchableOpacity>
-                                    <Text style={{textAlign:"center", marginBottom:5, fontSize: 20, fontWeight: "bold"}}>Manually add food</Text>
+                                    { selectedItem ? (
+                                        <Text style={{textAlign:"center", marginBottom:5, fontSize: 20, fontWeight: "bold"}}>Change food item</Text>
+                                    ) : (
+                                    <Text style={{textAlign:"center", marginBottom:5, fontSize: 20, fontWeight: "bold"}}>Insert food item</Text>
+                                    )
+                                    }
                                     <TouchableOpacity style={[styles.topButton, {backgroundColor: "grey"}]}>
                                         <Text style={styles.textButton}>{"i"}</Text>
                                     </TouchableOpacity>
@@ -86,6 +130,7 @@ const ManuallyAddModal = ({updateItem, modalVisible, closeModal}) => {
                                         label="Name"
                                         onChange={onChangeName}
                                         affix=""
+                                        value={name}
                                     />
                                 </View>
                                 <View style={styles.bigWrapper}>
@@ -93,6 +138,7 @@ const ManuallyAddModal = ({updateItem, modalVisible, closeModal}) => {
                                     label="Weight"
                                     keyboard="numeric"
                                     onChange={onChangeWeight}
+                                    value={weight}
                                     affix="| g"
                                     />
                                 </View>
@@ -102,6 +148,7 @@ const ManuallyAddModal = ({updateItem, modalVisible, closeModal}) => {
                                     label="Calories"
                                     keyboard="numeric"
                                     onChange={onChangeCalories}
+                                    value={calories}
                                     affix="| kcal"
                                     />
                                 </View>
@@ -111,24 +158,40 @@ const ManuallyAddModal = ({updateItem, modalVisible, closeModal}) => {
                                     label="Carb"
                                     keyboard="numeric"
                                     onChangeText={onChangeCarb}
+                                    value={carb}
                                     affix="| g"
                                     />
                                     <ShortInput
                                     label="Protein"
                                     keyboard="numeric"
                                     onChangeText={onChangeProtein}
+                                    value={protein}
                                     affix="| g"
                                     />
                                     <ShortInput
                                     label="Fat"
                                     keyboard="numeric"
                                     onChangeText={onChangeFat}
+                                    value={fat}
                                     affix="| g"
                                     />
                                 </View>
-                                <TouchableOpacity style={styles.addFoodButton} onPress={onSave}>
-                                    <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Save</Text>
-                                </TouchableOpacity>
+                                { selectedItem ? (
+                                        <View style={{flexDirection: 'row', justifyContent: 'space-around', width: "100%"}}>
+                                            <TouchableOpacity style={[styles.deleteFoodButton, {width:"35%"}]} onPress={onDelete}>
+                                            <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Delete</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity style={[styles.addFoodButton, {width: "35%"}]} onPress={onUpdate}>
+                                            <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Save</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    ) : (
+                                        <TouchableOpacity style={styles.addFoodButton} onPress={onSave}>
+                                        <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Save</Text>
+                                        </TouchableOpacity>
+                                    )
+                                    }
+                                
                         </TouchableOpacity>
                         </TouchableOpacity>
             </Modal>
@@ -180,6 +243,14 @@ const styles = StyleSheet.create({
     },
     addFoodButton: {
         backgroundColor: '#65CB2E',
+        paddingVertical: 5,
+        paddingHorizontal: 25,
+        borderRadius: 50,
+        marginBottom: 1,
+        width: "50%"
+    },
+    deleteFoodButton: {
+        backgroundColor: 'red',
         paddingVertical: 5,
         paddingHorizontal: 25,
         borderRadius: 50,

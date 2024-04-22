@@ -1,10 +1,7 @@
 import {db} from "./databaseConfig"
 import { setDoc, doc, getDoc, updateDoc, deleteField } from 'firebase/firestore';
 
-
-let today = new Date();
-
- 
+  let today = new Date();
 
   let date = today.getDate() + "-"+ parseInt(today.getMonth()+1) +"-"+today.getFullYear()
   const mainDocRef = doc(db, process.env.EXPO_PUBLIC_UUID, date);
@@ -52,7 +49,7 @@ const deleteMeal = async (uuidKey) => {
   const exsistingData = docSnapshot.data().data;
 
   const updateData = {...exsistingData}
-  delete meal[uuidKey]
+  delete updateData[uuidKey]
 
   //uopdate document with updated dat
   await updateDoc(mainDocRef, {

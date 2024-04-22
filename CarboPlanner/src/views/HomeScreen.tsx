@@ -25,6 +25,7 @@ export default function HomeScreen(){
   function goToCalendar() {
     navigation.navigate('Calendar');
   } 
+  
   const [data, setData] = useState([])
 
   useEffect(() => {
@@ -37,9 +38,6 @@ export default function HomeScreen(){
         }
     });
 }, []);
-
-  
-
 
     interface mealItems{
       name: String
@@ -66,8 +64,9 @@ export default function HomeScreen(){
       return (
         <List key={uuidKey} name={meal.name} imageURI={meal.icon} uuidKey={uuidKey}>
           <HorizontalLine />
-          {mealsArray.map((mealData, index) => {
-            const [mealUuid, mealInfo] = Object.entries(mealData)[0]; // Extract the UUID and meal info
+          {Object.values(mealsArray).map((mealInfo, index) => {
+            // Extract the UUID from the mealInfo object
+            const mealUuid = Object.keys(mealsArray)[index]; 
             return (
               <ListItem
                 key={`${uuidKey}_${index}`} // Ensure each item has a unique key
@@ -83,6 +82,7 @@ export default function HomeScreen(){
         </List>
       );
     };
+
     
     
     
@@ -120,7 +120,6 @@ export default function HomeScreen(){
             />
 
         </Card>
-
       <CameraButton />
       </View>
   );
