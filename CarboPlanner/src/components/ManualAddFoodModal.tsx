@@ -51,7 +51,6 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
             confidence: 1
         };
             updateItem(uuid,newItem);
-            console.log(newItem)
             toggleModal();  
     };
 
