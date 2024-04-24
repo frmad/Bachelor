@@ -2,15 +2,14 @@ import {Text, SafeAreaView, TouchableOpacity, View, Image, StyleSheet} from "rea
 import Card from "../components/Card";
 import { useNavigation } from "@react-navigation/native";
 import React, {useEffect, useState} from "react";
-import {getCategory} from "../components/MealType";
-import {getMacros} from "../components/Macros";
+import {getCategory} from "../utils/MealType";
+import {getMacros} from "../utils/Macros";
 import {TextInput} from "react-native-paper";
 import AddOptionModal from "../components/AddOptionModal";
 import { FlatList } from "react-native-gesture-handler";
 import HorizontalLine from '../components/HorizontalLine';
 import { saveData, edit, mainDocRef, deleteMeal } from "../utils/Database/DatabaseActions";
 import SaveConfirmationModal from "../components/SaveConfirmationModal";
-import { createData, edit, mainDocRef } from "../utils/Database/DatabaseActions";
 import uuid from 'react-native-uuid';
 import ImageCarousel from "../components/ImageCarousel";;
 import { Images } from "../utils/images";
@@ -43,7 +42,6 @@ export default function Result({route}) {
     const image: any = "data:image/png;base64," + base64;
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
-
 
     const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -88,11 +86,11 @@ export default function Result({route}) {
     }, [selectedItem,selectedUuid]);
 
     const openModal = () => {
-      setIsModalVisible(true);
+      setIsResultModalVisible(true);
     };
   
     const closeModal = () => {
-        setIsModalVisible(false);
+        setIsResultModalVisible(false);
         setSelectedItem(null);
     };
 
@@ -137,7 +135,7 @@ export default function Result({route}) {
     
 
 
-      const [isModalVisible, setIsModalVisible] = useState(false);
+      const [isResultModalVisible, setIsResultModalVisible] = useState(false);
       
             //check for uuid prop, if found uuidKey variable points to the prop
       const uuidKey = route.params.uuidKey || String(uuid.v4());
@@ -192,21 +190,20 @@ export default function Result({route}) {
       setIsModalVisible(!isModalVisible); // Show the confirmation modal
     };
 
- const deleteItem = (itemToDeleteKey) => {
-    const updatedItems = { ...items };
+    const deleteItem = (itemToDeleteKey) => {
+        const updatedItems = { ...items };
 
-    // Check if the item to delete exists in the items object
-    if (updatedItems.hasOwnProperty(itemToDeleteKey)) {
-        // Use the JavaScript delete operator to remove the item
-        delete updatedItems[itemToDeleteKey];
-        // Set the updated items object using setItem
-        setItem(updatedItems);
-    } else {
-        console.error('Item to delete does not exist');
-    }
-};
+        // Check if the item to delete exists in the items object
+        if (updatedItems.hasOwnProperty(itemToDeleteKey)) {
+            // Use the JavaScript delete operator to remove the item
+            delete updatedItems[itemToDeleteKey];
+            // Set the updated items object using setItem
+            setItem(updatedItems);
+        } else {
+            console.error('Item to delete does not exist');
+            }
+    };
 
-    
 
     const handleFoodItemPress = (item, uuid) => {    
         setSelectedItem(item); // Set the selected meal item when it's pressed
@@ -215,12 +212,13 @@ export default function Result({route}) {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-                <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
                     {route.params.uuidKey ? (
                     <View></View>
                     ):(
-                        <ImageCarousel images={allImages} />
+                        <View style={{height:"35%", marginTop:"-6%"}}>
+                        <ImageCarousel images={allImages}/>
+                        </View>
                     )}
                     <Card>
                         <View>
@@ -299,7 +297,7 @@ export default function Result({route}) {
                             <Text style={styles.cardTitleText}>Precision</Text>
                         </View>
                         <FlatList
-                            style={{ height: "23%", marginTop: 0, marginBottom: 0 }}
+                            style={{ maxHeight: "40%", marginTop: 0, marginBottom: 0 }}
                             data={uuids} // Use uuids array instead of items
                             renderItem={({ item }) => food(item)} // Pass the UUID key to the food function
                         />
@@ -319,9 +317,8 @@ export default function Result({route}) {
                         <TouchableOpacity onPress={() => {navigation.navigate("Home")}} style={styles.cancelButton}>
                             <Text style={styles.cancelButtonText}>Cancel</Text>
                         </TouchableOpacity>
-                        <ManuallyAdd updateItem={updateItem} saveItem={saveItem} selectedItem={selectedItem} modalVisible={isModalVisible} closeModal={closeModal} itemToDelete={deleteItem} uuid={selectedUuid}/>
+                        <ManuallyAdd updateItem={updateItem} saveItem={saveItem} selectedItem={selectedItem} modalVisible={isResultModalVisible} closeModal={closeModal} itemToDelete={deleteItem} uuid={selectedUuid}/>
                     </View>
-                </View>
         </SafeAreaView>
     );
 }
@@ -352,6 +349,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 5,
         elevation: 5, // for Android elevation
+        flex: 1
     },
     macros: {
         display: 'flex',
@@ -401,7 +399,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: '10%',
         justifyContent: "center",
         borderRadius: 50,
-        marginTop: 10,
+        marginTop: "8%",
     },
     saveButtonText: {
         color: 'white',
@@ -412,6 +410,7 @@ const styles = StyleSheet.create({
     cancelButton: {
         width: "auto",
         justifyContent: "center",
+        marginBottom: "5%"
     },
     cancelButtonText: {
         color: '#575757',

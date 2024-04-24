@@ -118,7 +118,7 @@ export default function CalendarComponent() {
                 />
             </View>
             <View style={{ marginTop: 20 }}>
-                <Text style={{ textAlign: 'center', fontFamily: 'Inter', color: "#45505B" }}>
+                <Text style={{ textAlign: 'center', color: "#45505B" }}>
                     <Text style={{ fontWeight: 'bold' }}>Agenda for {formattedDate}: </Text>
                     {agenda ? (
                         `Carbs: ${agenda.carbs}, Protein: ${agenda.protein}, Fat: ${agenda.fat}`
