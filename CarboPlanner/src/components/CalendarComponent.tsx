@@ -8,7 +8,7 @@ import { ScrollView } from 'react-native';
 import List from "./List";
 import HorizontalLine from "./HorizontalLine";
 import ListItem from "./ListItem";
-
+import GetData from "./getData";
 
 const getCurrentDate = () => {
     const now = new Date();
@@ -94,13 +94,16 @@ export default function CalendarComponent() {
      If the selected date changes, the state will be updated.
      */
     const [agenda, setAgenda] = useState(mealData[selectedDate.toISOString().split('T')[0]]);
-
+    const [selectedDateFormatted, setdate] = useState();
     const onSelectDate = (date) => {
         setSelectedDate(date);
         /* retrieves the meal data from mealData using the selected date
         then sets the agenda to this retrieved meal data
          */
         setAgenda(mealData[date.toISOString().split('T')[0]]);
+        console.log(selectedDate)
+        setdate(`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`)
+    console.log(selectedDateFormatted)
     };
 
     const formattedDate = selectedDate.toISOString().split('T')[0]; // Used for text
@@ -136,37 +139,7 @@ export default function CalendarComponent() {
                     marginVertical:10,
                     height: 100 }}>
                     <View style={styles.container}>
-                        <Card>
-                            <View style={styles.row}>
-                                <CircularSlider value={agenda.calories} max={2000}/>
-                            </View>
-                            <View style={styles.row}>
-                                <MacroProgressBar name={"Carbs"} value={agenda.carbs} max={300} />
-                                <MacroProgressBar name={"Protein"} value={agenda.protein} max={280} />
-                                <MacroProgressBar name={"Fat"} value={agenda.fat} max={280} />
-                            </View>
-                        </Card>
-
-                        <Card >
-                            {data.map((meals, index) => {
-                                return (
-                                    <List name={meals.name} imageURI={meals.icon}>
-                                        <HorizontalLine />
-
-                                        {data[index].meals.map((items) => {
-                                            return (
-                                                <ListItem weight={items.weight}
-                                                          name={items.name}
-                                                          calories={items.calories}
-                                                          protein={items.protein}
-                                                          carbs={items.carbs}
-                                                          fat={items.fat} />
-                                            );
-                                        })}
-                                    </List>
-                                )
-                            })}
-                        </Card>
+                        <GetData selectedDate={selectedDateFormatted} />
                     </View>
                 </ScrollView>
             )}

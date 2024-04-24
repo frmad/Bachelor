@@ -14,7 +14,6 @@ import { onSnapshot } from 'firebase/firestore';
 import { mainDocRef } from '../utils/Database/DatabaseActions';
 
 
-
 export default function HomeScreen(){
   const navigation = useNavigation();
 
@@ -24,14 +23,17 @@ export default function HomeScreen(){
 
   function goToCalendar() {
     navigation.navigate('Calendar');
-  } 
-  
+  }
+
   const [data, setData] = useState([])
 
   useEffect(() => {
     const unsubscribe = onSnapshot(mainDocRef, (snapshot) => {
         if (snapshot.exists()) {
+            console.log(mainDocRef)
+            console.log(snapshot)
             const fetchedData = snapshot.data().data;
+            console.log(fetchedData)
             setData(fetchedData);
         } else {
           setData([]);
@@ -45,28 +47,32 @@ export default function HomeScreen(){
       calories: String
       protein: String
       fat: String
-  
+
     }
-  
+
     interface Meal{
       name: String
       meals: mealItems[]
       icon: String
     }
 
-    const renderMealItem = ({ item }) => {
-      // deconstruct item into its key value pair 
-      const [uuidKey, meal] = item; 
+    const [p, setP] = useState(0);
+    const [f, setF] = useState(0);
+    const [c, setC] = useState(0);
 
-    
+
+    const renderMealItem = ({ item }) => {
+      // deconstruct item into its key value pair
+      const [uuidKey, meal] = item;
+
       const mealsArray = meal.meals // Access the meals array from the UUID object
-    
+
       return (
         <List key={uuidKey} name={meal.name} imageURI={meal.icon} uuidKey={uuidKey}>
           <HorizontalLine />
           {Object.values(mealsArray).map((mealInfo, index) => {
             // Extract the UUID from the mealInfo object
-            const mealUuid = Object.keys(mealsArray)[index]; 
+            const mealUuid = Object.keys(mealsArray)[index];
             return (
               <ListItem
                 key={`${uuidKey}_${index}`} // Ensure each item has a unique key
@@ -99,11 +105,11 @@ export default function HomeScreen(){
           <CircularSlider value={1200} max={2000}/>
         </View>
         <View style={styles.row}>
-            <MacroProgressBar name={"Carbs"} value={0.5} max={210} />
-          
-            <MacroProgressBar name={"Protein"} value={1} max={180} />
-          
-            <MacroProgressBar name={"Fat"} value={0.2} max={200} />
+            <MacroProgressBar name={"Carbs"} value={c} max={210} />
+
+            <MacroProgressBar name={"Protein"} value={p} max={180} />
+
+            <MacroProgressBar name={"Fat"} value={f} max={200} />
         </View>
       </Card>
         <Card customStyle={{maxHeight: "42%"}}>
