@@ -6,33 +6,33 @@ import MacroProgressBar from './MacroProgressBar';
 import List from './List';
 import HorizontalLine from './HorizontalLine';
 import ListItem from './ListItem';
-import {doc, getDoc, onSnapshot} from 'firebase/firestore';
-import { mainDocRef } from '../utils/Database/DatabaseActions';
-import {query} from "@react-native-firebase/database/lib/modular/query";
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../utils/Database/databaseConfig';
 
 const GetData = ({ selectedDate }) => {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState({});
+
+    const calenderDocRef = doc(db, process.env.EXPO_PUBLIC_UUID, selectedDate)
 
     useEffect(() => {
-        const unsubscribe = onSnapshot(mainDocRef, (snapshot) => {
+        console.log("hello")
+        const unsubscribe = onSnapshot(calenderDocRef, (snapshot) => {
             if (snapshot.exists()) {
-                console.log(mainDocRef)
-
-                console.log(snapshot)
                 const fetchedData = snapshot.data().data;
                 console.log(fetchedData)
                 setData(fetchedData);
             } else {
-                setData([]);
+              setData([]);
             }
         });
-    }, []);
+    }, [selectedDate]);
+
 
     const renderMealItem = ({ item }) => {
         const [uuidKey, meal] = item;
         const mealsArray = meal.meals;
 
-        return (
+        return(
             <List key={uuidKey} name={meal.name} imageURI={meal.icon} uuidKey={uuidKey}>
                 <HorizontalLine />
                 {Object.values(mealsArray).map((mealInfo, index) => (
@@ -47,30 +47,36 @@ const GetData = ({ selectedDate }) => {
                     />
                 ))}
             </List>
-        );
+        )
     };
 
     return (
-        <View style={styles.container}>
-            {/* Your UI components here */}
-            <Card>
-                <View style={styles.row}>
-                    <CircularSlider value={1200} max={2000} />
-                </View>
-                <View style={styles.row}>
-                    <MacroProgressBar name={"Carbs"} value={0.5} max={210} />
-                    <MacroProgressBar name={"Protein"} value={1} max={180} />
-                    <MacroProgressBar name={"Fat"} value={0.2} max={200} />
-                </View>
-            </Card>
-            <Card customStyle={{ maxHeight: "42%" }}>
-                <FlatList
-                    data={Object.entries(data)}
-                    renderItem={renderMealItem}
-                    keyExtractor={(item) => item[0]} // Use the UUID as the key
-                />
-            </Card>
+
+            <View style={styles.container}>
+                { Object.keys(data).length > 0  ? (
+            <><Card customStyle={{maxHeight:"100%"}}>
+                    <View style={styles.row}>
+                        <CircularSlider value={1200} max={2000} />
+                    </View>
+                    <View style={styles.row}>
+                        <MacroProgressBar name={"Carbs"} value={0.5} max={210} />
+                        <MacroProgressBar name={"Protein"} value={1} max={180} />
+                        <MacroProgressBar name={"Fat"} value={0.2} max={200} />
+                    </View>
+                </Card><Card customStyle={{maxHeight:"100%"}}>
+                        <FlatList
+                            data={Object.entries(data)}
+                            renderItem={renderMealItem}
+                            keyExtractor={(item) => item[0]} // Use the UUID as the key
+                        />
+                    </Card></>
+                ) : (
+                    <View style={styles.center}>
+                    <Text>No data found for this date</Text>
+                    </View>
+            )}
         </View>
+        
     );
 }
 
@@ -83,11 +89,13 @@ const styles = StyleSheet.create({
         height: '100%',
         paddingHorizontal: 5,
         paddingTop: 40,
+        justifyContent: "center"
     },
     center: {
         flex: 1,
-        alignContent: "center",
-        justifyContent: "space-around",
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: '-18%'
     },
     row: {
         flexDirection: "row",

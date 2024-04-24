@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     },
     goBackButton: {
         marginRight: 0,
+        width: 40,
     },
     goBackText: {
         color: "#45505B",
