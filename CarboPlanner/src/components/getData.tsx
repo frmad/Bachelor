@@ -12,20 +12,33 @@ import { db } from '../utils/Database/databaseConfig';
 const GetData = ({ selectedDate }) => {
     const [data, setData] = useState({});
 
+    /*
+    doc: create a reference to a specific document in the Firestore database
+    db: reference to the Firestore database instance
+    EXPO_PUBLIC_UUID: used as a part of the path
+    selectedDate: the date we want to retrieve data for from the Firestore database (part of the path to the specific document).
+     */
     const calenderDocRef = doc(db, process.env.EXPO_PUBLIC_UUID, selectedDate)
 
     useEffect(() => {
         console.log("hello")
+        /*
+        onSnapshot: listens for changes to the Firestore document referenced by calenderDocRef - a change in the document, onSnapshot is executed
+        If the document exist - it extracts the data from the snapshot using snapshot.data()
+        If the snapshot/dokument doesn't exist, it sets the data state to an empty array - setData([]).
+        unsubscribe - prevent unnecessary data fetching
+        */
         const unsubscribe = onSnapshot(calenderDocRef, (snapshot) => {
             if (snapshot.exists()) {
                 const fetchedData = snapshot.data().data;
                 console.log(fetchedData)
+                //sets the data variable to the data fetched from the database
                 setData(fetchedData);
             } else {
               setData([]);
             }
         });
-    }, [selectedDate]);
+    }, [selectedDate]); // Run the effect whenever selectedDate changes
 
 
     const renderMealItem = ({ item }) => {
