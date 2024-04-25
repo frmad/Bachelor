@@ -2,8 +2,53 @@ import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LoadingIcon from "./LoadingIcon";
+import { Density, getReferencePoint, getVolume, getWeight } from '../components/WeightEstimation';
 
 export default function Loading({route}) {
+
+
+
+    const generateWeight = (data: [any]) => {
+      interface SizeValues {
+        width: Number,
+        height: Number, 
+      };
+
+      let listOfItems = new Map<string, SizeValues>;
+
+      data.map((element, index) => {
+        if(!listOfItems.has(element["name"]+"-top")){
+          listOfItems.set(element["name"]+"-top", {width: element["width"], height: element["height"]});
+          return;
+        }
+        if(!listOfItems.has(element["name"]+"-side")){
+          listOfItems.set(element["name"]+"-side", {width: element["width"], height: element["height"]});
+          return;
+        }
+      });
+
+      console.log("Image" + listOfItems.get("laptop-top").height.toString);
+      return 0;
+    }
+
+    const data = [
+      {"class": 0, "name": "Chicken Breast", "x": 0, "y": 0, "width": 42.54, "height": 77.12,  "confidence": 0},
+      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 21.27, "height": 37.06,  "confidence": 0},
+      {"class": 0, "name": "Chicken Breast", "x": 0,  "y": 0,  "width": 42.54, "height": 60.12, "confidence": 0},
+      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 21.27, "height": 37.06,  "confidence": 0},
+    ];
+
+    const reference = getReferencePoint(data[1]["width"], data[1]["height"]); // cm^2
+    console.log(reference + " cm^2");
+
+    const volume = getVolume(data[0]["width"], data[0]["height"], data[2]["height"], reference); //cm^3
+    const weight = getWeight(volume, Density.Chicken_Breast); // grams
+
+    console.log("Volume of " + data[0]["name"] + ": " +  volume);
+
+    console.log(weight + " g");
+
+
     const funFacts = [
         "An avocado contains more potassium than a banana!",
         "Broccoli is high in fiber and vitamin C, and low in calories!",
@@ -54,6 +99,9 @@ export default function Loading({route}) {
         })
         .then(function(data) {
           // The JSON data from the WebServer is returned here
+
+            //generateWeight(data);
+
             navigation.navigate('Result', {base64: firstImageBase64, data: data, allImages: allImagesBase64});
         
 
