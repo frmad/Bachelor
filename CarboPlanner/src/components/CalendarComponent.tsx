@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { ScrollView } from 'react-native';
-import GetData from "./getData"
-
+import GetData from "./GetData"
 
 const getCurrentDate = () => {
     const now = new Date();
-    return (`${now.getDate().toString().padStart(2, '0')}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getFullYear()}`);
+    return `${now.getDate().toString().padStart(2, '0')}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getFullYear()}`;
 };
 
 export default function CalendarComponent() {
@@ -16,60 +15,56 @@ export default function CalendarComponent() {
 
     const onSelectDate = (date) => {
         setSelectedDate(`${date.day.toString().padStart(2, '0')}-${(date.month).toString().padStart(2, '0')}-${date.year}`);
-        /* retrieves the meal data from mealData using the selected date
-        then sets the agenda to this retrieved meal data
-         */
         setMarkedDates(date.dateString);
-        
     };
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.container}>
             <View style={styles.calendarContainer}>
                 <Calendar
-                    onDayPress={(day) => {onSelectDate(day)}}
+                    onDayPress={onSelectDate}
                     markedDates={{ [markedDates]: { selected: true, selectedColor: '#65CB2E' }}}
                     theme={{
                         arrowColor: '#65CB2E',
                         todayTextColor: '#65CB2E',
                     }}
                 />
-            </View>
-            <View style={{ marginTop: 20 }}>
-                <Text style={{ textAlign: 'center', color: "#45505B" }}>
-                    <Text style={{ fontWeight: 'bold' }}>Agenda for {selectedDate}: </Text>
-                </Text>
-            </View>
-
-            {/* Meal stats */}
-            {/* Shown if there is any meal data */}
-                <ScrollView style={{
-                    paddingVertical: 10,
-                    marginVertical:10,
-                    height: 100 }}>
-                    <View style={styles.container}>
-                        {<GetData selectedDate={selectedDate} />}
-                    </View>
+                <View style={styles.agendaHeader}>
+                    <Text style={styles.agendaHeaderText}>
+                        {selectedDate}
+                    </Text>
+                </View>
+                <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                    <GetData selectedDate={selectedDate} />
                 </ScrollView>
-            
+            </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    row: {
-        flexDirection: "row",
-        justifyContent: "space-around",
-    },
     container: {
         flex: 1,
-        flexDirection: "column",
-        gap: 10,
-        height: '100%',
+        backgroundColor: '#EBEBEB',
     },
     calendarContainer: {
+        flex: 1,
         margin: 10,
         borderRadius: 20,
         overflow: 'hidden',
-    }
+        backgroundColor: 'white',
+    },
+    agendaHeader: {
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    agendaHeaderText: {
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: "#45505B",
+        marginBottom: 7,
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+    },
 });

@@ -21,11 +21,10 @@ const GetData = ({ selectedDate }) => {
     const calenderDocRef = doc(db, process.env.EXPO_PUBLIC_UUID, selectedDate)
 
     useEffect(() => {
-        console.log("hello")
         /*
         onSnapshot: listens for changes to the Firestore document referenced by calenderDocRef - a change in the document, onSnapshot is executed
         If the document exist - it extracts the data from the snapshot using snapshot.data()
-        If the snapshot/dokument doesn't exist, it sets the data state to an empty array - setData([]).
+        If the snapshot/document doesn't exist, it sets the data state to an empty array - setData([]).
         unsubscribe - prevent unnecessary data fetching
         */
         const unsubscribe = onSnapshot(calenderDocRef, (snapshot) => {
@@ -67,16 +66,18 @@ const GetData = ({ selectedDate }) => {
 
             <View style={styles.container}>
                 { Object.keys(data).length > 0  ? (
-            <><Card customStyle={{maxHeight:"100%"}}>
-                    <View style={styles.row}>
-                        <CircularSlider value={1200} max={2000} />
-                    </View>
-                    <View style={styles.row}>
-                        <MacroProgressBar name={"Carbs"} value={0.5} max={210} />
-                        <MacroProgressBar name={"Protein"} value={1} max={180} />
-                        <MacroProgressBar name={"Fat"} value={0.2} max={200} />
-                    </View>
-                </Card><Card customStyle={{maxHeight:"100%"}}>
+            <>
+                <Card customStyle={{maxHeight:"100%", ...styles.card}}>
+                <View style={styles.row}>
+                    <CircularSlider value={1200} max={2000} />
+                </View>
+                <View style={styles.row}>
+                    <MacroProgressBar name={"Carbs"} value={100} max={210} />
+                    <MacroProgressBar name={"Protein"} value={100} max={180} />
+                    <MacroProgressBar name={"Fat"} value={200} max={200} />
+                </View>
+                </Card>
+                <Card customStyle={{maxHeight:"100%", ...styles.cardItems}}>
                         <FlatList
                             data={Object.entries(data)}
                             renderItem={renderMealItem}
@@ -101,14 +102,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#EBEBEB',
         height: '100%',
         paddingHorizontal: 5,
-        paddingTop: 40,
+        paddingTop: 0,
         justifyContent: "center"
     },
     center: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: '-18%'
+        marginTop: '-18%',
+        marginBottom: 5,
     },
     row: {
         flexDirection: "row",
@@ -129,18 +131,31 @@ const styles = StyleSheet.create({
     calendarIconContainer: {
         backgroundColor: '#65CB2E',
         width: 40,
-        height: 40,
+        height: 50,
         padding: 5,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 40,
+        borderRadius: 0,
         marginLeft: 20,
         marginTop: 10,
     },
     calendarIcon: {
         width: '100%',
         height: '100%',
-    }
+    },
+    card: {
+        borderTopRightRadius: 0,
+        borderTopLeftRadius: 0,
+        borderBottomRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        marginHorizontal: -7,
+        backgroundColor: 'white',
+    },
+    cardItems: {
+        borderRadius: 20,
+        marginHorizontal: -7,
+        backgroundColor: 'white',
+    },
 });
 
 export default GetData;
