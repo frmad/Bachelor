@@ -29,10 +29,10 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
     const onSave = () => {
         const newItem = {
             name: name,
-            calories: calories/100*weight,
-            fat: fat/100*weight,
-            protein: protein/100*weight,
-            carbs: carb/100*weight,
+            calories: String(parseInt(calories) / 100 * parseInt(weight)),
+            fat: String(parseInt(fat) / 100 * parseInt(weight)),
+            protein: String(parseInt(protein) / 100 * parseInt(weight)),
+            carbs: String(parseInt(carb) / 100 * parseInt(weight)),
             weight: weight,
             confidence: 1
         };
@@ -43,11 +43,10 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
     const onUpdate = () => {
         const newItem = {
             name: name,
-            calories: calories/100*weight,
-            fat: fat/100*weight,
-            protein: protein/100*weight,
-            carbs: carb/100*weight,
-            weight: weight,
+            calories: String(parseInt(calories) / 100 * parseInt(weight)),
+            fat: String(parseInt(fat) / 100 * parseInt(weight)),
+            protein: String(parseInt(protein) / 100 * parseInt(weight)),
+            carbs: String(parseInt(carb) / 100 * parseInt(weight)),
             confidence: 1
         };
             updateItem(uuid,newItem);
