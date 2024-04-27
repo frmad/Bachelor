@@ -29,10 +29,10 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
     const onSave = () => {
         const newItem = {
             name: name,
-            calories: calories,
-            fat: fat,
-            protein: protein,
-            carbs: carb,
+            calories: calories/100*weight,
+            fat: fat/100*weight,
+            protein: protein/100*weight,
+            carbs: carb/100*weight,
             weight: weight,
             confidence: 1
         };
@@ -43,10 +43,10 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
     const onUpdate = () => {
         const newItem = {
             name: name,
-            calories: calories,
-            fat: fat,
-            protein: protein,
-            carbs: carb,
+            calories: calories/100*weight,
+            fat: fat/100*weight,
+            protein: protein/100*weight,
+            carbs: carb/100*weight,
             weight: weight,
             confidence: 1
         };
