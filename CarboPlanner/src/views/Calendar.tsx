@@ -10,8 +10,8 @@ export default function Calendar() {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => { navigation.navigate('Home'); }} style={styles.goBackButton}>
-                    <View style={styles.calendarIconContainer}>
-                        <Image source={require("../../assets/func-icon/arrow-go-back.png")} style={styles.calendarIcon} resizeMode="contain" />
+                    <View style={styles.iconContainer}>
+                        <Image source={require("../../assets/func-icon/left-arrow.png")} style={styles.icon} resizeMode="contain" />
                     </View>
                 </TouchableOpacity>
                 <View style={styles.headerTextView}>
@@ -40,7 +40,10 @@ const styles = StyleSheet.create({
     goBackButton: {
         marginRight: 0,
         width: 40,
-        height: 40
+        height: 40,
+        alignItems: "center",
+        justifyContent: "center",
+
     },
     headerText: {
         fontSize: 30,
@@ -56,14 +59,11 @@ const styles = StyleSheet.create({
         height: 3,
         backgroundColor: '#65CB2E',
     },
-    calendarIconContainer: {
-        width: 40,
-        height: 40,
-        paddingVertical: 3,
-        justifyContent: 'center',
-        alignItems: 'center',
+    iconContainer: {
+        width: 25,
+        height: 25,
     },
-    calendarIcon: {
+    icon: {
         width: '100%',
         height: '100%',
     }
