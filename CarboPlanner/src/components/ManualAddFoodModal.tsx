@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
+import { Image, View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import {LongInput, ShortInput} from '../components/TextInput';
 
 const windowWidth = Dimensions.get('window').width;
@@ -135,16 +135,16 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
                     <TouchableOpacity activeOpacity={1} style={styles.modalContent}>
                                 <View style={styles.macros}>
                                     <TouchableOpacity style={styles.topButton} onPress={toggleModal}>
-                                        <Text style={styles.textButton}>{"<"}</Text>
+                                        <Image source={require("../../assets/func-icon/left-arrow.png")} style={styles.icon} resizeMode="contain" />
                                     </TouchableOpacity>
                                     { selectedItem ? (
-                                        <Text style={{textAlign:"center", marginBottom:5, fontSize: 20, fontWeight: "bold"}}>Change food item</Text>
+                                        <Text style={{textAlign:"center", color: "#45505B", marginBottom:5, fontSize: 20, fontWeight: "bold"}}>Change food item</Text>
                                     ) : (
-                                    <Text style={{textAlign:"center", marginBottom:5, fontSize: 20, fontWeight: "bold"}}>Insert food item</Text>
+                                    <Text style={{textAlign:"center", color: "#45505B", marginBottom:5, fontSize: 23, fontWeight: "bold"}}>Insert food item</Text>
                                     )
                                     }
-                                    <TouchableOpacity style={[styles.topButton, {backgroundColor: "grey"}]}>
-                                        <Text style={styles.textButton}>{"i"}</Text>
+                                    <TouchableOpacity style={[styles.topButton, {backgroundColor: "#EBEBEB"}]}>
+                                        <Image source={require("../../assets/func-icon/info.png")} style={styles.icon} resizeMode="contain" />
                                     </TouchableOpacity>
                                 </View>
                                 <View style={styles.bigWrapper}>
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
         width: "50%"
     },
     deleteFoodButton: {
-        backgroundColor: 'red',
+        backgroundColor: '#F35353',
         paddingVertical: 5,
         paddingHorizontal: 25,
         borderRadius: 50,
@@ -281,13 +281,20 @@ const styles = StyleSheet.create({
     textButton: {
         fontSize: 25,
         fontWeight: "bold", 
-        textAlign: "center"
+        textAlign: "center",
+        color: "#45505B",
     },
     topButton: {
         borderRadius: 500, 
-        width: 40, 
-        alignContent: "center"
-    }
+        width: 40,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    icon: {
+        width: 25,
+        height: 25,
+    },
 });
 
 export default ManuallyAddModal;
