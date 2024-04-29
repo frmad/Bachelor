@@ -45,7 +45,7 @@ const GetData = ({ selectedDate }) => {
         const mealsArray = meal.meals;
 
         return(
-            <List key={uuidKey} name={meal.name} imageURI={meal.icon} uuidKey={uuidKey}>
+            <List key={uuidKey} name={meal.name} imageURI={meal.icon} uuidKey={uuidKey} showOptions={false}>
                 <HorizontalLine />
                 {Object.values(mealsArray).map((mealInfo, index) => (
                     <ListItem
@@ -90,7 +90,7 @@ const GetData = ({ selectedDate }) => {
                     </View>
             )}
         </View>
-        
+
     );
 }
 

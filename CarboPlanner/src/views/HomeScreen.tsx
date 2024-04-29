@@ -68,7 +68,7 @@ export default function HomeScreen(){
       const mealsArray = meal.meals // Access the meals array from the UUID object
 
       return (
-        <List key={uuidKey} name={meal.name} imageURI={meal.icon} uuidKey={uuidKey}>
+        <List key={uuidKey} name={meal.name} imageURI={meal.icon} uuidKey={uuidKey} showOptions={true}>
           <HorizontalLine />
           {Object.values(mealsArray).map((mealInfo, index) => {
             // Extract the UUID from the mealInfo object
