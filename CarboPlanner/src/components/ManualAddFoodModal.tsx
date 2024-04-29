@@ -4,7 +4,7 @@ import {LongInput, ShortInput} from '../components/TextInput';
 
 const windowWidth = Dimensions.get('window').width;
 
-const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, itemToDelete, saveItem, uuid}) => {
+const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, itemToDelete, saveItem, uuid, closeAddOptionModal}) => {
     
     const [name, setName] = useState("");
     const [calories, setCalories] = useState(0);
@@ -24,20 +24,48 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
             setWeight(String(selectedItem.weight) || "0");
         }
     }, [selectedItem]);
-    
+
+    const isInputEmpty = () => {
+        // Check if name is empty or any other field is "0"
+        if (
+            name.trim().length === 0 ||
+            calories === 0 ||
+            fat === 0 ||
+            protein === 0 ||
+            carb === 0 ||
+            weight === 0
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     const onSave = () => {
-        const newItem = {
-            name: name,
-            calories: calories,
-            fat: fat,
-            protein: protein,
-            carbs: carb,
-            weight: weight,
-            confidence: 1
-        };
-            saveItem(newItem);
-            toggleModal();
+        if (isInputEmpty()) {
+            // Display a message indicating that all fields must be filled
+            alert('Please fill in all input fields.');
+            return;
+        }
+        else {
+            const newItem = {
+                name: name.trim(),
+                calories,
+                fat,
+                protein,
+                carbs: carb,
+                weight,
+                confidence: 1
+            };
+
+            if (selectedItem) {
+                updateItem(uuid, newItem);
+            } else {
+                saveItem(newItem);
+            }
+            closeModal();
+            closeAddOptionModal();
+        }
     };
 
     const onUpdate = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-export default function HorizontalLine() {
+export default function VerticalLine() {
     return (
         <View style={styles.container} />
     );
