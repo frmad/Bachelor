@@ -31,7 +31,10 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Carousel>
+            <Carousel
+                pageIndicatorStyle={styles.pageIndicator}
+                activePageIndicatorStyle={styles.activePageIndicator}
+            >
                 {images.map((image, index) => renderPage(image, index))}
             </Carousel>
         </SafeAreaView>
@@ -44,6 +47,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         margin: 5
+    },
+    pageIndicator: {
+        backgroundColor: '#C4C4C4', // Color for inactive dots
+    },
+    activePageIndicator: {
+        backgroundColor: '#65CB2E', // Color for active dot
     },
     fullWidthSlide: {
         width: width,
@@ -70,7 +79,7 @@ const styles = StyleSheet.create({
         height: '50%',
         resizeMode: "cover",
         marginTop: 50,
-        borderRadius: 15 
+        borderRadius: 15
     },
     parentImage: {
         width: '42.5%',
