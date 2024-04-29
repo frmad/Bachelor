@@ -14,7 +14,6 @@ export default function List(props: any) {
 
     const body = <View>{props.children}</View>;
 
-
     return (
         <View>
             <TouchableOpacity onPress={handlePress}>
@@ -24,7 +23,7 @@ export default function List(props: any) {
                         <Text style={styles.bold}>{props.name}</Text>
                         <OptionButton uuidKey={props.uuidKey}/>
                     </View>
-                    {expanded ? <Image source={require("../../assets/func-icon/Accordion-Up-Switch.png")} style={styles.accordionLogo} /> : <Image source={require("../../assets/func-icon/Accordion-Down-Switch.png")} style={styles.accordionLogo} />}
+                    {expanded ? <Image source={require("../../assets/func-icon/up.png")} style={styles.accordionLogo} /> : <Image source={require("../../assets/func-icon/down.png")} style={styles.accordionLogo} />}
                 </View>
             </TouchableOpacity>
             <View style={styles.body}>
@@ -47,8 +46,8 @@ const styles = StyleSheet.create({
         height: 60,
     },
     accordionLogo: {
-        width: 40,
-        height: 40,
+        width: 55,
+        height: 55,
         alignSelf: "center",
         paddingRight: "2%",
     },
