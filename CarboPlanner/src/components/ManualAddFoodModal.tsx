@@ -201,15 +201,15 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
                                 { selectedItem ? (
                                         <View style={{flexDirection: 'row', justifyContent: 'space-around', width: "100%"}}>
                                             <TouchableOpacity style={[styles.deleteFoodButton, {width:"35%"}]} onPress={onDelete}>
-                                            <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Delete</Text>
+                                            <Text style={{fontSize: 20, textAlign: "center", color:"white", fontWeight: 600}}>Delete</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity style={[styles.addFoodButton, {width: "35%"}]} onPress={onUpdate}>
-                                            <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Save</Text>
+                                            <Text style={{fontSize: 20, textAlign: "center", color:"white", fontWeight: 600}}>Save</Text>
                                             </TouchableOpacity>
                                         </View>
                                     ) : (
                                         <TouchableOpacity style={styles.addFoodButton} onPress={onSave}>
-                                        <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Save</Text>
+                                        <Text style={{fontSize: 20, textAlign: "center", color:"white", fontWeight: 600}}>Save</Text>
                                         </TouchableOpacity>
                                     )
                                     }
