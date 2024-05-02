@@ -30,7 +30,6 @@ const GetData = ({ selectedDate }) => {
         const unsubscribe = onSnapshot(calenderDocRef, (snapshot) => {
             if (snapshot.exists()) {
                 const fetchedData = snapshot.data().data;
-                console.log(fetchedData)
                 //sets the data variable to the data fetched from the database
                 setData(fetchedData);
             } else {

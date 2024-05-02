@@ -30,10 +30,7 @@ export default function HomeScreen(){
   useEffect(() => {
     const unsubscribe = onSnapshot(mainDocRef, (snapshot) => {
         if (snapshot.exists()) {
-            console.log(mainDocRef)
-            console.log(snapshot)
             const fetchedData = snapshot.data().data;
-            console.log(fetchedData)
             setData(fetchedData);
         } else {
           setData([]);
