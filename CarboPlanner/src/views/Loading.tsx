@@ -16,9 +16,6 @@ export default function Loading({route}) {
       let listOfItems = new Map<string, number[]>;
       let listOfVolumes = new Map<string, number>;
 
-
-
-
       data.map((element, index) => {
         if(!listOfItems.has(element["name"]+"-top")){
           listOfItems.set(element["name"]+"-top", [element["height"], element["width"]]);
@@ -30,24 +27,37 @@ export default function Loading({route}) {
         }
       });
 
-      for (let [key, value] of listOfItems) {
-        const keySplit: string[] = key.split("-");
+        // Loop through each entry in the listOfItems map
+        for (let [key, value] of listOfItems) {
+            // Extract the item's name and view from the key
+            const [name, view] = key.split("-");
+            // Extract the item's height and width from the value
+            const [height, width] = value;
 
-        //Have top and side calculate the w x h x l, and return to the list of volumes
-
-      }
-
-      return listOfVolumes;
-
-      console.log("Image" + listOfItems.get("Chicken Breast-top"));
-      return 0;
+            // Calculate volume based on the views
+            if (view === "top") {
+                // Retrieve the width of the item from the side view
+                const sideWidth = listOfItems.get(name + "-side")[1];
+                console.log("Height:", height);
+                console.log("Width:", width);
+                console.log("Side Width:", sideWidth);
+                // Calculate the volume using height, width, and side width
+                const volume = height * width * sideWidth;
+                // Store the calculated volume in the listOfVolumes map
+                listOfVolumes.set(name, volume);
+                console.log(`Volume of ${name}:`, volume);
+            }
+        }
+        console.log("List of volumes:", listOfVolumes);
+        // Return the listOfVolumes map that contains the calculated volumes for all items
+        return listOfVolumes;
     }
 
     const data = [
-      {"class": 0, "name": "Chicken Breast", "x": 0, "y": 0, "width": 42.54, "height": 77.12,  "confidence": 0},
-      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 21.27, "height": 37.06,  "confidence": 0},
-      {"class": 0, "name": "Chicken Breast", "x": 0,  "y": 0,  "width": 42.54, "height": 60.12, "confidence": 0},
-      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 21.27, "height": 37.06,  "confidence": 0},
+      {"class": 0, "name": "Chicken Breast", "x": 0, "y": 0, "width": 42, "height": 77,  "confidence": 0},
+      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 21, "height": 37,  "confidence": 0},
+      {"class": 0, "name": "Chicken Breast", "x": 0,  "y": 0,  "width": 41, "height": 60, "confidence": 0},
+      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 22, "height": 38,  "confidence": 0},
     ];
 
 
