@@ -1,7 +1,7 @@
 
 export const Images = {
-    "dinner": require('./dinner_turkey.png'),
-    "lunch": require('./lunch_bag.png'),
-    "midday": require('./midday_lunch.png'),
-    "morning": require('./morning_breakfast.png')
+    "Dinner": require('./dinner_turkey.png'),
+    "Lunch": require('./lunch_bag.png'),
+    "Midday": require('./midday_lunch.png'),
+    "Breakfast": require('./morning_breakfast.png')
 }
