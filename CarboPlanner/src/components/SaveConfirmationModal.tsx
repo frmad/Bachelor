@@ -7,7 +7,7 @@ const SaveConfirmationModal = ({ isVisible }) => {
     const [isModalVisible, setIsModalVisible] = useState(isVisible);
     const navigation = useNavigation();
     function afterDelay(){
-        navigation.navigate('Home');
+        navigation.navigate('Tracking');
     }
 
     useEffect(() => {

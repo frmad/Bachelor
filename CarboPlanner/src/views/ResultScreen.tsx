@@ -30,7 +30,7 @@ export default function Result({route}) {
 
     const navigation = useNavigation();
 
-    navigation.goBack = () => navigation.navigate('Home');
+    navigation.goBack = () => navigation.navigate('Tracking');
 
     const  mealMacros = getMacros();
 
@@ -314,7 +314,7 @@ export default function Result({route}) {
                         <SaveConfirmationModal isVisible={isModalVisible} />
                       
                         <Text style={{marginBottom: 2.5, marginTop: 2.5, fontWeight: '300',}}>or</Text>
-                        <TouchableOpacity onPress={() => {navigation.navigate("Home")}} style={styles.cancelButton}>
+                        <TouchableOpacity onPress={() => {navigation.navigate("Tracking")}} style={styles.cancelButton}>
                             <Text style={styles.cancelButtonText}>Cancel</Text>
                         </TouchableOpacity>
                         <ManuallyAdd updateItem={updateItem} saveItem={saveItem} selectedItem={selectedItem} modalVisible={isResultModalVisible} closeModal={closeModal} itemToDelete={deleteItem} uuid={selectedUuid}/>

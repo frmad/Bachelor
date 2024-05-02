@@ -9,7 +9,7 @@ export default function Calendar() {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => { navigation.navigate('Home'); }} style={styles.goBackButton}>
+                <TouchableOpacity onPress={() => { navigation.navigate('Tracking'); }} style={styles.goBackButton}>
                     <View style={styles.iconContainer}>
                         <Image source={require("../../assets/func-icon/left-arrow.png")} style={styles.icon} resizeMode="contain" />
                     </View>
