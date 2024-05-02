@@ -25,7 +25,7 @@ export default function OptionButton(props: any) {
                 const buttonPositionY = pageY;
 
                 setModalPosition({
-                    top: buttonPositionY + 40,
+                    top: buttonPositionY - 1,
                     left: buttonPositionX - 1,
                 });
             });
