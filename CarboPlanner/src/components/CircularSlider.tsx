@@ -31,7 +31,7 @@ const CircularSlider = (props: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    
+    marginBottom: -30,
     },
 });
 
