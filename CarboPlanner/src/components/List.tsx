@@ -14,7 +14,6 @@ export default function List(props: any) {
 
     const body = <View>{props.children}</View>;
 
-
     const renderTitle = () => {
         return (
             <View style={styles.titleRow}>
@@ -33,7 +32,7 @@ export default function List(props: any) {
                     {/*If showOptions is true, it renders the option button along with the title*/}
                     {/*If it returns false only the title is rendered*/}
                     {renderTitle()}
-                    {expanded ? <Image source={require("../../assets/func-icon/Accordion-Up-Switch.png")} style={styles.accordionLogo} /> : <Image source={require("../../assets/func-icon/Accordion-Down-Switch.png")} style={styles.accordionLogo} />}
+                    {expanded ? <Image source={require("../../assets/func-icon/up.png")} style={styles.accordionLogo} /> : <Image source={require("../../assets/func-icon/down.png")} style={styles.accordionLogo} />}
                 </View>
             </TouchableOpacity>
             <View style={styles.body}>
@@ -56,8 +55,8 @@ const styles = StyleSheet.create({
         height: 60,
     },
     accordionLogo: {
-        width: 40,
-        height: 40,
+        width: 55,
+        height: 55,
         alignSelf: "center",
         paddingRight: "2%",
     },

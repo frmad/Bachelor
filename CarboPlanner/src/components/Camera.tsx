@@ -125,12 +125,16 @@ export default function Camera(props: any){
         <View style={styles.container}>
           <View style={styles.header}>
             <Pressable onPress={navigation.goBack} style={styles.button} >
-              <Text style={styles.goBackText}>{"<"}</Text>
+              <View style={styles.goBackButton}>
+                <Image source={require("../../assets/func-icon/arrow.png")} style={styles.icon} />
+              </View>
             </Pressable>
 
             <Pressable onPress={toggleFlashMode} style={styles.button} >
-              <Image source={flashLogo} style={{width: 32, height: 32}} />
-            </Pressable>
+                <View style={styles.flashButton}>
+                  <Image source={require("../../assets/func-icon/lightning-bolt.png")} style={{width: 28, height: 28}} />
+                </View>
+              </Pressable>
           </View>
 
           <View style={styles.cameraContainer}>
@@ -209,6 +213,26 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginBottom: 25,
   },
+  goBackButton: {
+    borderRadius: 50,
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: 'gray',
+    borderWidth: 1,
+    backgroundColor: 'white',
+  },
+  flashButton: {
+    borderRadius: 50,
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: 'gray',
+    borderWidth: 1,
+    backgroundColor: '#45505B',
+  },
   cameraContainer: {
     flexDirection: 'row',
     height: "68%",
@@ -258,5 +282,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 5,
   },
-
+  icon: {
+  },
 });
