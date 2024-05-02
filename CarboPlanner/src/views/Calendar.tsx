@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import CalendarComponent from '../components/CalendarComponent';
 import { useNavigation } from "@react-navigation/native";
 
@@ -10,7 +10,9 @@ export default function Calendar() {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => { navigation.navigate('Home'); }} style={styles.goBackButton}>
-                    <Text style={styles.goBackText}>{'<'}</Text>
+                    <View style={styles.iconContainer}>
+                        <Image source={require("../../assets/func-icon/left-arrow.png")} style={styles.icon} resizeMode="contain" />
+                    </View>
                 </TouchableOpacity>
                 <View style={styles.headerTextView}>
                     <Text style={styles.headerText}>Calendar</Text>
@@ -37,9 +39,11 @@ const styles = StyleSheet.create({
     },
     goBackButton: {
         marginRight: 0,
-    },
-    goBackText: {
-        color: "#45505B",
+        width: 40,
+        height: 40,
+        alignItems: "center",
+        justifyContent: "center",
+
     },
     headerText: {
         fontSize: 30,
@@ -48,9 +52,19 @@ const styles = StyleSheet.create({
     headerTextView: {
         flex: 1,
         alignItems: 'center',
+        paddingLeft: -50,
+        marginLeft: -50,
     },
     greenLine: {
         height: 3,
         backgroundColor: '#65CB2E',
     },
+    iconContainer: {
+        width: 25,
+        height: 25,
+    },
+    icon: {
+        width: '100%',
+        height: '100%',
+    }
 });
