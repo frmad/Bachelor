@@ -126,7 +126,7 @@ export default function Camera(props: any){
           <View style={styles.header}>
             <Pressable onPress={navigation.goBack} style={styles.button} >
               <View style={styles.goBackButton}>
-                <Image source={require("../../assets/func-icon/arrow.png")} style={styles.icon} />
+                <Image source={require("../../assets/func-icon/arrow.png")} style={{width: 37, height: 37}} />
               </View>
             </Pressable>
 
@@ -225,12 +225,10 @@ const styles = StyleSheet.create({
   },
   flashButton: {
     borderRadius: 50,
-    width: 30,
-    height: 30,
+    width: 31,
+    height: 31,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: 'gray',
-    borderWidth: 1,
     backgroundColor: '#45505B',
   },
   cameraContainer: {
@@ -281,7 +279,5 @@ const styles = StyleSheet.create({
     height: 40,
     marginRight: 10,
     borderRadius: 5,
-  },
-  icon: {
   },
 });
