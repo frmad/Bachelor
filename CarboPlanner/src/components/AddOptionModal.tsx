@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions, Pressable, Image} from 'react-native';
 import ManuallyAdd from "./ManualAddFoodModal";
+import VerticalLine from './VerticalLine';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -15,6 +16,10 @@ const AddOptionModal = ({saveItem}) => {
   
     const closeModal = () => {
       setIsModalVisible(false);
+    };
+
+    const closeAddOptionModal = () => {
+        setIsVisible(false);
     };
 
     const toggleModal = () => {
@@ -49,13 +54,15 @@ const AddOptionModal = ({saveItem}) => {
                         <View style={styles.optionContainer}>
                             <Text style={styles.optionText}>Manually add food</Text>
                             <TouchableOpacity style={styles.option} onPress={openModal}>
-                                {/*add icon*/}
+                                <Image source={require("../../assets/func-icon/plus.png")} style={styles.icon} resizeMode="contain" />
                             </TouchableOpacity>
-                            <ManuallyAdd saveItem={saveItem} modalVisible={isModalVisible} closeModal={closeModal} selectedItem={undefined} updateItem={undefined} itemToDelete={undefined} uuid={undefined}/>
+                            <ManuallyAdd saveItem={saveItem} modalVisible={isModalVisible} closeModal={closeModal} selectedItem={undefined} updateItem={undefined} itemToDelete={undefined} uuid={undefined} closeAddOptionModal={closeAddOptionModal} />
                         </View>
+                        <VerticalLine/>
                         <View style={styles.optionContainer}>
-                            <Text style={styles.optionText}>Camera upload</Text>
+                            <Text style={styles.optionText}>Upload from Camera</Text>
                             <TouchableOpacity style={styles.option} onPress={toggleModal}>
+                                <Image source={require("../../assets/icons/camera.png")} style={styles.icon} resizeMode="contain" />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -83,7 +90,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: 370,
+        width: '55%',
         padding: 20,
         borderRadius: 10,
         elevation: 5,
@@ -116,21 +123,23 @@ const styles = StyleSheet.create({
     option: {
         backgroundColor: '#65CB2E',
         width: windowWidth * 0.13,
-        aspectRatio: 1, // Ensures square shape
+        aspectRatio: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 5,
-        marginBottom: 10,
+        marginTop: 15,
+        marginBottom: 2,
+        padding: 5,
         borderRadius: (windowWidth * 0.13) / 2, // Half of the width for circular shape
     },
     optionText: {
         color: '#45505B',
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: 'bold',
     },
     optionContainer: {
         justifyContent: 'center',
         alignItems: 'center',
+        paddingHorizontal: 5,
     },
     saveButtonText: {
         color: 'white',
@@ -144,6 +153,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     plusIcon: {
+        width: '100%',
+        height: '100%',
+    },
+    icon: {
         width: '100%',
         height: '100%',
     },

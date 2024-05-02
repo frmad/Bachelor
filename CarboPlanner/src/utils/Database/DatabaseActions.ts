@@ -1,12 +1,20 @@
+import { uuid } from "expo-modules-core";
 import {db} from "./databaseConfig"
-import { setDoc, doc, getDoc, updateDoc, deleteField } from 'firebase/firestore';
+import { setDoc, doc, getDoc, updateDoc, deleteField, onSnapshot } from 'firebase/firestore';
 
   let today = new Date();
 
-  let date = today.getDate() + "-"+ parseInt(today.getMonth()+1) +"-"+today.getFullYear()
+  let date = today.getDate().toString().padStart(2,'0') + "-"+ parseInt(today.getMonth()+1).toString().padStart(2,'0') +"-"+today.getFullYear()
   const mainDocRef = doc(db, process.env.EXPO_PUBLIC_UUID, date);
 
   const data = {};
+
+  const calenderGetDocRef = async (date) => {
+
+    const calenderDocRef = doc(db, process.env.EXPO_PUBLIC_UUID, date)
+    return calenderDocRef;
+  };
+
 
   const saveData = async (uuidKey, newData) => {
     if (!(await getDoc(mainDocRef)).exists()) {
@@ -58,7 +66,7 @@ const deleteMeal = async (uuidKey) => {
 }
 
 
-  export {saveData, mainDocRef, edit, deleteMeal};
+  export {saveData, mainDocRef, edit, deleteMeal, calenderGetDocRef};
   
 
 

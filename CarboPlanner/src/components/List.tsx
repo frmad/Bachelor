@@ -14,20 +14,29 @@ export default function List(props: any) {
 
     const body = <View>{props.children}</View>;
 
+    const renderTitle = () => {
+        return (
+            <View style={styles.titleRow}>
+                <Text style={styles.bold}>{props.name}</Text>
+                {/*props.showOptions determines whether the <OptionButton /> component should be rendered or not */}
+                {props.showOptions && <OptionButton uuidKey={props.uuidKey}/>}
+            </View>
+        );
+    };
+
     return (
         <View>
             <TouchableOpacity onPress={handlePress}>
                 <View style={styles.row}>
                     <Image style={styles.tinyImage} source={Images[props.imageURI]} />
-                    <View style={styles.titleRow}>
-                        <Text style={styles.bold}>{props.name}</Text>
-                        <OptionButton uuidKey={props.uuidKey}/>
-                    </View>
+                    {/*If showOptions is true, it renders the option button along with the title*/}
+                    {/*If it returns false only the title is rendered*/}
+                    {renderTitle()}
                     {expanded ? <Image source={require("../../assets/func-icon/up.png")} style={styles.accordionLogo} /> : <Image source={require("../../assets/func-icon/down.png")} style={styles.accordionLogo} />}
                 </View>
             </TouchableOpacity>
             <View style={styles.body}>
-                { expanded && body }
+                {expanded && body}
             </View>
         </View>
     );
