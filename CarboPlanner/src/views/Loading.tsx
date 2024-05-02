@@ -14,6 +14,7 @@ export default function Loading({route}) {
     const generateWeight = (value: any) => {
 
       let listOfItems = new Map<string, number[]>;
+      let listOfVolumes = new Map<string, number>;
 
 
 
@@ -28,6 +29,15 @@ export default function Loading({route}) {
           return;
         }
       });
+
+      for (let [key, value] of listOfItems) {
+        const keySplit: string[] = key.split("-");
+
+        //Have top and side calculate the w x h x l, and return to the list of volumes
+
+      }
+
+      return listOfVolumes;
 
       console.log("Image" + listOfItems.get("Chicken Breast-top"));
       return 0;
