@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
-import {LongInput, ShortInput} from '../components/TextInput';
+import { Image, View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { LongInput, ShortInput } from '../components/TextInput';
 
 const windowWidth = Dimensions.get('window').width;
 
-const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, itemToDelete, saveItem, uuid}) => {
-    
+const ManuallyAddModal = ({ selectedItem, updateItem, modalVisible, closeModal, itemToDelete, saveItem, uuid, closeAddOptionModal }) => {
+
     const [name, setName] = useState("");
     const [calories, setCalories] = useState(0);
     const [fat, setFat] = useState(0);
     const [protein, setProtein] = useState(0);
     const [carb, setCarb] = useState(0);
     const [weight, setWeight] = useState(0);
-    
+
 
     useEffect(() => {
         if (selectedItem) {
@@ -24,20 +24,48 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
             setWeight(String(selectedItem.weight) || "0");
         }
     }, [selectedItem]);
-    
+
+    const isInputEmpty = () => {
+        // Check if name is empty or any other field is "0"
+        if (
+            name.trim().length === 0 ||
+            calories === 0 ||
+            fat === 0 ||
+            protein === 0 ||
+            carb === 0 ||
+            weight === 0
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     const onSave = () => {
-        const newItem = {
-            name: name,
-            calories: calories,
-            fat: fat,
-            protein: protein,
-            carbs: carb,
-            weight: weight,
-            confidence: 1
-        };
-            saveItem(newItem);
-            toggleModal();
+        if (isInputEmpty()) {
+            // Display a message indicating that all fields must be filled
+            alert('Please fill in all input fields.');
+            return;
+        }
+        else {
+            const newItem = {
+                name: name.trim(),
+                calories,
+                fat,
+                protein,
+                carbs: carb,
+                weight,
+                confidence: 1
+            };
+
+            if (selectedItem) {
+                updateItem(uuid, newItem);
+            } else {
+                saveItem(newItem);
+            }
+            closeModal();
+            closeAddOptionModal();
+        }
     };
 
     const onUpdate = () => {
@@ -50,14 +78,14 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
             weight: weight,
             confidence: 1
         };
-            updateItem(uuid,newItem);
-            toggleModal();  
+        updateItem(uuid, newItem);
+        toggleModal();
     };
 
     const onDelete = () => {
         itemToDelete(uuid)
         toggleModal();
-    } 
+    }
 
     const toggleModal = () => {
         closeModal();
@@ -91,9 +119,20 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
         event.stopPropagation();
     };
 
+    const [showInfo, setShowInfo] = useState(false);
+    const renderInfo = () => {
+        if (showInfo) {
+            return (
+                    <Text style={styles.infoText}>Measurements are per 100g</Text>
+            );
+        } else {
+            return null;
+        }
+    };
+
     return (
         <View style={styles.container}>
-            
+
             <Modal
                 key={selectedItem ? selectedItem.id : null}
                 animationType="slide"
@@ -105,88 +144,91 @@ const ManuallyAddModal = ({selectedItem, updateItem, modalVisible, closeModal, i
             >
                 <TouchableOpacity onPress={toggleModal} style={styles.modalContainer}>
                     <TouchableOpacity activeOpacity={1} style={styles.modalContent}>
-                                <View style={styles.macros}>
-                                    <TouchableOpacity style={styles.topButton} onPress={toggleModal}>
-                                        <Text style={styles.textButton}>{"<"}</Text>
-                                    </TouchableOpacity>
-                                    { selectedItem ? (
-                                        <Text style={{textAlign:"center", marginBottom:5, fontSize: 20, fontWeight: "bold"}}>Change food item</Text>
-                                    ) : (
-                                    <Text style={{textAlign:"center", marginBottom:5, fontSize: 20, fontWeight: "bold"}}>Insert food item</Text>
-                                    )
-                                    }
-                                    <TouchableOpacity style={[styles.topButton, {backgroundColor: "grey"}]}>
-                                        <Text style={styles.textButton}>{"i"}</Text>
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={styles.bigWrapper}>
-                                    <LongInput
-                                        label="Name"
-                                        onChange={onChangeName}
-                                        affix=""
-                                        value={name}
-                                    />
-                                </View>
-                                <View style={styles.bigWrapper}>
-                                    <LongInput
-                                    label="Weight"
-                                    keyboard="numeric"
-                                    onChange={onChangeWeight}
-                                    value={weight}
-                                    affix="| g"
-                                    />
-                                </View>
+                        <View style={styles.macros}>
+                            <TouchableOpacity style={styles.topButton} onPress={toggleModal}>
+                                <Image source={require("../../assets/func-icon/left-arrow.png")} style={styles.icon} resizeMode="contain" />
+                            </TouchableOpacity>
+                            {selectedItem ? (
+                                <Text style={{ textAlign: "center", color: "#45505B", marginBottom: 5, fontSize: 20, fontWeight: "bold" }}>Change food item</Text>
+                            ) : (
+                                <Text style={{ textAlign: "center", color: "#45505B", marginBottom: 5, fontSize: 23, fontWeight: "bold" }}>Insert food item</Text>
+                            )
+                            }
+                            <TouchableOpacity style={[styles.topButton, { backgroundColor: "#EBEBEB" }]} onPress={() => setShowInfo(!showInfo)}>
+                                <Image source={require("../../assets/func-icon/info.png")} style={styles.icon} resizeMode="contain" />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.bigWrapper}>
+                            <LongInput
+                                label="Name"
+                                onChange={onChangeName}
+                                affix=""
+                                value={name}
+                            />
+                        </View>
+                        <View style={styles.bigWrapper}>
+                            <LongInput
+                                label="Weight"
+                                keyboard="numeric"
+                                onChange={onChangeWeight}
+                                value={weight}
+                                affix="| g"
+                            />
+                        </View>
 
-                                <View style={styles.bigWrapper}>
-                                    <LongInput
+                        {renderInfo()}
+
+                        <View style={showInfo ? styles.infoBox : null}>
+                            <View style={styles.bigWrapper}>
+                                <LongInput
                                     label="Calories"
                                     keyboard="numeric"
                                     onChange={onChangeCalories}
                                     value={calories}
                                     affix="| kcal"
-                                    />
-                                </View>
-
-                                <View style={styles.macros}>
-                                    <ShortInput
+                                />
+                            </View>
+                            <View style={styles.macros}>
+                                <ShortInput
                                     label="Carb"
                                     keyboard="numeric"
                                     onChangeText={onChangeCarb}
                                     value={carb}
                                     affix="| g"
-                                    />
-                                    <ShortInput
+                                />
+                                <ShortInput
                                     label="Protein"
                                     keyboard="numeric"
                                     onChangeText={onChangeProtein}
                                     value={protein}
                                     affix="| g"
-                                    />
-                                    <ShortInput
+                                />
+                                <ShortInput
                                     label="Fat"
                                     keyboard="numeric"
                                     onChangeText={onChangeFat}
                                     value={fat}
                                     affix="| g"
-                                    />
-                                </View>
-                                { selectedItem ? (
-                                        <View style={{flexDirection: 'row', justifyContent: 'space-around', width: "100%"}}>
-                                            <TouchableOpacity style={[styles.deleteFoodButton, {width:"35%"}]} onPress={onDelete}>
-                                            <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Delete</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity style={[styles.addFoodButton, {width: "35%"}]} onPress={onUpdate}>
-                                            <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Save</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    ) : (
-                                        <TouchableOpacity style={styles.addFoodButton} onPress={onSave}>
-                                        <Text style={{fontSize: 20, textAlign: "center", color:"white"}}>Save</Text>
-                                        </TouchableOpacity>
-                                    )
-                                    }
-                        </TouchableOpacity>
-                        </TouchableOpacity>
+                                />
+                            </View>
+                        </View>
+                        {selectedItem ? (
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: "100%" }}>
+                                <TouchableOpacity style={[styles.deleteFoodButton, { width: "35%" }]} onPress={onDelete}>
+                                    <Text style={{ fontSize: 20, textAlign: "center", color: "white", fontWeight: 600 }}>Delete</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={[styles.addFoodButton, { width: "35%" }]} onPress={onUpdate}>
+                                    <Text style={{ fontSize: 20, textAlign: "center", color: "white", fontWeight: 600 }}>Save</Text>
+                                </TouchableOpacity>
+                            </View>
+                        ) : (
+                            <TouchableOpacity style={styles.addFoodButton} onPress={onSave}>
+                                <Text style={{ fontSize: 20, textAlign: "center", color: "white", fontWeight: 600 }}>Save</Text>
+                            </TouchableOpacity>
+                        )
+                        }
+                    </TouchableOpacity>
+                </TouchableOpacity>
             </Modal>
         </View>
     );
@@ -233,6 +275,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%',
+        paddingVertical: 15,
     },
     addFoodButton: {
         backgroundColor: '#65CB2E',
@@ -243,7 +286,7 @@ const styles = StyleSheet.create({
         width: "50%"
     },
     deleteFoodButton: {
-        backgroundColor: 'red',
+        backgroundColor: '#F35353',
         paddingVertical: 5,
         paddingHorizontal: 25,
         borderRadius: 50,
@@ -252,13 +295,32 @@ const styles = StyleSheet.create({
     },
     textButton: {
         fontSize: 25,
-        fontWeight: "bold", 
-        textAlign: "center"
+        fontWeight: "bold",
+        textAlign: "center",
+        color: "#45505B",
     },
     topButton: {
-        borderRadius: 500, 
-        width: 40, 
-        alignContent: "center"
+        borderRadius: 500,
+        width: 40,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    icon: {
+        width: 25,
+        height: 25,
+    },
+    infoBox: {
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: 'black',
+        paddingHorizontal: 10,
+        paddingTop: 10,
+    },
+    infoText: {
+        textAlign: 'left',
+        fontSize: 14,
+        color: '#45505B',
     }
 });
 
