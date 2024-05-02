@@ -6,28 +6,30 @@ import { Density, getReferencePoint, getVolume, getWeight } from '../components/
 
 export default function Loading({route}) {
 
+  /*interface SizeValues {
+    width: Number,
+    height: Number, 
+  };*/
+
+    const generateWeight = (value: any) => {
+
+      let listOfItems = new Map<string, number[]>;
 
 
-    const generateWeight = (data: [any]) => {
-      interface SizeValues {
-        width: Number,
-        height: Number, 
-      };
 
-      let listOfItems = new Map<string, SizeValues>;
 
       data.map((element, index) => {
         if(!listOfItems.has(element["name"]+"-top")){
-          listOfItems.set(element["name"]+"-top", {width: element["width"], height: element["height"]});
+          listOfItems.set(element["name"]+"-top", [element["height"], element["width"]]);
           return;
         }
         if(!listOfItems.has(element["name"]+"-side")){
-          listOfItems.set(element["name"]+"-side", {width: element["width"], height: element["height"]});
+          listOfItems.set(element["name"]+"-side", [element["height"], element["width"]]);
           return;
         }
       });
 
-      console.log("Image" + listOfItems.get("laptop-top").height.toString);
+      console.log("Image" + listOfItems.get("Chicken Breast-top"));
       return 0;
     }
 
@@ -38,6 +40,11 @@ export default function Loading({route}) {
       {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 21.27, "height": 37.06,  "confidence": 0},
     ];
 
+
+    generateWeight(data);
+
+    
+    /*
     const reference = getReferencePoint(data[1]["width"], data[1]["height"]); // cm^2
     console.log(reference + " cm^2");
 
@@ -47,7 +54,7 @@ export default function Loading({route}) {
     console.log("Volume of " + data[0]["name"] + ": " +  volume);
 
     console.log(weight + " g");
-
+    */
 
     const funFacts = [
         "An avocado contains more potassium than a banana!",
