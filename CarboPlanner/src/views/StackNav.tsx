@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Loading from './Loading';
 import {NavigationContainer} from "@react-navigation/native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from "./HomeScreen";
+import TrackingScreen from "./TrackingScreen";
 import MealScreen from "./MealScreen";
 import PlanScreen from "./PlanScreen";
 import ResultScreen from "./ResultScreen";
@@ -11,12 +11,13 @@ import Camera from '../components/Camera';
 import Calendar from '../views/Calendar';
 import {Image} from 'react-native'
 import { AnimatedTabBarNavigator } from 'react-native-animated-nav-tab-bar'
+import HomeScreen from "./HomeScreen";
 
 const Tab = AnimatedTabBarNavigator();
 
 function Tabs() {
     return (
-        <Tab.Navigator initialRouteName='Home' 
+        <Tab.Navigator initialRouteName='Tracking'
         screenOptions={({ route, navigation}) => ({
             tabBarIcon: ({ focused }) => (
             CustomTabBarIcon(route.name, focused)),
@@ -24,9 +25,10 @@ function Tabs() {
             tabBarLabel: navigation.isFocused() ? route.name : '',
   })}
   tabBarOptions={{ activeBackgroundColor: '#BCFFBB'}}
-  
+
   >
             <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
+            <Tab.Screen name="Tracking" component={TrackingScreen} options={{ headerShown: false }}/>
             <Tab.Screen name="Meal" component={MealScreen} options={{ headerShown: false }}/>
             <Tab.Screen name="Plan" component={PlanScreen} options={{ headerShown: false }}/>
             <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }}/>

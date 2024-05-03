@@ -3,10 +3,10 @@ export function getCategory() {
     const currentHour = currentTime.getHours();
 
     if (currentHour >= 5 && currentHour < 12) {
-        return 'morning';
+        return 'Breakfast';
     } else if (currentHour >= 12 && currentHour < 17) {
-        return 'lunch';
+        return 'Lunch';
     } else {
-        return 'dinner';
+        return 'Dinner';
     }
 }

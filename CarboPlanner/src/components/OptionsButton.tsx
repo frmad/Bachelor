@@ -1,8 +1,8 @@
 import {View, StyleSheet, TouchableOpacity, Text, Modal, Dimensions, Image} from 'react-native';
 import * as React from "react";
 import { useState, useRef } from "react";
-import {Inter_400Regular} from "@expo-google-fonts/inter";
 import { useNavigation } from '@react-navigation/native';
+import { deleteMeal } from '../utils/Database/DatabaseActions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -71,7 +71,7 @@ export default function OptionButton(props: any) {
                             <Text style={styles.optionText}>Edit food item</Text>
                         </TouchableOpacity>
                         <View style={styles.line} />
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={ () => {toggleModal(), deleteMeal( props.uuidKey)}}>
                             <Text style={styles.optionText}>Delete meal</Text>
                         </TouchableOpacity>
                     </View>
