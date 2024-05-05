@@ -5,20 +5,21 @@ import LoadingIcon from "./LoadingIcon";
 import { Density, getReferencePoint, getVolume, getWeight } from '../components/WeightEstimation';
 
 export default function Loading({route}) {
+    /*interface SizeValues {
+      width: Number,
+      height: Number,
+    };*/
 
-  /*interface SizeValues {
-    width: Number,
-    height: Number, 
-  };*/
-
-    const generateWeight = (value: any) => {
+    const generateWeight = (value: any[]) => {
 
       let listOfItems = new Map<string, number[]>;
       let listOfVolumes = new Map<string, number>;
 
+        // TODO change to value when API is fixed
       data.map((element, index) => {
         if(!listOfItems.has(element["name"]+"-top")){
           listOfItems.set(element["name"]+"-top", [element["height"], element["width"]]);
+
           return;
         }
         if(!listOfItems.has(element["name"]+"-side")){
@@ -26,6 +27,14 @@ export default function Loading({route}) {
           return;
         }
       });
+
+      console.log(listOfItems)
+
+      let reference = 0
+      if (listOfItems.get('Credit Card'+'-top')||listOfItems.get('Credit Card'+'-side')){
+          reference = getReferencePoint(listOfItems.get('Credit Card'+'-top')[1], listOfItems.get('Credit Card'+'-top')[0]); // cm^2
+          console.log(reference + " cm^2");
+      }
 
         // Loop through each entry in the listOfItems map
         for (let [key, value] of listOfItems) {
@@ -35,22 +44,18 @@ export default function Loading({route}) {
             const [height, width] = value;
 
             // Calculate volume based on the views
-            if (view === "top") {
+            if (view === "top" && name !== 'Credit Card') {
                 // Retrieve the width of the item from the side view
-                const sideWidth = listOfItems.get(name + "-side")[1];
-                console.log("Height:", height);
-                console.log("Width:", width);
-                console.log("Side Width:", sideWidth);
+                const sideWidth = listOfItems.get(name + "-side")?.[1] || 0;
                 // Calculate the volume using height, width, and side width
-                const volume = height * width * sideWidth;
+                const volume = getVolume(height, width, sideWidth, reference); //cm^3
                 // Store the calculated volume in the listOfVolumes map
                 listOfVolumes.set(name, volume);
                 console.log(`Volume of ${name}:`, volume);
             }
         }
-        console.log("List of volumes:", listOfVolumes);
-        // Return the listOfVolumes map that contains the calculated volumes for all items
-        return listOfVolumes;
+
+        return calculateWeight(listOfVolumes);
     }
 
     const data = [
@@ -60,8 +65,28 @@ export default function Loading({route}) {
       {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 22, "height": 38,  "confidence": 0},
     ];
 
+    const calculateWeight = (listOfVolumes: Map<string, number>) => {
+        const listOfWeights = new Map<string, any>;
+        for (let [key, value] of listOfVolumes) {
+            if (key !== 'Credit Card'){
+                const name : string = key.replace(" ", "_");
+                const weight = getWeight(value, Density[name]); // grams
+                console.log(Density[name])
 
-    generateWeight(data);
+                listOfWeights.set(key, weight)
+            }
+        }
+        console.log("List of weights:",listOfWeights)
+        return listOfWeights
+
+
+        //name, confidence, weight, calories, carbs, fat, protein
+        //Rice: cal:130 carbs:28 fat:1 protein:3
+        //Pasta: cal:131 carbs:25 fat:1 protein:5
+        //Spinach: cal:7 carbs:1 fat:0.1 protein:0.8
+        //Chicken breast: cal:195 carbs:0 fat:7 protein:29
+        //Peas: cal:117 carbs:20 fat:0.5 protein:7
+    }
 
     
     /*
@@ -100,14 +125,17 @@ export default function Loading({route}) {
     //const { base64 } = route.params;
     const { firstImageBase64, allImagesBase64 } = route.params;
 
-    const api_url = process.env.EXPO_PUBLIC_API_URL;
+    //const api_url = process.env.EXPO_PUBLIC_API_URL;
+
+    const api_url : string = 'https://yolov5-flaskapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection';
+    //GAMLE - https://yolov5-flaskapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection
 
     const fetchData = async (firstImageBase64) => {
 
         const requestBody = {
           image: firstImageBase64
         };
-    
+
         //Sends POST request to this URL, sends using the Base64 Image from the Expo Camera
         fetch(api_url, {
           method: 'POST',
@@ -119,6 +147,7 @@ export default function Loading({route}) {
         .then(function(response) {
           if (response.ok) {
             //TODO: make return with params to the result screen
+              console.log('ok')
             return response.json();
           } else {
             throw new Error('Request failed.');
@@ -127,7 +156,8 @@ export default function Loading({route}) {
         .then(function(data) {
           // The JSON data from the WebServer is returned here
 
-            //generateWeight(data);
+            // TODO fix how we send the data to result
+            generateWeight(data);
 
             navigation.navigate('Result', {base64: firstImageBase64, data: data, allImages: allImagesBase64});
         
