@@ -1,4 +1,4 @@
-import { Children } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
 interface CardProps {
@@ -16,11 +16,12 @@ export default function Card({children, customStyle}: CardProps) {
 
 const styles = StyleSheet.create({
     container: {
+        display: "flex",
         backgroundColor: '#FFFFFF',
         paddingVertical: '2%',
         paddingHorizontal: '2%',
         marginHorizontal: '2%',
         borderRadius: 25,
-        maxHeight:"100%"
+        maxHeight:"53%"
     },
 });

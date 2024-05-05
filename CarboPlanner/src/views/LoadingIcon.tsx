@@ -1,5 +1,5 @@
-import React, {useRef, useEffect, useState} from 'react';
-import { Animated, View, StyleSheet, SafeAreaView, Easing } from 'react-native';
+import React, {useRef, useEffect} from 'react';
+import { Animated, StyleSheet, SafeAreaView, Easing } from 'react-native';
 
 const LoadingIcon = () => {
     const rotateAnim = useRef(new Animated.Value(0)).current;

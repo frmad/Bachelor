@@ -1,19 +1,15 @@
 import React from 'react';
-import { View, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import VerticalLine from './VerticalLine';
 
 export default function ListItem(props: any) {
-
 
     return (
         <View style={styles.row}>
             <View style={styles.row}>
                 <Text style={styles.bold}>{props.weight}g</Text>
             </View>
-
-            <VerticalLine />
-      
-
+            <VerticalLine/>
             <View style={styles.column}>
                 <Text>{props.name}</Text>
                 <Text>{props.calories}</Text>
