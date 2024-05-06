@@ -121,35 +121,30 @@ export default function Loading({route}) {
 
     const foodData = {
         "Rice": {
-            "name": "Rice",
             "calories": 130,
             "carbs": 28,
             "fat": 1,
             "protein": 3
         },
         "Pasta": {
-            "name": "Pasta",
             "calories": 131,
             "carbs": 25,
             "fat": 1,
             "protein": 5
         },
         "Chicken_Breast": {
-            "name": "Chicken breast",
             "calories": 195,
             "carbs": 0.2,
             "fat": 7,
             "protein": 29
         },
         "Spinach": {
-            "name": "Spinach",
             "calories": 7,
             "carbs": 1,
             "fat": 0.1,
             "protein": 0.8
         },
         "Peas": {
-            "name": "Peas",
             "calories": 117,
             "carbs": 20,
             "fat": 0.5,
