@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LoadingIcon from "./LoadingIcon";
 import { Density, getReferencePoint, getVolume, getWeight } from '../components/WeightEstimation';
+import {getCameraPermissionsAsync} from "expo-camera";
 
 export default function Loading({route}) {
     /*interface SizeValues {
@@ -68,17 +69,16 @@ export default function Loading({route}) {
     const calculateWeight = (listOfVolumes: Map<string, number>) => {
         const listOfWeights = new Map<string, any>;
         for (let [key, value] of listOfVolumes) {
-            if (key !== 'Credit Card'){
-                const name : string = key.replace(" ", "_");
+            if (key !== 'Credit Card') {
+                const name: string = key.replace(" ", "_");
                 const weight = getWeight(value, Density[name]); // grams
                 console.log(Density[name])
 
                 listOfWeights.set(key, weight)
             }
         }
-        console.log("List of weights:",listOfWeights)
+        console.log("List of weights:", listOfWeights)
         return listOfWeights
-
 
         //name, confidence, weight, calories, carbs, fat, protein
         //Rice: cal:130 carbs:28 fat:1 protein:3
@@ -88,7 +88,61 @@ export default function Loading({route}) {
         //Peas: cal:117 carbs:20 fat:0.5 protein:7
     }
 
-    
+    const foodData = {
+        "Rice": {
+            "name": "Rice",
+            "foodItemData": {
+                "calories": 130,
+                "carbs": 28,
+                "fat": 1,
+                "protein": 3
+            }
+        },
+        "Pasta": {
+            "name": "Pasta",
+            "foodItemData": {
+                "calories": 131,
+                "carbs": 25,
+                "fat": 1,
+                "protein": 5
+            }
+        },
+        "Chicken_breast": {
+            "name": "Chicken breast",
+            "foodItemData": {
+                "calories": 195,
+                "carbs": 0.2,
+                "fat": 7,
+                "protein": 29
+            }
+        },
+        "Spinach": {
+            "name": "Spinach",
+            "foodItemData": {
+                "calories": 7,
+                "carbs": 1,
+                "fat": 0.1,
+                "protein": 0.8
+            }
+        },
+        "Peas": {
+            "name": "Peas",
+            "foodItemData": {
+                "calories": 117,
+                "carbs": 20,
+                "fat": 0.5,
+                "protein": 7
+            }
+        }
+    };
+
+    function getFoodItemData(foodItemName) {
+        return foodData[foodItemName].foodItemData;
+    }
+    function calculateMacros(foodItemName, weight) {
+        
+    }
+
     /*
     const reference = getReferencePoint(data[1]["width"], data[1]["height"]); // cm^2
     console.log(reference + " cm^2");
