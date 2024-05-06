@@ -11,7 +11,7 @@ export default function Loading({route}) {
       height: Number,
     };*/
 
-    const generateWeight = (value: any[]) => {
+    const generateWeightAndMacro = (value: any[]) => {
 
       let listOfItems = new Map<string, number[]>;
       let listOfVolumes = new Map<string, number>;
@@ -108,7 +108,7 @@ export default function Loading({route}) {
                 listOfWeights.set(key, result)
             }
         }
-        console.log("List that is send", listOfWeights)
+        console.log("List that is sent", listOfWeights)
         return listOfWeights
 
         //name, confidence, weight, calories, carbs, fat, protein
@@ -241,8 +241,8 @@ export default function Loading({route}) {
         .then(function(data) {
           // The JSON data from the WebServer is returned here
 
-            // TODO fix how we send the data to result
-            generateWeight(data);
+            // TODO fix how we send the data to result - it should be used to make calculations based on the images - this should be sent (not data)
+            generateWeightAndMacro(data);
 
             navigation.navigate('Result', {base64: firstImageBase64, data: data, allImages: allImagesBase64});
         
