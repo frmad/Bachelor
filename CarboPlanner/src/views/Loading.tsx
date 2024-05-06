@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LoadingIcon from "./LoadingIcon";
-import { Density, getReferencePoint, getVolume, getWeight } from '../components/WeightEstimation';
+import { Density, getReferencePoint, getVolume, getWeight } from '../utils/WeightEstimation';
 import {getCameraPermissionsAsync} from "expo-camera";
 
 export default function Loading({route}) {
@@ -20,7 +20,6 @@ export default function Loading({route}) {
       data.map((element, index) => {
         if(!listOfItems.has(element["name"]+"-top")){
           listOfItems.set(element["name"]+"-top", [element["height"], element["width"]]);
-
           return;
         }
         if(!listOfItems.has(element["name"]+"-side")){
@@ -29,12 +28,9 @@ export default function Loading({route}) {
         }
       });
 
-      console.log(listOfItems)
-
       let reference = 0
       if (listOfItems.get('Credit Card'+'-top')||listOfItems.get('Credit Card'+'-side')){
           reference = getReferencePoint(listOfItems.get('Credit Card'+'-top')[1], listOfItems.get('Credit Card'+'-top')[0]); // cm^2
-          console.log(reference + " cm^2");
       }
 
         // Loop through each entry in the listOfItems map
@@ -52,13 +48,14 @@ export default function Loading({route}) {
                 const volume = getVolume(height, width, sideWidth, reference); //cm^3
                 // Store the calculated volume in the listOfVolumes map
                 listOfVolumes.set(name, volume);
-                console.log(`Volume of ${name}:`, volume);
+                //console.log(`Volume of ${name}:`, volume);
             }
         }
-
-        return calculateWeight(listOfVolumes);
+        // TODO change to value when API is fixed
+        return calculateWeight(listOfVolumes, data);
     }
 
+    // TODO delete
     const data = [
       {"class": 0, "name": "Chicken Breast", "x": 0, "y": 0, "width": 42, "height": 77,  "confidence": 0},
       {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 21, "height": 37,  "confidence": 0},
@@ -66,18 +63,52 @@ export default function Loading({route}) {
       {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 22, "height": 38,  "confidence": 0},
     ];
 
-    const calculateWeight = (listOfVolumes: Map<string, number>) => {
+    function calculateAverageConfidence(data) {
+        // Object to store the average confidence and occurrence counts
+        const nameAndConfidence = {};
+
+        // Aggregate confidence values and occurrence counts
+        data.forEach(({ name, confidence }) => {
+            //does the name exist in nameAndConfidence
+            if (!nameAndConfidence[name]) {
+                //If not, initialize an object containing totalConfidence and count
+                nameAndConfidence[name] = { totalConfidence: 0, count: 0 };
+            }
+            //if the name exist add the confidence value to totalConfidence and increment count
+            nameAndConfidence[name].totalConfidence += confidence;
+            nameAndConfidence[name].count++;
+        });
+
+        // Calculate average confidence for each name
+        const result = [];
+        for (const name in nameAndConfidence) {
+            const { totalConfidence, count } = nameAndConfidence[name];
+            const averageConfidence = totalConfidence / count;
+            if (name !== 'Credit Card'){
+                result.push({ name:name, confidence: averageConfidence });
+            }
+            //console.log('result:', result)
+        }
+        //return an object with name and confidence
+        return result;
+    }
+
+    const calculateWeight = (listOfVolumes: Map<string, number>, data: any) => {
         const listOfWeights = new Map<string, any>;
         for (let [key, value] of listOfVolumes) {
             if (key !== 'Credit Card') {
                 const name: string = key.replace(" ", "_");
                 const weight = getWeight(value, Density[name]); // grams
-                console.log(Density[name])
-
-                listOfWeights.set(key, weight)
+                //console.log(name)
+                const result = {
+                    averageConfidence: calculateAverageConfidence(data),
+                    weight: weight,
+                    macros: calculateMacros(name, weight)
+                }
+                listOfWeights.set(key, result)
             }
         }
-        console.log("List of weights:", listOfWeights)
+        console.log("List that is send", listOfWeights)
         return listOfWeights
 
         //name, confidence, weight, calories, carbs, fat, protein
@@ -91,56 +122,56 @@ export default function Loading({route}) {
     const foodData = {
         "Rice": {
             "name": "Rice",
-            "foodItemData": {
-                "calories": 130,
-                "carbs": 28,
-                "fat": 1,
-                "protein": 3
-            }
+            "calories": 130,
+            "carbs": 28,
+            "fat": 1,
+            "protein": 3
         },
         "Pasta": {
             "name": "Pasta",
-            "foodItemData": {
-                "calories": 131,
-                "carbs": 25,
-                "fat": 1,
-                "protein": 5
-            }
+            "calories": 131,
+            "carbs": 25,
+            "fat": 1,
+            "protein": 5
         },
-        "Chicken_breast": {
+        "Chicken_Breast": {
             "name": "Chicken breast",
-            "foodItemData": {
-                "calories": 195,
-                "carbs": 0.2,
-                "fat": 7,
-                "protein": 29
-            }
+            "calories": 195,
+            "carbs": 0.2,
+            "fat": 7,
+            "protein": 29
         },
         "Spinach": {
             "name": "Spinach",
-            "foodItemData": {
-                "calories": 7,
-                "carbs": 1,
-                "fat": 0.1,
-                "protein": 0.8
-            }
+            "calories": 7,
+            "carbs": 1,
+            "fat": 0.1,
+            "protein": 0.8
         },
         "Peas": {
             "name": "Peas",
-            "foodItemData": {
-                "calories": 117,
-                "carbs": 20,
-                "fat": 0.5,
-                "protein": 7
-            }
+            "calories": 117,
+            "carbs": 20,
+            "fat": 0.5,
+            "protein": 7
         }
     };
 
     function getFoodItemData(foodItemName) {
-        return foodData[foodItemName].foodItemData;
+        return foodData[foodItemName];
     }
     function calculateMacros(foodItemName, weight) {
-        
+        try {
+            const foodItem = getFoodItemData(foodItemName);
+            const calories = (weight/100)*foodItem.calories;
+            const carbs = (weight/100)*foodItem.carbs;
+            const fat = (weight/100)*foodItem.fat;
+            const protein = (weight/100)*foodItem.protein;
+            return { calories, carbs, fat, protein }; //object like macros = { calories, carbs, fat, protein };
+        } catch (error) {
+            console.log('No food item with that name');
+            return null;
+        }
     }
 
     /*
