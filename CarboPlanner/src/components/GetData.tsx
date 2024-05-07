@@ -38,11 +38,40 @@ const GetData = ({ selectedDate }) => {
         });
     }, [selectedDate]); // Run the effect whenever selectedDate changes
 
+    const [p, setProtein] = useState(0)
+    let protein = 0;
+
+    const [c, setCarbs] = useState(0)
+    let carbs = 0;
+
+    const [f, setFat] = useState(0)
+    let fat = 0;
+
+    const [cal, setCalories] = useState(0)
+    let calories = 0;
+
+    const totalMacros = (mealsArray: any) => {
+        // Iterate over each meal in mealsArray
+        Object.values(mealsArray).map(mealInfo => {
+            // Update variables
+            protein = protein+mealInfo.protein
+            carbs = protein+mealInfo.carbs
+            fat = protein+mealInfo.fat
+            calories = protein+mealInfo.calories
+        });
+
+        setProtein(protein)
+        setCarbs(carbs)
+        setFat(fat)
+        setCalories(calories)
+
+        return {protein, carbs, fat, calories}
+    };
 
     const renderMealItem = ({ item }) => {
         const [uuidKey, meal] = item;
         const mealsArray = meal.meals;
-
+        totalMacros(mealsArray)
         return(
             <List key={uuidKey} name={meal.name} imageURI={meal.icon} uuidKey={uuidKey} showOptions={false}>
                 <HorizontalLine />
@@ -67,14 +96,16 @@ const GetData = ({ selectedDate }) => {
                 { Object.keys(data).length > 0  ? (
             <>
                 <Card customStyle={{maxHeight:"100%", ...styles.card}}>
-                <View style={styles.row}>
-                    <CircularSlider value={1200} max={2000} />
-                </View>
-                <View style={styles.row}>
-                    <MacroProgressBar name={"Carbs"} value={100} max={210} />
-                    <MacroProgressBar name={"Protein"} value={100} max={180} />
-                    <MacroProgressBar name={"Fat"} value={200} max={200} />
-                </View>
+                    <View style={styles.row}>
+                        <CircularSlider value={Math.round(cal)} max={2500}/>
+                    </View>
+                    <View style={styles.row}>
+                        <MacroProgressBar name={"Carbs"} value={Math.round(c)} max={700} />
+
+                        <MacroProgressBar name={"Protein"} value={Math.round(p)} max={700} />
+
+                        <MacroProgressBar name={"Fat"} value={Math.round(f)} max={700} />
+                    </View>
                 </Card>
                 <Card customStyle={{maxHeight:"100%", ...styles.cardItems}}>
                         <FlatList

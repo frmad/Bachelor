@@ -57,19 +57,21 @@ export default function Loading({route}) {
 
     // TODO delete
     const data = [
-      {"class": 0, "name": "Chicken Breast", "x": 0, "y": 0, "width": 42, "height": 77,  "confidence": 0},
-      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 21, "height": 37,  "confidence": 0},
-      {"class": 0, "name": "Chicken Breast", "x": 0,  "y": 0,  "width": 41, "height": 60, "confidence": 0},
-      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 22, "height": 38,  "confidence": 0},
+      {"class": 0, "name": "Chicken Breast", "x": 0, "y": 0, "width": 42, "height": 77,  "confidence": 0.2},
+      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 21, "height": 37,  "confidence": 0.3},
+      {"class": 0, "name": "Chicken Breast", "x": 0,  "y": 0,  "width": 41, "height": 60, "confidence": 0.4},
+      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 22, "height": 38,  "confidence": 0.6},
+        {"class": 0, "name": "Pasta", "x": 0,  "y": 0,  "width": 20, "height": 10, "confidence": 0.4},
+        {"class": 1, "name": "Pasta",    "x": 0,  "y": 0,  "width": 27, "height": 34,  "confidence": 0.8},
     ];
 
-    function calculateAverageConfidence(data) {
+    const calculateAverageConfidence = (data, foodName) => {
         // Object to store the average confidence and occurrence counts
         const nameAndConfidence = {};
 
         // Aggregate confidence values and occurrence counts
         data.forEach(({ name, confidence }) => {
-            //does the name exist in nameAndConfidence
+            //Does the name exist in nameAndConfidence
             if (!nameAndConfidence[name]) {
                 //If not, initialize an object containing totalConfidence and count
                 nameAndConfidence[name] = { totalConfidence: 0, count: 0 };
@@ -80,36 +82,35 @@ export default function Loading({route}) {
         });
 
         // Calculate average confidence for each name
-        const result = [];
-        for (const name in nameAndConfidence) {
-            const { totalConfidence, count } = nameAndConfidence[name];
+        const { totalConfidence, count } = nameAndConfidence[foodName] || { totalConfidence: 0, count: 0 };
+        if (count !== 0 && foodName !== 'Credit Card') {
             const averageConfidence = totalConfidence / count;
-            if (name !== 'Credit Card'){
-                result.push({ name:name, confidence: averageConfidence });
-            }
-            //console.log('result:', result)
+            console.log(averageConfidence)
+            return { foodName, averageConfidence };
         }
-        //return an object with name and confidence
-        return result;
+        return null;
     }
 
     const calculateWeight = (listOfVolumes: Map<string, number>, data: any) => {
-        const listOfWeights = new Map<string, any>;
+        const listForSending = [];
         for (let [key, value] of listOfVolumes) {
             if (key !== 'Credit Card') {
                 const name: string = key.replace(" ", "_");
                 const weight = getWeight(value, Density[name]); // grams
-                //console.log(name)
                 const result = {
-                    averageConfidence: calculateAverageConfidence(data),
+                    name: calculateAverageConfidence(data, key)["foodName"],
+                    confidence: calculateAverageConfidence(data, key)["averageConfidence"],
                     weight: weight,
-                    macros: calculateMacros(name, weight)
+                    calories: calculateMacros(name, weight)["calories"],
+                    carbs: calculateMacros(name, weight)["carbs"],
+                    fat: calculateMacros(name, weight)["fat"],
+                    protein: calculateMacros(name, weight)["protein"]
                 }
-                listOfWeights.set(key, result)
+                console.log("hello",result.confidence)
+                listForSending.push(result)
             }
         }
-        console.log("List that is sent", listOfWeights)
-        return listOfWeights
+        return listForSending
 
         //name, confidence, weight, calories, carbs, fat, protein
         //Rice: cal:130 carbs:28 fat:1 protein:3
@@ -227,7 +228,6 @@ export default function Loading({route}) {
         .then(function(response) {
           if (response.ok) {
             //TODO: make return with params to the result screen
-              console.log('ok')
             return response.json();
           } else {
             throw new Error('Request failed.');
@@ -237,9 +237,8 @@ export default function Loading({route}) {
           // The JSON data from the WebServer is returned here
 
             // TODO fix how we send the data to result - it should be used to make calculations based on the images - this should be sent (not data)
-            generateWeightAndMacro(data);
-
-            navigation.navigate('Result', {base64: firstImageBase64, data: data, allImages: allImagesBase64});
+            const calculatedData = generateWeightAndMacro(data);
+            navigation.navigate('Result', {base64: firstImageBase64, data: calculatedData, allImages: allImagesBase64});
         
 
           return data;

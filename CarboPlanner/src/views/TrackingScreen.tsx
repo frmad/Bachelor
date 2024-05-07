@@ -53,17 +53,42 @@ export default function TrackingScreen(){
       icon: String
     }
 
-    const [p, setP] = useState(0);
-    const [f, setF] = useState(0);
-    const [c, setC] = useState(0);
+    const [p, setProtein] = useState(0)
+    let protein = 0;
 
+    const [c, setCarbs] = useState(0)
+    let carbs = 0;
+
+    const [f, setFat] = useState(0)
+    let fat = 0;
+
+    const [cal, setCalories] = useState(0)
+    let calories = 0;
+
+    const totalMacros = (mealsArray: any) => {
+        // Iterate over each meal in mealsArray
+        Object.values(mealsArray).map(mealInfo => {
+            // Update variables
+            protein = protein+mealInfo.protein
+            carbs = protein+mealInfo.carbs
+            fat = protein+mealInfo.fat
+            calories = protein+mealInfo.calories
+        });
+
+        setProtein(protein)
+        setCarbs(carbs)
+        setFat(fat)
+        setCalories(calories)
+
+        return {protein, carbs, fat, calories}
+    };
 
     const renderMealItem = ({ item }) => {
+        console.log(item, "hello item")
       // deconstruct item into its key value pair
       const [uuidKey, meal] = item;
-
       const mealsArray = meal.meals // Access the meals array from the UUID object
-
+      totalMacros(mealsArray)
       return (
         <List key={uuidKey} name={meal.name} imageURI={meal.icon} uuidKey={uuidKey} showOptions={true}>
           <HorizontalLine />
@@ -73,12 +98,12 @@ export default function TrackingScreen(){
             return (
               <ListItem
                 key={`${uuidKey}_${index}`} // Ensure each item has a unique key
-                weight={mealInfo.weight}
+                weight={Math.round(mealInfo.weight)}
                 name={mealInfo.name}
-                calories={mealInfo.calories}
-                protein={mealInfo.protein}
-                carbs={mealInfo.carbs}
-                fat={mealInfo.fat}
+                calories={Math.round(mealInfo.calories)}
+                protein={Math.round(mealInfo.protein)}
+                carbs={Math.round(mealInfo.carbs)}
+                fat={Math.round(mealInfo.fat)}
               />
             );
           })}
@@ -99,14 +124,14 @@ export default function TrackingScreen(){
 
       <Card>
         <View style={styles.row}>
-          <CircularSlider value={1200} max={2000}/>
+          <CircularSlider value={Math.round(cal)} max={2500}/>
         </View>
         <View style={styles.row}>
-            <MacroProgressBar name={"Carbs"} value={c} max={210} />
+            <MacroProgressBar name={"Carbs"} value={Math.round(c)} max={700} />
 
-            <MacroProgressBar name={"Protein"} value={p} max={180} />
+            <MacroProgressBar name={"Protein"} value={Math.round(p)} max={700} />
 
-            <MacroProgressBar name={"Fat"} value={f} max={200} />
+            <MacroProgressBar name={"Fat"} value={Math.round(f)} max={700} />
         </View>
       </Card>
         <Card customStyle={{maxHeight: "42%"}}>
