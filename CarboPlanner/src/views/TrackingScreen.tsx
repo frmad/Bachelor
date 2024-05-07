@@ -98,12 +98,12 @@ export default function TrackingScreen(){
             return (
               <ListItem
                 key={`${uuidKey}_${index}`} // Ensure each item has a unique key
-                weight={Math.round(mealInfo.weight)}
+                weight={mealInfo.weight}
                 name={mealInfo.name}
-                calories={Math.round(mealInfo.calories)}
-                protein={Math.round(mealInfo.protein)}
-                carbs={Math.round(mealInfo.carbs)}
-                fat={Math.round(mealInfo.fat)}
+                calories={mealInfo.calories}
+                protein={mealInfo.protein}
+                carbs={mealInfo.carbs}
+                fat={mealInfo.fat}
               />
             );
           })}
@@ -176,7 +176,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
-  },calendarIconContainer: {
+  },
+    calendarIconContainer: {
     backgroundColor: '#65CB2E',
     width: 40,
     height: 40,

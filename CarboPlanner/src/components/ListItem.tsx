@@ -6,27 +6,29 @@ export default function ListItem(props: any) {
 
     return (
         <View style={styles.row}>
-            <View style={styles.row}>
-                <Text style={styles.bold}>{props.weight}g</Text>
-            </View>
-            <VerticalLine/>
-            <View style={styles.column}>
-                <Text>{props.name}</Text>
-                <Text>{props.calories}</Text>
-            </View>
-            <View style={styles.column}>
-                <Text>Carbs</Text>
-                <Text>{props.carbs}</Text>
-            </View>
-           
-            <View style={styles.column}>
-                <Text>Protein</Text>
-                <Text>{props.protein}</Text>
-            </View>
-      
-            <View style={styles.column}>
-                <Text>Fat</Text>
-                <Text>{props.fat}</Text>
+            <View style={styles.pp}>
+                <View style={styles.row}>
+                    <Text style={styles.bold}>{Math.round(props.weight)} g</Text>
+                </View>
+                <VerticalLine/>
+                <View style={styles.column}>
+                    <Text style={styles.name}>{props.name}</Text>
+                    <Text style={styles.textUnder}>{Math.round(props.calories)} kcal</Text>
+                </View>
+                <View style={styles.column}>
+                    <Text style={styles.text}>Carbs</Text>
+                    <Text style={styles.textUnder}>{Math.round(props.carbs)} g</Text>
+                </View>
+
+                <View style={styles.column}>
+                    <Text style={styles.text}>Protein</Text>
+                    <Text style={styles.textUnder}>{Math.round(props.protein)} g</Text>
+                </View>
+
+                <View style={styles.column}>
+                    <Text style={styles.text}>Fat</Text>
+                    <Text style={styles.textUnder}>{Math.round(props.fat)} g</Text>
+                </View>
             </View>
         </View>
     );
@@ -42,7 +44,8 @@ const styles = StyleSheet.create({
     },
     bold: {
         fontWeight: "bold",
-        fontSize: 24,
+        fontSize: 18,
+        color: '#45505B',
     },
     tinyImage: {
         width: 60,
@@ -59,5 +62,37 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         alignSelf: "center",
+        alignItems: "center"
+    },
+    text: {
+        color: '#45505B',
+        fontSize: 14,
+    },
+    textUnder: {
+        color: '#45505B',
+        fontSize: 12,
+    },
+    name: {
+        fontWeight: "bold",
+        fontSize: 16,
+        color: '#45505B',
+    },
+    pp:{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        backgroundColor: '#FFFFFF',
+        padding: 5,
+        marginVertical: 2,
+        marginHorizontal: 2,
+        borderRadius: 20,
+        shadowColor: '#000000',
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        elevation: 5, // for Android elevation
+        flex: 1
     },
 });
