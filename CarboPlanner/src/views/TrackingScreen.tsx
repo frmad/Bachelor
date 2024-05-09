@@ -97,7 +97,7 @@ export default function TrackingScreen(){
       </TouchableOpacity>
     </View>
 
-      <Card>
+      <Card customStyle={{paddingVertical: 10, paddingBottom: 17,}}>
         <View style={styles.row}>
           <CircularSlider value={1200} max={2000}/>
         </View>
