@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { onSnapshot } from 'firebase/firestore';
 import { mainDocRef } from '../utils/Database/DatabaseActions';
+import { maxCalories } from '../components/CircularSlider';
 
 
 export default function TrackingScreen(){
@@ -124,14 +125,14 @@ export default function TrackingScreen(){
 
       <Card>
         <View style={styles.row}>
-          <CircularSlider value={Math.round(cal)} max={2500}/>
+          <CircularSlider value={Math.round(cal)} max={maxCalories}/>
         </View>
         <View style={styles.row}>
-            <MacroProgressBar name={"Carbs"} value={Math.round(c)} max={700} />
+            <MacroProgressBar name={"Carbs"} value={Math.round(c)} max={Math.round((maxCalories*0.60)/4)} />
 
-            <MacroProgressBar name={"Protein"} value={Math.round(p)} max={700} />
+            <MacroProgressBar name={"Protein"} value={Math.round(p)} max={Math.round((maxCalories*0.3)/4)} />
 
-            <MacroProgressBar name={"Fat"} value={Math.round(f)} max={700} />
+            <MacroProgressBar name={"Fat"} value={Math.round(f)} max={Math.round((maxCalories*0.3)/9)} />
         </View>
       </Card>
         <Card customStyle={{maxHeight: "42%"}}>
