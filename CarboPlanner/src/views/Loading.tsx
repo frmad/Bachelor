@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 17,
+        fontSize: 18,
     },
     text: {
         alignItems: 'center',
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginEnd: '5%',
         marginStart: '5%',
+        fontWeight: "400",
     },
     fact_view: {
         justifyContent: 'center',
@@ -127,5 +128,6 @@ const styles = StyleSheet.create({
         marginEnd: '5%',
         marginStart: '5%',
         textAlign: 'center',
+        fontWeight: "400",
     },
 });
