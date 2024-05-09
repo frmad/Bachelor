@@ -208,17 +208,22 @@ export default function Loading({route}) {
 
     //const api_url = process.env.EXPO_PUBLIC_API_URL;
 
+    const myNewFerrari : string = 'https://testapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection';
+
+    const asd : string = '127.0.0.1:5000/v1/object-detection';
+
     const api_url : string = 'https://yolov5-flaskapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection';
     //GAMLE - https://yolov5-flaskapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection
 
     const fetchData = async (firstImageBase64) => {
 
         const requestBody = {
-          image: firstImageBase64
+          image: 
+            allImagesBase64.map((uri, index) => ({"id": index, "img": uri}))
         };
 
         //Sends POST request to this URL, sends using the Base64 Image from the Expo Camera
-        fetch(api_url, {
+        fetch(asd, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -235,6 +240,8 @@ export default function Loading({route}) {
         })
         .then(function(data) {
           // The JSON data from the WebServer is returned here
+
+            console.log(data);
 
             // TODO fix how we send the data to result - it should be used to make calculations based on the images - this should be sent (not data)
             const calculatedData = generateWeightAndMacro(data);

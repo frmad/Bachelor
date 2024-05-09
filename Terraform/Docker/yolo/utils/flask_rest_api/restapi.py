@@ -15,7 +15,7 @@ DETECTION_URL = "/v1/object-detection"
 list_of_images = []
 
 # Load YOLOv5 model
-model = torch.hub.load('../../', 'custom', path='./abc123.pt', source='local')
+model = torch.hub.load('../../', 'custom', path='./last.pt', source='local')
 
 
 def get_class_name(class_index):
