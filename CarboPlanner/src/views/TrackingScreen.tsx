@@ -110,11 +110,19 @@ export default function TrackingScreen(){
         </View>
       </Card>
         <Card customStyle={{maxHeight: "42%"}}>
-            <FlatList
-                data={Object.entries(data)}
-                renderItem={renderMealItem}
-                keyExtractor={(item) => item[0]} // Use the UUID as the key
-            />
+            {/*if there is no meals*/}
+            {p === 0 || c === 0 || f === 0 ? (
+                <View style={{alignItems: 'center'}}>
+                    <Text style={{color: '#65CB2E', fontSize: 18, fontWeight: 'bold', marginTop: 30}}>Let’s eat some delicious food!</Text>
+                    <Text style={{color: '#45505B', marginTop: 20, marginBottom: 30}}>No meals registered</Text>
+                </View>
+            ) : (
+                <FlatList
+                    data={Object.entries(data)}
+                    renderItem={renderMealItem}
+                    keyExtractor={(item) => item[0]}
+                />
+            )}
         </Card>
       <CameraButton />
       </View>
