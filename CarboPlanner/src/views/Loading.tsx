@@ -6,10 +6,6 @@ import { Density, getReferencePoint, getVolume, getWeight } from '../utils/Weigh
 import {getCameraPermissionsAsync} from "expo-camera";
 
 export default function Loading({route}) {
-    /*interface SizeValues {
-      width: Number,
-      height: Number,
-    };*/
 
     const generateWeightAndMacro = (value: any[]) => {
 
@@ -48,7 +44,6 @@ export default function Loading({route}) {
                 const volume = getVolume(height, width, sideWidth, reference); //cm^3
                 // Store the calculated volume in the listOfVolumes map
                 listOfVolumes.set(name, volume);
-                //console.log(`Volume of ${name}:`, volume);
             }
         }
         // TODO change to value when API is fixed
@@ -85,7 +80,6 @@ export default function Loading({route}) {
         const { totalConfidence, count } = nameAndConfidence[foodName] || { totalConfidence: 0, count: 0 };
         if (count !== 0 && foodName !== 'Credit Card') {
             const averageConfidence = totalConfidence / count;
-            console.log(averageConfidence)
             return { foodName, averageConfidence };
         }
         return null;
@@ -106,18 +100,12 @@ export default function Loading({route}) {
                     fat: calculateMacros(name, weight)["fat"],
                     protein: calculateMacros(name, weight)["protein"]
                 }
-                console.log("hello",result.confidence)
                 listForSending.push(result)
             }
         }
         return listForSending
 
         //name, confidence, weight, calories, carbs, fat, protein
-        //Rice: cal:130 carbs:28 fat:1 protein:3
-        //Pasta: cal:131 carbs:25 fat:1 protein:5
-        //Spinach: cal:7 carbs:1 fat:0.1 protein:0.8
-        //Chicken breast: cal:195 carbs:0 fat:7 protein:29
-        //Peas: cal:117 carbs:20 fat:0.5 protein:7
     }
 
     const foodData = {
@@ -169,18 +157,6 @@ export default function Loading({route}) {
             return null;
         }
     }
-
-    /*
-    const reference = getReferencePoint(data[1]["width"], data[1]["height"]); // cm^2
-    console.log(reference + " cm^2");
-
-    const volume = getVolume(data[0]["width"], data[0]["height"], data[2]["height"], reference); //cm^3
-    const weight = getWeight(volume, Density.Chicken_Breast); // grams
-
-    console.log("Volume of " + data[0]["name"] + ": " +  volume);
-
-    console.log(weight + " g");
-    */
 
     const funFacts = [
         "An avocado contains more potassium than a banana!",

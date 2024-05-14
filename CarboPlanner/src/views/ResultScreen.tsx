@@ -128,7 +128,6 @@ export default function Result({route}) {
             });
         }
         await setItem(initialItems);
-        console.log('result data', initialItems)
         setUuids(Object.keys(initialItems)); // Update uuids with the UUIDs of all items
     };
 

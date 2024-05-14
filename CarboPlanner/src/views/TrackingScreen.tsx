@@ -85,7 +85,6 @@ export default function TrackingScreen(){
     };
 
     const renderMealItem = ({ item }) => {
-        console.log(item, "hello item")
       // deconstruct item into its key value pair
       const [uuidKey, meal] = item;
       const mealsArray = meal.meals // Access the meals array from the UUID object
