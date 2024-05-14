@@ -18,10 +18,10 @@ const styles = StyleSheet.create({
     container: {
         display: "flex",
         backgroundColor: '#FFFFFF',
-        paddingVertical: '2%',
+        paddingVertical: 0,
         paddingHorizontal: '2%',
         marginHorizontal: '2%',
         borderRadius: 25,
-        maxHeight:"53%"
+        maxHeight:"57%"
     },
 });

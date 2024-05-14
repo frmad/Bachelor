@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     },
     calendarContainer: {
         flex: 1,
-        margin: 10,
+        margin: 15,
         borderRadius: 20,
         overflow: 'hidden',
         backgroundColor: 'white',

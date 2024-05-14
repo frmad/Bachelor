@@ -161,12 +161,14 @@ export default function Result({route}) {
         const food = (uuidKey: string) => {
             const item = items[uuidKey]; // Look up the item using its UUID key
             if (!item) return null; // Return null if item is not found
-          
+
+            const truncatedName = item.name.length > 15 ? item.name.substring(0, 15) + "..." : item.name;
+
             return (
               <TouchableOpacity onPress={() => handleFoodItemPress(item, uuidKey)}>
                 <View style={styles.card}>
                   <View style={styles.cardTitle}>
-                    <Text style={styles.itemName}>{item.name}</Text>
+                    <Text style={styles.itemName}>{truncatedName}</Text>
                     <Text style={styles.itemCal}>230cal</Text>
                   </View>
                   <Text style={styles.itemWeight}>100g</Text>
@@ -204,11 +206,13 @@ export default function Result({route}) {
             }
     };
 
-
     const handleFoodItemPress = (item, uuid) => {    
         setSelectedItem(item); // Set the selected meal item when it's pressed
         setSelectedUuid(uuid)
-    
+    };
+
+    const ItemSeparator = () => {
+        return <View style={{ height: 10 }} />; // Adjust the height as needed
     };
 
     return (
@@ -216,7 +220,7 @@ export default function Result({route}) {
                     {route.params.uuidKey ? (
                     <View></View>
                     ):(
-                        <View style={{height:"35%", marginTop:"-6%"}}>
+                        <View style={{height:"35%", marginTop:"-10%"}}>
                         <ImageCarousel images={allImages}/>
                         </View>
                     )}
@@ -297,7 +301,7 @@ export default function Result({route}) {
                             <Text style={styles.cardTitleText}>Precision</Text>
                         </View>
                         <FlatList
-                            style={{ maxHeight: "40%", marginTop: 0, marginBottom: 0 }}
+                            style={{marginTop: 5, marginBottom: 0}}
                             data={uuids} // Use uuids array instead of items
                             renderItem={({ item }) => food(item)} // Pass the UUID key to the food function
                         />
@@ -310,9 +314,9 @@ export default function Result({route}) {
                         <TouchableOpacity onPress={() => handleSaveButtonPress()} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
-                      
+
                         <SaveConfirmationModal isVisible={isModalVisible} />
-                      
+
                         <Text style={{marginBottom: 2.5, marginTop: 2.5, fontWeight: '300',}}>or</Text>
                         <TouchableOpacity onPress={() => {navigation.navigate("Tracking")}} style={styles.cancelButton}>
                             <Text style={styles.cancelButtonText}>Cancel</Text>
@@ -337,9 +341,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         backgroundColor: '#FFFFFF',
-        padding: 15,
-        marginVertical: 10,
-        marginHorizontal: 20,
+        paddingVertical:5.5,
+        paddingHorizontal:15,
+        marginVertical: 6,
+        marginHorizontal: 25,
         borderRadius: 20,
         shadowColor: '#000000',
         shadowOffset: {
@@ -399,7 +404,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: '10%',
         justifyContent: "center",
         borderRadius: 50,
-        marginTop: "8%",
+        marginTop: "3%",
     },
     saveButtonText: {
         color: 'white',
@@ -410,7 +415,7 @@ const styles = StyleSheet.create({
     cancelButton: {
         width: "auto",
         justifyContent: "center",
-        marginBottom: "5%"
+        marginBottom: 5,
     },
     cancelButtonText: {
         color: '#575757',
@@ -506,9 +511,14 @@ const styles = StyleSheet.create({
         padding: 4,
         borderRadius: 5,
         textAlign: 'center',
-        lineHeight: 20,
+        lineHeight: 15,
         display: 'flex',
         justifyContent: 'center',
+        position: 'absolute', // Make the position absolute
+        top: '25%', // Position from the top of the parent container
+        left: '47%', // Position from the left of the parent container
+        right: '47%', // Position from the right of the parent container
+        bottom: '25%',
     },
     itemConfi: {
         fontSize: 11,
