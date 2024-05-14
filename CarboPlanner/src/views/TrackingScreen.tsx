@@ -111,7 +111,7 @@ export default function TrackingScreen(){
       </Card>
         <Card customStyle={{maxHeight: "42%"}}>
             {/*if there is no meals*/}
-            {p === 0 || c === 0 || f === 0 ? (
+            {Object.entries(data).length <= 0 ? (
                 <View style={{alignItems: 'center'}}>
                     <Text style={{color: '#65CB2E', fontSize: 18, fontWeight: 'bold', marginTop: 30}}>Let’s eat some delicious food!</Text>
                     <Text style={{color: '#45505B', marginTop: 20, marginBottom: 30}}>No meals registered</Text>
