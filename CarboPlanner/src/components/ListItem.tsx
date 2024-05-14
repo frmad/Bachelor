@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#45505B',
     },
-    pp:{
+    macros:{
         flexDirection: "row",
         justifyContent: "space-between",
         backgroundColor: '#FFFFFF',
