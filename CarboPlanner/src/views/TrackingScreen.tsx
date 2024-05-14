@@ -122,7 +122,7 @@ export default function TrackingScreen(){
       </TouchableOpacity>
     </View>
 
-      <Card>
+      <Card customStyle={{paddingVertical: 10, paddingBottom: 17,}}>
         <View style={styles.row}>
           <CircularSlider value={Math.round(cal)} max={maxCalories}/>
         </View>
@@ -188,6 +188,18 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 10,
   },
+    calendarIconContainer: {
+        backgroundColor: '#65CB2E',
+        width: 45,
+        height: 45,
+        padding: 6,
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        borderRadius: 40,
+        marginLeft: 20,
+        marginTop: 10,
+    },
   calendarIcon: {
     width: '100%',
     height: '100%',

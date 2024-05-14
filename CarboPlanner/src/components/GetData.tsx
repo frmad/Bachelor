@@ -181,6 +181,8 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 20,
         marginHorizontal: -7,
         backgroundColor: 'white',
+        paddingVertical: 10,
+        paddingBottom: 17,
     },
     cardItems: {
         borderRadius: 20,
