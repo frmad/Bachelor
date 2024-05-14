@@ -97,7 +97,7 @@ export default function TrackingScreen(){
       </TouchableOpacity>
     </View>
 
-      <Card>
+      <Card customStyle={{paddingVertical: 10, paddingBottom: 17,}}>
         <View style={styles.row}>
           <CircularSlider value={1200} max={2000}/>
         </View>
@@ -161,17 +161,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
     calendarIconContainer: {
-    backgroundColor: '#65CB2E',
-    width: 45,
-    height: 45,
-    padding: 6,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    borderRadius: 40,
-    marginLeft: 20,
-    marginTop: 10,
-  },
+        backgroundColor: '#65CB2E',
+        width: 45,
+        height: 45,
+        padding: 6,
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        borderRadius: 40,
+        marginLeft: 20,
+        marginTop: 10,
+    },
   calendarIcon: {
     width: '100%',
     height: '100%',
