@@ -25,8 +25,8 @@ export default function OptionButton(props: any) {
                 const buttonPositionY = pageY;
 
                 setModalPosition({
-                    top: buttonPositionY - 1,
-                    left: buttonPositionX - 1,
+                    top: buttonPositionY + 40,
+                    left: buttonPositionX - 0,
                 });
             });
         }
@@ -96,6 +96,9 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         position: 'absolute',
+        marginTop: '-10%',
+        marginBottom: '10%',
+        gap: 5,
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
