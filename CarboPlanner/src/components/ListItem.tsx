@@ -6,7 +6,7 @@ export default function ListItem(props: any) {
 
     return (
         <View style={styles.row}>
-            <View style={styles.pp}>
+            <View style={styles.macros}>
                 <View style={styles.row}>
                     <Text style={styles.bold}>{Math.round(props.weight)} g</Text>
                 </View>
