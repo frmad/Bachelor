@@ -192,7 +192,7 @@ const ManuallyAddModal = ({ selectedItem, updateItem, modalVisible, closeModal, 
                                     label="Carb"
                                     keyboard="numeric"
                                     onChangeText={onChangeCarb}
-                                    value={carb}
+                                    value={(carb)}
                                     affix="| g"
                                 />
                                 <ShortInput

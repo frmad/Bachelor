@@ -94,7 +94,7 @@ export default function Loading({route}) {
                 const result = {
                     name: calculateAverageConfidence(data, key)["foodName"],
                     confidence: calculateAverageConfidence(data, key)["averageConfidence"],
-                    weight: weight,
+                    weight: Math.round(weight) ,
                     calories: calculateMacros(name, weight)["calories"],
                     carbs: calculateMacros(name, weight)["carbs"],
                     fat: calculateMacros(name, weight)["fat"],
@@ -147,11 +147,11 @@ export default function Loading({route}) {
     function calculateMacros(foodItemName, weight) {
         try {
             const foodItem = getFoodItemData(foodItemName);
-            const calories = (weight/100)*foodItem.calories;
-            const carbs = (weight/100)*foodItem.carbs;
-            const fat = (weight/100)*foodItem.fat;
-            const protein = (weight/100)*foodItem.protein;
-            return { calories, carbs, fat, protein }; //object like macros = { calories, carbs, fat, protein };
+            const calories = Math.round((weight/100)*foodItem.calories);
+            const carbs = Math.round((weight/100)*foodItem.carbs);
+            const fat = Math.round((weight/100)*foodItem.fat);
+            const protein = Math.round((weight/100)*foodItem.protein);
+            return {calories, carbs, fat, protein }; //object like macros = { calories, carbs, fat, protein };
         } catch (error) {
             console.log('No food item with that name');
             return null;
