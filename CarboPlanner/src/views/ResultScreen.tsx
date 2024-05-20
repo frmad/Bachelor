@@ -116,23 +116,42 @@ export default function Result({route}) {
         if (data && data.length > 0 && (!items || !items.length)) {
             data.forEach(item => {
                 const uuidKey = uuid.v4(); // Generate a UUID for the item
-                const { /* Fields to keep */ confidence, name } = item;
+                const { /* Fields to keep */ confidence, name, weight, calories, carbs, fat, protein } = item;
                 initialItems[uuidKey] = {
                     confidence,
                     name,
-                    // Set default values for properties other than confidence and name
-                    weight: '100',
-                    carbs: '33',
-                    protein: '12',
-                    fat: '8'
+                    weight,
+                    calories,
+                    carbs,
+                    fat, protein,
                 };
             });
         }
         await setItem(initialItems);
         setUuids(Object.keys(initialItems)); // Update uuids with the UUIDs of all items
     };
-   
-    
+
+    function totalMacros() {
+        let totalCalories = 0;
+        let totalFat = 0;
+        let totalProtein = 0;
+        let totalCarb = 0;
+
+        data.forEach(item => {
+            totalCalories += item.calories;
+            totalFat += item.fat;
+            totalProtein += item.protein;
+            totalCarb += item.carbs;
+        });
+
+        return {
+            totalCalories,
+            totalFat,
+            totalProtein,
+            totalCarb
+        };
+    }
+
 
 
       const [isResultModalVisible, setIsResultModalVisible] = useState(false);
@@ -168,10 +187,10 @@ export default function Result({route}) {
               <TouchableOpacity onPress={() => handleFoodItemPress(item, uuidKey)}>
                 <View style={styles.card}>
                   <View style={styles.cardTitle}>
-                    <Text style={styles.itemName}>{truncatedName}</Text>
-                    <Text style={styles.itemCal}>230cal</Text>
+                    <Text style={styles.itemName}>{item.name}</Text>
+                    <Text style={styles.itemCal}>{Math.round(item.calories)}kcal</Text>
                   </View>
-                  <Text style={styles.itemWeight}>100g</Text>
+                  <Text style={styles.itemWeight}>{Math.round(item.weight)}g</Text>
                   <Text style={styles.itemConfi}>{Math.round(100 * item.confidence)}%</Text>
                 </View>
               </TouchableOpacity>
@@ -277,19 +296,19 @@ export default function Result({route}) {
                             <View style={styles.macros}>
                                 <View style={styles.macroItem}>
                                     <Text style={styles.macroTextHeader}>Total Kcal</Text>
-                                    <Text style={styles.macroText}>{mealMacros.totalCalories} kcal</Text>
+                                    <Text style={styles.macroText}>{Math.round(totalMacros().totalCalories)} kcal</Text>
                                 </View>
                                 <View style={styles.macroItem}>
                                     <Text style={styles.macroTextHeader}>Total Carbs</Text>
-                                    <Text style={styles.macroText}>{mealMacros.totalCarb} g</Text>
+                                    <Text style={styles.macroText}>{Math.round(totalMacros().totalCarb)} g</Text>
                                 </View>
                                 <View style={styles.macroItem}>
                                     <Text style={styles.macroTextHeader}>Total Protein</Text>
-                                    <Text style={styles.macroText}>{mealMacros.totalProtein} g</Text>
+                                    <Text style={styles.macroText}>{Math.round(totalMacros().totalProtein)} g</Text>
                                 </View>
                                 <View style={styles.macroItem}>
                                     <Text style={styles.macroTextHeader}>Total Fat</Text>
-                                    <Text style={styles.macroText}>{mealMacros.totalFat} g</Text>
+                                    <Text style={styles.macroText}>{Math.round(totalMacros().totalFat)} g</Text>
                                 </View>
                             </View>
                             <HorizontalLine />

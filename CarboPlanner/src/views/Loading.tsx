@@ -2,8 +2,162 @@ import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LoadingIcon from "./LoadingIcon";
+import { Density, getReferencePoint, getVolume, getWeight } from '../utils/WeightEstimation';
+import {getCameraPermissionsAsync} from "expo-camera";
 
 export default function Loading({route}) {
+
+    const generateWeightAndMacro = (value: any[]) => {
+
+      let listOfItems = new Map<string, number[]>;
+      let listOfVolumes = new Map<string, number>;
+
+        // TODO change to value when API is fixed
+      data.map((element, index) => {
+        if(!listOfItems.has(element["name"]+"-top")){
+          listOfItems.set(element["name"]+"-top", [element["height"], element["width"]]);
+          return;
+        }
+        if(!listOfItems.has(element["name"]+"-side")){
+          listOfItems.set(element["name"]+"-side", [element["height"], element["width"]]);
+          return;
+        }
+      });
+
+      let reference = 0
+      if (listOfItems.get('Credit Card'+'-top')||listOfItems.get('Credit Card'+'-side')){
+          reference = getReferencePoint(listOfItems.get('Credit Card'+'-top')[1], listOfItems.get('Credit Card'+'-top')[0]); // cm^2
+      }
+
+        // Loop through each entry in the listOfItems map
+        for (let [key, value] of listOfItems) {
+            // Extract the item's name and view from the key
+            const [name, view] = key.split("-");
+            // Extract the item's height and width from the value
+            const [height, width] = value;
+
+            // Calculate volume based on the views
+            if (view === "top" && name !== 'Credit Card') {
+                // Retrieve the width of the item from the side view
+                const sideWidth = listOfItems.get(name + "-side")?.[1] || 0;
+                // Calculate the volume using height, width, and side width
+                const volume = getVolume(height, width, sideWidth, reference); //cm^3
+                // Store the calculated volume in the listOfVolumes map
+                listOfVolumes.set(name, volume);
+            }
+        }
+        // TODO change to value when API is fixed
+        return calculateWeight(listOfVolumes, data);
+    }
+
+    // TODO delete
+    const data = [
+      {"class": 0, "name": "Chicken Breast", "x": 0, "y": 0, "width": 42, "height": 77,  "confidence": 0.2},
+      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 21, "height": 37,  "confidence": 0.3},
+      {"class": 0, "name": "Chicken Breast", "x": 0,  "y": 0,  "width": 41, "height": 60, "confidence": 0.4},
+      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 22, "height": 38,  "confidence": 0.6},
+        {"class": 0, "name": "Pasta", "x": 0,  "y": 0,  "width": 20, "height": 10, "confidence": 0.4},
+        {"class": 1, "name": "Pasta",    "x": 0,  "y": 0,  "width": 27, "height": 34,  "confidence": 0.8},
+    ];
+
+    const calculateAverageConfidence = (data, foodName) => {
+        // Object to store the average confidence and occurrence counts
+        const nameAndConfidence = {};
+
+        // Aggregate confidence values and occurrence counts
+        data.forEach(({ name, confidence }) => {
+            //Does the name exist in nameAndConfidence
+            if (!nameAndConfidence[name]) {
+                //If not, initialize an object containing totalConfidence and count
+                nameAndConfidence[name] = { totalConfidence: 0, count: 0 };
+            }
+            //if the name exist add the confidence value to totalConfidence and increment count
+            nameAndConfidence[name].totalConfidence += confidence;
+            nameAndConfidence[name].count++;
+        });
+
+        // Calculate average confidence for each name
+        const { totalConfidence, count } = nameAndConfidence[foodName] || { totalConfidence: 0, count: 0 };
+        if (count !== 0 && foodName !== 'Credit Card') {
+            const averageConfidence = totalConfidence / count;
+            return { foodName, averageConfidence };
+        }
+        return null;
+    }
+
+    const calculateWeight = (listOfVolumes: Map<string, number>, data: any) => {
+        const listForSending = [];
+        for (let [key, value] of listOfVolumes) {
+            if (key !== 'Credit Card') {
+                const name: string = key.replace(" ", "_");
+                const weight = getWeight(value, Density[name]); // grams
+                const result = {
+                    name: calculateAverageConfidence(data, key)["foodName"],
+                    confidence: calculateAverageConfidence(data, key)["averageConfidence"],
+                    weight: weight,
+                    calories: calculateMacros(name, weight)["calories"],
+                    carbs: calculateMacros(name, weight)["carbs"],
+                    fat: calculateMacros(name, weight)["fat"],
+                    protein: calculateMacros(name, weight)["protein"]
+                }
+                listForSending.push(result)
+            }
+        }
+        return listForSending
+
+        //name, confidence, weight, calories, carbs, fat, protein
+    }
+
+    const foodData = {
+        "Rice": {
+            "calories": 130,
+            "carbs": 28,
+            "fat": 1,
+            "protein": 3
+        },
+        "Pasta": {
+            "calories": 131,
+            "carbs": 25,
+            "fat": 1,
+            "protein": 5
+        },
+        "Chicken_Breast": {
+            "calories": 195,
+            "carbs": 0.2,
+            "fat": 7,
+            "protein": 29
+        },
+        "Spinach": {
+            "calories": 7,
+            "carbs": 1,
+            "fat": 0.1,
+            "protein": 0.8
+        },
+        "Peas": {
+            "calories": 117,
+            "carbs": 20,
+            "fat": 0.5,
+            "protein": 7
+        }
+    };
+
+    function getFoodItemData(foodItemName) {
+        return foodData[foodItemName];
+    }
+    function calculateMacros(foodItemName, weight) {
+        try {
+            const foodItem = getFoodItemData(foodItemName);
+            const calories = (weight/100)*foodItem.calories;
+            const carbs = (weight/100)*foodItem.carbs;
+            const fat = (weight/100)*foodItem.fat;
+            const protein = (weight/100)*foodItem.protein;
+            return { calories, carbs, fat, protein }; //object like macros = { calories, carbs, fat, protein };
+        } catch (error) {
+            console.log('No food item with that name');
+            return null;
+        }
+    }
+
     const funFacts = [
         "An avocado contains more potassium than a banana!",
         "Broccoli is high in fiber and vitamin C, and low in calories!",
@@ -28,14 +182,17 @@ export default function Loading({route}) {
     //const { base64 } = route.params;
     const { firstImageBase64, allImagesBase64 } = route.params;
 
-    const api_url = process.env.EXPO_PUBLIC_API_URL;
+    //const api_url = process.env.EXPO_PUBLIC_API_URL;
+
+    const api_url : string = 'https://yolov5-flaskapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection';
+    //GAMLE - https://yolov5-flaskapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection
 
     const fetchData = async (firstImageBase64) => {
 
         const requestBody = {
           image: firstImageBase64
         };
-    
+
         //Sends POST request to this URL, sends using the Base64 Image from the Expo Camera
         fetch(api_url, {
           method: 'POST',
@@ -54,7 +211,10 @@ export default function Loading({route}) {
         })
         .then(function(data) {
           // The JSON data from the WebServer is returned here
-            navigation.navigate('Result', {base64: firstImageBase64, data: data, allImages: allImagesBase64});
+
+            // TODO fix how we send the data to result - it should be used to make calculations based on the images - this should be sent (not data)
+            const calculatedData = generateWeightAndMacro(data);
+            navigation.navigate('Result', {base64: firstImageBase64, data: calculatedData, allImages: allImagesBase64});
         
 
           return data;

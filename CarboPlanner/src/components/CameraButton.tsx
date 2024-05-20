@@ -20,9 +20,9 @@ export default function CameraButton() {
 const styles = StyleSheet.create({
     camera_button: {
         backgroundColor: "#65CB2E",
-        width: 45,
-        height: 45,
-        borderRadius: 25,
+        width: 65,
+        height: 65,
+        borderRadius: 50,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
         transform: [{ translateX: -22.5 }],
     },
     plusIconContainer: {
-        width: 30,
-        height: 30,
+        width: 40,
+        height: 40,
         justifyContent: 'center',
         alignItems: 'center',
     },

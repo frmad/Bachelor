@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { onSnapshot } from 'firebase/firestore';
 import { mainDocRef } from '../utils/Database/DatabaseActions';
+import { maxCalories } from '../components/CircularSlider';
 
 
 export default function TrackingScreen(){
@@ -53,17 +54,41 @@ export default function TrackingScreen(){
       icon: String
     }
 
-    const [p, setP] = useState(0);
-    const [f, setF] = useState(0);
-    const [c, setC] = useState(0);
+    const [p, setProtein] = useState(0)
+    let protein = 0;
 
+    const [c, setCarbs] = useState(0)
+    let carbs = 0;
+
+    const [f, setFat] = useState(0)
+    let fat = 0;
+
+    const [cal, setCalories] = useState(0)
+    let calories = 0;
+
+    const totalMacros = (mealsArray: any) => {
+        // Iterate over each meal in mealsArray
+        Object.values(mealsArray).map(mealInfo => {
+            // Update variables
+            protein = protein+mealInfo.protein
+            carbs = protein+mealInfo.carbs
+            fat = protein+mealInfo.fat
+            calories = protein+mealInfo.calories
+        });
+
+        setProtein(protein)
+        setCarbs(carbs)
+        setFat(fat)
+        setCalories(calories)
+
+        return {protein, carbs, fat, calories}
+    };
 
     const renderMealItem = ({ item }) => {
       // deconstruct item into its key value pair
       const [uuidKey, meal] = item;
-
       const mealsArray = meal.meals // Access the meals array from the UUID object
-
+      totalMacros(mealsArray)
       return (
         <List key={uuidKey} name={meal.name} imageURI={meal.icon} uuidKey={uuidKey} showOptions={true}>
           <HorizontalLine />
@@ -99,14 +124,14 @@ export default function TrackingScreen(){
 
       <Card customStyle={{paddingVertical: 10, paddingBottom: 17,}}>
         <View style={styles.row}>
-          <CircularSlider value={1200} max={2000}/>
+          <CircularSlider value={Math.round(cal)} max={maxCalories}/>
         </View>
         <View style={styles.row}>
-            <MacroProgressBar name={"Carbs"} value={c} max={210} />
+            <MacroProgressBar name={"Carbs"} value={Math.round(c)} max={Math.round((maxCalories*0.60)/4)} />
 
-            <MacroProgressBar name={"Protein"} value={p} max={180} />
+            <MacroProgressBar name={"Protein"} value={Math.round(p)} max={Math.round((maxCalories*0.3)/4)} />
 
-            <MacroProgressBar name={"Fat"} value={f} max={200} />
+            <MacroProgressBar name={"Fat"} value={Math.round(f)} max={Math.round((maxCalories*0.3)/9)} />
         </View>
       </Card>
         <Card customStyle={{maxHeight: "42%"}}>
@@ -151,6 +176,17 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
+  },
+    calendarIconContainer: {
+    backgroundColor: '#65CB2E',
+    width: 40,
+    height: 40,
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 40,
+    marginLeft: 20,
+    marginTop: 10,
   },
     calendarIconContainer: {
         backgroundColor: '#65CB2E',

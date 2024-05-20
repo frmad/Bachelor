@@ -5,7 +5,6 @@ import { RadialSlider } from 'react-native-radial-slider';
 const CircularSlider = (props: any) => {
   const [speed, setSpeed] = useState(0);
 
-
   return (
     <View style={styles.container}>
       <RadialSlider 
@@ -36,3 +35,5 @@ const styles = StyleSheet.create({
 });
 
 export default CircularSlider;
+
+export const maxCalories: number = 2500;
