@@ -42,6 +42,7 @@ export default function Result({route}) {
     const image: any = "data:image/png;base64," + base64;
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
+    const [showOtherErrorMessage, setShowOtherErrorMessage] = useState(false);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -237,21 +238,25 @@ export default function Result({route}) {
     return (
         <SafeAreaView style={styles.container}>
                     {route.params.uuidKey ? (
-                    <View></View>
+                    <View style={{marginBottom: '40%'}}></View>
                     ):(
                         <View style={{height:"35%", marginTop:"-10%"}}>
                         <ImageCarousel images={allImages}/>
                         </View>
                     )}
                     <Card>
+
                         <View>
                             {changeText ? ( // If changeText is true
                                 <View>
                                     {showErrorMessage && (
                                         <Text style={styles.errorMessage}>Please enter a name for the meal</Text>
                                     )}
+                                    {showOtherErrorMessage && (
+                                        <Text style={styles.errorMessage}>Please enter a shorter name for the meal</Text>
+                                    )}
                                     <View style={styles.editView}>
-                                        <TextInput 
+                                        <TextInput
                                             style={{width:"80%", backgroundColor: "white"}}
                                             theme={{roundness: 10}}
                                             activeUnderlineColor="#65CB2E"
@@ -259,12 +264,25 @@ export default function Result({route}) {
                                             placeholder="Name for the meal"
                                             placeholderTextColor={'#45505B'}
                                             activeOutlineColor='black'
-                                            onChangeText={setNewText}
-                                            />
+                                            onChangeText={(text) => {
+                                                if (text.length > 10) {
+                                                    setShowOtherErrorMessage(true);
+                                                } else {
+                                                    setShowOtherErrorMessage(false);
+                                                }
+                                                setNewText(text);
+                                            }}
+                                        />
                                         <TouchableOpacity onPress={() => {
                                             if (newText.trim() !== '') {
-                                                setChangeText(false);
                                                 setShowErrorMessage(false);
+                                                if (newText.length <= 12) {
+                                                    setShowOtherErrorMessage(false);
+                                                    setChangeText(false);
+                                                } else {
+                                                    setShowOtherErrorMessage(true);
+                                                    setChangeText(true);
+                                                }
                                             } else {
                                                 setShowErrorMessage(true);
                                             }
