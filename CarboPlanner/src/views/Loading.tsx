@@ -104,8 +104,6 @@ export default function Loading({route}) {
             }
         }
         return listForSending
-
-        //name, confidence, weight, calories, carbs, fat, protein
     }
 
     const foodData = {
@@ -157,7 +155,6 @@ export default function Loading({route}) {
             return null;
         }
     }
-
     const funFacts = [
         "An avocado contains more potassium than a banana!",
         "Broccoli is high in fiber and vitamin C, and low in calories!",
@@ -190,7 +187,8 @@ export default function Loading({route}) {
     const fetchData = async (firstImageBase64) => {
 
         const requestBody = {
-          image: firstImageBase64
+          image: 
+            allImagesBase64.map((uri, index) => ({"id": index, "img": uri}))
         };
 
         //Sends POST request to this URL, sends using the Base64 Image from the Expo Camera
@@ -211,8 +209,6 @@ export default function Loading({route}) {
         })
         .then(function(data) {
           // The JSON data from the WebServer is returned here
-
-            // TODO fix how we send the data to result - it should be used to make calculations based on the images - this should be sent (not data)
             const calculatedData = generateWeightAndMacro(data);
             navigation.navigate('Result', {base64: firstImageBase64, data: calculatedData, allImages: allImagesBase64});
         
