@@ -6,7 +6,7 @@ export default function ListItem(props: any) {
 
     return (
         <View style={styles.row}>
-            <View style={styles.pp}>
+            <View style={styles.macros}>
                 <View style={styles.row}>
                     <Text style={styles.bold}>{Math.round(props.weight)} g</Text>
                 </View>
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#45505B',
     },
-    pp:{
+    macros:{
         flexDirection: "row",
         justifyContent: "space-between",
         backgroundColor: '#FFFFFF',

@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        margin: '2%',
+        margin: '7%',
     },
     icon: {
 

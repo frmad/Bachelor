@@ -131,8 +131,6 @@ const ManuallyAddModal = ({ selectedItem, updateItem, modalVisible, closeModal, 
     };
 
     return (
-        <View style={styles.container}>
-
             <Modal
                 key={selectedItem ? selectedItem.id : null}
                 animationType="slide"
@@ -178,7 +176,7 @@ const ManuallyAddModal = ({ selectedItem, updateItem, modalVisible, closeModal, 
 
                         {renderInfo()}
 
-                        <View style={showInfo ? styles.infoBox : null}>
+                        <View style={showInfo ? styles.infoBox : styles.noInfoBox}>
                             <View style={styles.bigWrapper}>
                                 <LongInput
                                     label="Calories"
@@ -188,6 +186,7 @@ const ManuallyAddModal = ({ selectedItem, updateItem, modalVisible, closeModal, 
                                     affix="| kcal"
                                 />
                             </View>
+
                             <View style={styles.macros}>
                                 <ShortInput
                                     label="Carb"
@@ -230,7 +229,6 @@ const ManuallyAddModal = ({ selectedItem, updateItem, modalVisible, closeModal, 
                     </TouchableOpacity>
                 </TouchableOpacity>
             </Modal>
-        </View>
     );
 };
 
@@ -316,12 +314,16 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         paddingHorizontal: 10,
         paddingTop: 10,
+        width: '100%',
     },
     infoText: {
         textAlign: 'left',
         fontSize: 14,
         color: '#45505B',
-    }
+    },
+    noInfoBox: {
+        width: '100%',
+    },
 });
 
 export default ManuallyAddModal;

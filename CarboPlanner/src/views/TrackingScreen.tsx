@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { onSnapshot } from 'firebase/firestore';
 import { mainDocRef } from '../utils/Database/DatabaseActions';
+import { maxCalories } from '../components/CircularSlider';
 
 
 export default function TrackingScreen(){
@@ -122,24 +123,32 @@ export default function TrackingScreen(){
       </TouchableOpacity>
     </View>
 
-      <Card>
+      <Card customStyle={{paddingVertical: 10, paddingBottom: 17,}}>
         <View style={styles.row}>
-          <CircularSlider value={Math.round(cal)} max={2500}/>
+          <CircularSlider value={Math.round(cal)} max={maxCalories}/>
         </View>
         <View style={styles.row}>
-            <MacroProgressBar name={"Carbs"} value={Math.round(c)} max={700} />
+            <MacroProgressBar name={"Carbs"} value={Math.round(c)} max={Math.round((maxCalories*0.60)/4)} />
 
-            <MacroProgressBar name={"Protein"} value={Math.round(p)} max={700} />
+            <MacroProgressBar name={"Protein"} value={Math.round(p)} max={Math.round((maxCalories*0.3)/4)} />
 
-            <MacroProgressBar name={"Fat"} value={Math.round(f)} max={700} />
+            <MacroProgressBar name={"Fat"} value={Math.round(f)} max={Math.round((maxCalories*0.3)/9)} />
         </View>
       </Card>
         <Card customStyle={{maxHeight: "42%"}}>
-            <FlatList
-                data={Object.entries(data)}
-                renderItem={renderMealItem}
-                keyExtractor={(item) => item[0]} // Use the UUID as the key
-            />
+            {/*if there is no meals*/}
+            {Object.entries(data).length <= 0 ? (
+                <View style={{alignItems: 'center'}}>
+                    <Text style={{color: '#65CB2E', fontSize: 18, fontWeight: 'bold', marginTop: 30}}>Let’s eat some delicious food!</Text>
+                    <Text style={{color: '#45505B', marginTop: 20, marginBottom: 30}}>No meals registered</Text>
+                </View>
+            ) : (
+                <FlatList
+                    data={Object.entries(data)}
+                    renderItem={renderMealItem}
+                    keyExtractor={(item) => item[0]}
+                />
+            )}
         </Card>
       <CameraButton />
       </View>
@@ -188,6 +197,18 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 10,
   },
+    calendarIconContainer: {
+        backgroundColor: '#65CB2E',
+        width: 45,
+        height: 45,
+        padding: 6,
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        borderRadius: 40,
+        marginLeft: 20,
+        marginTop: 10,
+    },
   calendarIcon: {
     width: '100%',
     height: '100%',
