@@ -138,12 +138,16 @@ export default function Result({route}) {
         let totalProtein = 0;
         let totalCarb = 0;
 
-        data.forEach(item => {
-            totalCalories += item.calories;
-            totalFat += item.fat;
-            totalProtein += item.protein;
-            totalCarb += item.carbs;
-        });
+
+        uuids.forEach(uuid => {
+            
+            totalCalories += parseFloat(items[uuid].calories);
+            totalFat += parseFloat(items[uuid].fat);
+            totalProtein += parseFloat(items[uuid].protein);
+            totalCarb += parseFloat(items[uuid].carbs);
+
+        })
+        
 
         return {
             totalCalories,
@@ -173,9 +177,10 @@ export default function Result({route}) {
             class: number;
             name: String;
             weight: Number;
-            carbs: String;
-            protein: String;
-            fat: String;
+            carbs: number;
+            protein: number;
+            fat: number;
+            calories: number;
         }
     
         const food = (uuidKey: string) => {
