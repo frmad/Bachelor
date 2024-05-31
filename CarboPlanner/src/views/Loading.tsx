@@ -13,7 +13,7 @@ export default function Loading({route}) {
       let listOfVolumes = new Map<string, number>;
 
         // TODO change to value when API is fixed
-      data.map((element, index) => {
+      value.map((element, index) => {
         if(!listOfItems.has(element["name"]+"-top")){
           listOfItems.set(element["name"]+"-top", [element["height"], element["width"]]);
           return;
@@ -47,18 +47,8 @@ export default function Loading({route}) {
             }
         }
         // TODO change to value when API is fixed
-        return calculateWeight(listOfVolumes, data);
+        return calculateWeight(listOfVolumes, value);
     }
-
-    // TODO delete
-    const data = [
-      {"class": 0, "name": "Chicken Breast", "x": 0, "y": 0, "width": 42, "height": 77,  "confidence": 0.2},
-      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 21, "height": 37,  "confidence": 0.3},
-      {"class": 0, "name": "Chicken Breast", "x": 0,  "y": 0,  "width": 41, "height": 60, "confidence": 0.4},
-      {"class": 1, "name": "Credit Card",    "x": 0,  "y": 0,  "width": 22, "height": 38,  "confidence": 0.6},
-        {"class": 0, "name": "Pasta", "x": 0,  "y": 0,  "width": 20, "height": 10, "confidence": 0.4},
-        {"class": 1, "name": "Pasta",    "x": 0,  "y": 0,  "width": 27, "height": 34,  "confidence": 0.8},
-    ];
 
     const calculateAverageConfidence = (data, foodName) => {
         // Object to store the average confidence and occurrence counts
@@ -179,9 +169,9 @@ export default function Loading({route}) {
     //const { base64 } = route.params;
     const { firstImageBase64, allImagesBase64 } = route.params;
 
-    //const api_url = process.env.EXPO_PUBLIC_API_URL;
+    const api_url = process.env.EXPO_PUBLIC_API_URL;
 
-    const api_url : string = 'https://yolov5-flaskapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection';
+    //const api_url : string = 'https://yolov5-flaskapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection';
     //GAMLE - https://yolov5-flaskapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection
 
     const fetchData = async (firstImageBase64) => {
