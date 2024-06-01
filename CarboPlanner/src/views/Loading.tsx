@@ -46,7 +46,7 @@ export default function Loading({route}) {
                 listOfVolumes.set(name, volume);
             }
         }
-        // TODO change to value when API is fixed
+       
         return calculateWeight(listOfVolumes, value);
     }
 
