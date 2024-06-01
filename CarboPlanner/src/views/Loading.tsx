@@ -172,7 +172,7 @@ export default function Loading({route}) {
     const api_url = process.env.EXPO_PUBLIC_API_URL;
 
     //const api_url : string = 'https://yolov5-flaskapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection';
-    //GAMLE - https://yolov5-flaskapi-5qhj5kt2ta-lz.a.run.app/v1/object-detection
+   
 
     const fetchData = async (firstImageBase64) => {
 
