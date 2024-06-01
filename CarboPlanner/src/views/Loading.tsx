@@ -12,7 +12,7 @@ export default function Loading({route}) {
       let listOfItems = new Map<string, number[]>;
       let listOfVolumes = new Map<string, number>;
 
-        // TODO change to value when API is fixed
+       
       value.map((element, index) => {
         if(!listOfItems.has(element["name"]+"-top")){
           listOfItems.set(element["name"]+"-top", [element["height"], element["width"]]);
