@@ -138,7 +138,8 @@ export default function Result({route}) {
         let totalProtein = 0;
         let totalCarb = 0;
 
-
+        console.log(uuids)
+        if (uuids !== undefined){
         uuids.forEach(uuid => {
             
             totalCalories += parseFloat(items[uuid].calories);
@@ -147,6 +148,7 @@ export default function Result({route}) {
             totalCarb += parseFloat(items[uuid].carbs);
 
         })
+    }
         
 
         return {
@@ -225,6 +227,7 @@ export default function Result({route}) {
             // Use the JavaScript delete operator to remove the item
             delete updatedItems[itemToDeleteKey];
             // Set the updated items object using setItem
+            setUuids(uuids.filter(uuid => uuid !== itemToDeleteKey));
             setItem(updatedItems);
         } else {
             console.error('Item to delete does not exist');
